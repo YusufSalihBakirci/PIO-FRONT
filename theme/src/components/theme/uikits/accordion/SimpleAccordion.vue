@@ -1,0 +1,57 @@
+<template>
+    <Card3 colClass="col-sm-12 col-xl-6" cardhaderClass="card-no-border pb-0" pre="true" preClass="mt-1 mb-0 mb-0"
+        headerTitle="true" title="Simple Accordion"
+        desc="Using the <code>.accordion   </code>class to expand/collapse to accordion content.">
+        <div class="accordion dark-accordion" id="simpleaccordion">
+            <div class="accordion-item" v-for="(item, index) in simple" :key="index">
+                <h2 class="accordion-header" :id="item.hederid">
+                    <button class="accordion-button accordion-light-primary text-primary active"
+                        @click="toggleAccordion(index)" type="button" :data-bs-target="item.id" aria-expanded="true"
+                        :aria-controls="item.ids">{{ item.title
+                        }}<i class="iconly-Arrow-Down-2 icli ms-auto icon"></i></button>
+                </h2>
+                <div class="accordion-collapse " v-if="item.isActive" :id="item.ids" :aria-labelledby="item.hederid"
+                    data-bs-parent="#simpleaccordion">
+                    <div class="accordion-body">
+                        <div v-for="(items, index) in item.childern" :key="index">
+                            <p v-html="items.desc" v-if="item.one">
+                            </p>
+                        </div>
+                        <div v-for="(items, index) in item.childern" :key="index">
+                            <p class="mb-3" v-html="items.desc" v-if="item.two">
+                            </p>
+                        </div>
+                        <p v-if="item.three">
+                            The web design process allows designers to adjust to any preferences and provide effective
+                            solutions. There are many standard components of every web design, including:</p>
+
+
+                        <ul class="d-flex flex-column gap-2 accordions-content" v-if="item.three">
+                            <li v-for="(items, index) in item.childern" :key="index">--> {{ items.title }}</li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Card3>
+</template>
+<script lang="ts" setup>
+import { ref, defineAsyncComponent } from 'vue'
+import { useCommonStore } from "@/store/common"
+const Card3 = defineAsyncComponent(() => import("@/components/common/card/CardData3.vue"))
+let store = useCommonStore()
+let simple = store.data
+const toggleAccordion = (index: number) => {
+    simple[index].isActive = !simple[index].isActive;
+    closeOtherAccordions(index);
+};
+
+const closeOtherAccordions = (currentIndex: number) => {
+    simple.forEach((item, index) => {
+        if (index !== currentIndex) {
+            item.isActive = false;
+        }
+    });
+};
+</script>

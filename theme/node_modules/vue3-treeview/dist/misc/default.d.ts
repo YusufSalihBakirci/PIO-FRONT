@@ -1,0 +1,14 @@
+import { IConfiguration } from "../structure/IConfiguration";
+import { IIcon } from "../structure/IIcon";
+import { INodeState } from '../structure/INodeState';
+export declare const defaultSize = 8;
+export declare const defaultDisabledClass = "disabled";
+export declare const defaultFocusClass = "focused";
+export declare const defaultDragClass = "draggable";
+export declare const defaultDropClass = "droppable";
+export declare const defaultOverClass = "node-over";
+export declare const defaultInClass = "node-in";
+export declare const defaultUnderClass = "node-under";
+export declare function createDefaultIcon(draw: string): IIcon;
+export declare const defaultConfig: IConfiguration;
+export declare const defaultState: INodeState;

@@ -1,0 +1,104 @@
+{
+  "name": "@ckeditor/ckeditor5-vue",
+  "version": "5.1.0",
+  "main": "dist/ckeditor.js",
+  "types": "dist/plugin.d.ts",
+  "description": "Official Vue.js 3+ component for CKEditor 5 – the best browser-based rich text editor.",
+  "keywords": [
+    "wysiwyg",
+    "rich text",
+    "editor",
+    "html",
+    "contentEditable",
+    "editing",
+    "vue",
+    "vue.js",
+    "vue component",
+    "vue.js component",
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor 5"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.17.7",
+    "@ckeditor/ckeditor5-build-classic": "^37.0.0",
+    "@ckeditor/ckeditor5-core": "^37.0.0",
+    "@ckeditor/ckeditor5-dev-bump-year": "^36.0.0",
+    "@ckeditor/ckeditor5-dev-ci": "^36.0.0",
+    "@ckeditor/ckeditor5-dev-release-tools": "^36.0.0",
+    "@ckeditor/ckeditor5-dev-utils": "^36.0.0",
+    "@types/lodash-es": "^4.17.6",
+    "@vue/test-utils": "^2.3.1",
+    "babel-loader": "^8.2.3",
+    "babel-plugin-istanbul": "^6.1.0",
+    "chai": "^4.3.6",
+    "coveralls": "^3.1.1",
+    "eslint": "^7.32.0",
+    "eslint-config-ckeditor5": "^4.0.0",
+    "eslint-plugin-vue": "^9.9.0",
+    "husky": "^8.0.2",
+    "karma": "^6.3.17",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-coverage": "^2.2.0",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-mocha": "^2.0.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-sinon": "^1.0.5",
+    "karma-sourcemap-loader": "^0.3.8",
+    "karma-webpack": "^5.0.0",
+    "lint-staged": "^10.2.11",
+    "lodash-es": "^4.17.21",
+    "minimist": "^1.2.5",
+    "mocha": "^9.2.2",
+    "sinon": "^13.0.1",
+    "terser-webpack-plugin": "^3.0.2",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "vue": "^3.2.31",
+    "vue-eslint-parser": "^9.1.0",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=5.7.1"
+  },
+  "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
+    "build": "webpack --mode production",
+    "postbuild": "tsc -p ./tsconfig.json --emitDeclarationOnly",
+    "develop": "webpack --mode development --watch",
+    "changelog": "node ./scripts/changelog.js",
+    "release:bump-version": "node ./scripts/bump-version.js",
+    "release:publish": "node ./scripts/publish.js",
+    "prerelease:bump-version": "npm run build; if [ -n \"$(git status dist/ --porcelain)\" ]; then git add -u dist/ && git commit -m 'Internal: Build.'; fi",
+    "test": "node ./scripts/test.js",
+    "coverage": "node ./scripts/test.js --coverage",
+    "lint": "eslint --quiet \"src/**/*.{js,ts}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ckeditor/ckeditor5-vue.git"
+  },
+  "files": [
+    "dist",
+    "scripts/postinstall.js"
+  ],
+  "author": "CKSource (http://cksource.com/)",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/ckeditor/ckeditor5-vue/issues"
+  },
+  "homepage": "https://github.com/ckeditor/ckeditor5-vue",
+  "eslintIgnore": [
+    "coverage/**",
+    "demo/node_modules/**",
+    "dist/**"
+  ],
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "eslint --quiet"
+    ]
+  }
+}
