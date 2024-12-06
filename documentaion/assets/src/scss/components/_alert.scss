@@ -1,0 +1,132 @@
+
+@each $alert-name, $alert-color in (primary, rgba(var(--primary-color),1)),
+  (secondary, rgba(var(--secondary-color),1)), (success, rgba(var(--success-color),1)),
+  (danger, rgba(var(--danger-color),1)), (warning, rgba(var(--warning-color),1)),
+  (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1)),(dark, rgba(var(--body-font-color),1))
+
+{
+  .list-group {
+
+        .form-check-input:checked[type=checkbox],
+        [type=radio] {
+        &.checkbox-#{$alert-name} {
+            background-color: unset;
+            border-color: $alert-color;
+            outline: 0;
+            background-color: unset;
+
+            &:focus,
+            &:active,
+            &.active {
+            border-color: $alert-color;
+            outline: 0;
+            background-color: $alert-color;
+            }
+        }
+        }
+    }
+}
+.alert-dismissible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .btn-close {
+    padding: 10px 1.25rem;
+    top: 10px;
+    padding-right: 13px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transition: all 0.3s ease;
+      opacity: 1;
+      color: inherit;
+    }
+  }
+  @media (max-width: 767px) {
+    p{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 294px;
+    }
+  }
+  @media (max-width: 575px) {
+    p{
+      max-width: 102px;
+    }
+  }
+  
+}
+.border-left-wrapper {
+  border-left: 4px solid rgba(var(--dark),1);
+}
+@each $alert-name, $alert-color in (primary, rgba(var(--primary-color),1)),
+  (secondary, rgba(var(--secondary-color),1)), (success, rgba(var(--success-color),1)),
+  (danger, rgba(var(--danger-color),1)), (warning, rgba(var(--warning-color),1)),
+  (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1)),(dark, rgba(var(--body-font-color),1))
+
+{
+
+  .alert-#{$alert-name} {
+    background-color: $alert-color;
+    border-color: $alert-color;
+    color: rgba(var(--white),1);
+
+  }
+}
+@each $border-name, $border-color in (primary, rgba(var(--primary-color),0.3)),
+  (secondary, rgba(var(--secondary-color),0.3)), (success, rgba(var(--success-color),0.3)),
+  (danger, rgba(var(--danger-color),0.3)), (warning, rgba(var(--warning-color),0.3)),
+  (info, rgba(var(--info-color),0.3)), (light, rgba(var(--light-color),0.3)),(dark, rgba(var(--body-font-color),0.3))
+
+{
+
+  .border-light-#{$border-name} {
+    border-color: $border-color;
+
+  }
+}
+.outline-2x {
+  border-width: 2px;
+  padding: 11px 1.25rem;
+}
+.alert-icons {
+  &.outline-2x {
+    padding: 15px;
+  }
+}
+
+.alert-theme{
+  .alert{
+    padding: 12px !important;
+    border-radius: 0.15rem;
+  }
+  p{
+    font-weight: 600;
+  }
+}
+.alert{
+  border-radius: 0.15rem;
+}
+
+.alert-arrow {
+  min-width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  i {
+    margin-right: 0;
+    color: rgba(var(--white),1);
+  }
+
+}
+.alert-secondary, .alert-warning{
+  .btn-close{
+    filter: brightness(1) invert(1);
+  }
+}

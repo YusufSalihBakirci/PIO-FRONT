@@ -1,0 +1,37 @@
+/*! -----------------------------------------------------------------------------------
+    Template Name: Admiro Admin
+    Template URI: http://admin.pixelstrap.com/Admiro/theme
+    Description: This is Admin Template
+    Author: Pixelstrap
+    Author URI: https://themeforest.net/user/pixelstrap
+-----------------------------------------------------------------------------------*/
+
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+// *** utils ***
+@import './utils/variables';
+@import './utils/mixins';
+// *** base ***
+@import './base/reset';
+@import './base/typography';
+// *** components ***
+@import './components/according';
+@import './components/alert';
+@import './components/buttons';
+@import './components/badge';
+@import './components/card';
+@import './components/color';
+// @import './components/chart';
+@import './components/dropdown';
+@import './components/forms';
+@import './components/modal';
+@import './components/radio';
+@import './components/sweet-alert';
+@import './components/tab';
+@import './components/popover';
+@import './components/progress';
+@import './components/scrollable';
+@import './components/switch';
+@import './components/touchspin';
+@import './components/form-wizard';
+// *** Layout *** 
+@import './layout/select2';

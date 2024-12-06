@@ -1,0 +1,204 @@
+
+:root {
+    --white: 255, 255, 255;
+    --black: 0, 0, 0;
+    --body-font-color: 41, 41, 41;
+    --font-color: 170, 163, 160;
+    --shape-border: 229, 229, 229;
+    --scrollbar-color: 174, 174, 174;
+    --light-border: 220, 238, 230;
+    //color css
+    --doc-gray: 102, 102, 102;
+    --iner-sub-title: 70, 70, 70;
+    --sub-title-color: 42, 42, 42;
+    --font-doc-color: 29, 39, 70;
+    --body-color: 249, 247, 246;
+    --primary-color: 48, 142, 135;
+    --secondary-color: 243, 145, 89;
+    --success-color: 62, 185, 95;
+    --info-color: 2, 162, 185;
+    --warning-color: 234, 146, 0;
+    --danger-color: 231, 75, 43;
+    --light-color: 245, 245, 245;
+    --footer-icon: 244, 0, 0;
+    --active-bg-color: 217, 232, 229;
+    --font-color: 170, 163, 160;
+    --border-color: 235, 235, 235;
+    --light-gray: 229, 229, 229;
+    --light-semi-gray : 239, 239, 239;
+    --bg-light: 244, 244, 244;
+    --light-fill: 244, 244, 244;
+    --dark:33, 37, 41;
+    --light-background:242, 243, 247;
+    --theme-body-font-color : 47, 47, 59;
+    --light-text: 153, 153, 153;
+    --light-chartist-grid-color: 246, 249, 253;
+    --gray-60 : 204, 204, 204;
+    --span-color: 242, 243, 247;
+    --light-gray-color:170, 163, 160;
+    --gray-200: 233, 236, 239;
+    --gray-700: 73, 80, 87;
+    --gray2: 211, 211, 211;
+    --table-border:228, 228, 228;
+    --alert-light-light: 241, 239, 238;
+    --border-light-color:243, 243, 243;
+    --form-select:206, 212, 218;
+    --timline-dot-line:82, 82, 108;
+    --light2: 29, 30, 38;
+    --pitch-color: 254, 138, 125;
+    --categorie-hover: 244, 245, 248;
+    --color-fiord: 69, 90, 100;
+    // dropdown color
+    --dropdown-menu: 43, 43, 43;
+    --dropdown-bg-color:249, 249, 249;
+    --dropdown-content-color:242, 242, 242;
+    --dropdown-toggle: 48, 142, 135;
+    // table color 
+    --table-hover-color:246, 246, 246;
+    --table-double-color: 222, 226, 230; 
+    //ping color 
+    --ping-success: 54, 155, 54;
+    --ping-light-success: 112, 199, 112;
+    // --bs-pagination-focus-bg: rgba(255, 255, 255, 1);
+    // social 
+    --fb: 80, 89, 142;
+    --twitter: 111, 162, 216;
+    --google-plus: 198, 78, 64;
+    --linkedin: 0, 119, 181;
+    // slider rating
+    --face-hue1: 60;
+	--face-hue2: 30;
+    --delay-left: 0s;
+    --delay-right: 0s;
+    --delay-mouth-lower: 0s;
+    --delay-mouth-upper: 0s;
+    --input-hue: 60;
+	--percent: 50%;
+    --hue: 223;
+	--face: hsl(var(--hue),10%,100%);
+	--lt-gray: hsl(var(--hue),10%,95%);
+	--gray1: hsl(var(--hue),10%,90%);
+	--gray2: hsl(var(--hue),10%,80%);
+	--gray7: hsl(var(--hue),10%,30%);
+	--gray9: hsl(var(--hue),10%,10%);
+	--primary: hsl(var(--hue),90%,55%);
+	--trans-dur: 0.3s;
+        // Rating
+    --normal: #ECEAF3;
+    --normal-shadow: #D9D8E3;
+    --normal-mouth: #9795A4;
+    --normal-eye: #595861;
+    --active: #F8DA69;
+    --active-shadow: #F4B555;
+    --active-mouth: #F05136;
+    --active-eye: #313036;
+    --active-tear: #76b5e7;
+    --active-shadow-angry: #e94f1d;
+}
+
+body.dark-only{
+    --black: 255, 255, 255;
+    --white: 11, 12, 14;
+    --font-color: 170, 170, 170;
+    --shape-border: 29, 29, 29;
+    --span-color: 29, 29, 29 ;
+    --scrollbar-color: #eee;
+    --body-color: 0, 0, 0;
+    --light-border: #DCEEE6; 
+    --light-gray: 29, 29, 29;
+    --sub-title: 182, 176, 176;
+    --border-color: 29, 29, 29;
+    --gray-200: 49, 49, 49;
+    --active-bg-color: 29, 29, 29;
+    --body-font-color: 182, 176, 176;
+    --bg-light: 0, 0, 0;
+    --light-semi-gray:  0, 0, 0;
+    --alert-light-light: 11, 12, 14;
+    --theme-body-font-color: 182, 176, 176;
+    --light-background: 0, 0, 0;
+    // --dark: 182, 176, 176;
+    --dropdown-menu: 255, 255, 255;
+    --gray-60: 29, 29, 29;
+    --border-light-color: 29, 29, 29;
+    --light-color: 0, 0, 0;
+    --timline-dot-line: 182, 176, 176;
+    
+    // bootstrap color     
+    --bs-tertiary-bg: rgba(11, 12, 14, 1);
+    --bs-body-bg: rgba(11, 12, 14, 1); 
+    --bs-heading-color: rgba(182, 176, 176, 1);
+    --bs-body-color: rgba(182, 176, 176, 1);    
+    --bs-border-color: rgba(29, 29, 29, 1);
+    --bs-white-rgb: rgba(var(--black), 1);
+    --bs-popover-header-bg: rgba(var(--black), 1);
+    --bs-secondary-color: rgba(182, 176, 176, 1);
+    --bs-toast-header-bg: rgba(var(--black), 1); 
+    --bs-btn-color: rgba(182, 176, 176, 1);
+    --bs-btn-active-color: rgba(182, 176, 176, 1);
+    --bs-nav-tabs-link-hover-border-color: rgba(233, 236, 239, 1); 
+    
+    // --bs-list-group-color: rgba(182, 176, 176, 1);
+}
+$body-font: 'Nunito Sans', sans-serif;
+$heading_1: 30px;
+$heading_2: 24px;
+$heading_3: 20px;
+$heading_4: 18px;
+$heading_5: 16px;
+$heading_6: 14px;
+$common_letter_spacing: 0.5px;
+$border_radius: 24px;
+$spacing: 40px;
+
+// header settings
+$header-spacing: 15px 36px;
+
+// sidebar settings
+$logo-shadow: 0px 4px 15px rgba(var(--black), 0.05);
+$sidebar-width: 253px;
+$mobile-sidebar-width: 240px;
+$sidebar-shadow: 0px 4px 40px rgba(var(--black), 0.1);
+
+// input variables
+$input-radius: 30px;
+$input-font-size: 14px;
+$input-padding: 14px 20px;
+
+// button variables
+$btn-hover-shadow: 3px 3px 3px rgba(var(--shape-border),1);
+
+// card settings
+$card-box-shadow: 0 0 50px rgba(var(--black), 0.03);
+$card-header-bg-color : rgba(var(--white),1);
+$card-padding :20px;
+$card-border: 1px solid rgba(var(--light-gray),1);
+// page title
+$title-spacing: 30px 0;
+$breadcrumb-icon-shadow: 1px 1px 0px rgba(var(--shape-border),1);
+$breadcrumb-icon-radius: 5px;
+$page-body-padding : 0 15px 0 15px;
+$header-size: 136px;
+
+
+// Tables settings
+$table-b-margin: 0px;
+$table-heading-color: rgba(var(--theme-body-font-color),1);
+$table-row-color: rgba(var(--theme-body-font-color),1);
+$table-padding: 0.75rem;
+
+//According setting
+$according-card-top-margin : 10px;
+$according-btn-weight : 500;
+$according-btn-color : rgba(var(--body-font-color),1);
+$according-card-header-padding : 0.75rem 1.25rem;
+$according-open-icon : "\eb73";
+$according-close-icon : "\eb7a";
+
+// tabs
+$nav-tabs-border-color:             rgba(var(--table-double-color),1) !default;
+// $nav-tabs-border-width:             $border-width !default;
+// $nav-tabs-border-radius:            $border-radius !default;
+$nav-tabs-link-hover-border-color:  rgba(var(--gray-200),1) rgba(var(--gray-200),1) $nav-tabs-border-color !default;
+$nav-tabs-link-active-color:        rgba(var(--gray-700),1) !default;
+$nav-tabs-link-active-bg:           rgba(var(--white),1) !default;
+$nav-tabs-link-active-border-color: rgba(var(--table-double-color),1) rgba(var(--table-double-color),1) $nav-tabs-link-active-bg !default;

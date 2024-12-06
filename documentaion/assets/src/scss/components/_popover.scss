@@ -1,0 +1,105 @@
+/**=====================
+  Popover CSS Start
+==========================**/
+.popover {
+  border: rgba(var(--light-color),1);
+}
+.popover-header {
+  background-color: rgba(var(--primary-color), 0.1);
+  border-bottom: rgba(var(--light-color),1);
+  color: rgba(var(--primary-color),1);
+}
+.common-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.popover-main {
+  .btn-showcase {
+    a {
+      color: rgba(var(--white),1);
+    }
+    button {
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+.tooltip-inner {
+  background-color: rgba($white, 1);
+  border: rgba(var(--light-color),1);
+  color: rgba(var(--primary-color),1);
+}
+.tooltip-arrow {
+  &:before {
+    border: rgba($white, 1) !important;
+  }
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: rgba(var(--primary-color),1);
+}
+.wonky-tooltip{
+  form{
+    display: flex;
+    gap: 20px;
+    @include media-breakpoint-down(sm) {
+      flex-wrap: wrap;
+    }
+  }
+  .input-group{
+    width: 280px;
+    @include media-breakpoint-between(sm , md) {
+      width: 188px;
+    }
+    @include media-breakpoint-down(sm) {
+      width: 220px;
+    }
+    input{
+      background-color: rgba(var(--light-color),1);
+    }
+    .input-group-text{
+      position: relative;
+      transition: all 0.4s ease-in;
+      .tooltip{
+        display: none;
+        position: absolute;
+        top: -62px;
+        left: -90px;
+        width: 260px;
+        @media (max-width: 420px) {
+          left: unset;
+          right: -30px;
+        }
+      }
+      &:hover{
+        .tooltip{
+          display: block;
+          opacity: 1;
+          transition: all 0.4s ease-in;
+          animation: shake 600ms ease-in-out forwards;
+        }
+      }
+    }
+  }
+  
+  @keyframes shake {
+    0% { 
+      transform: rotate(2deg);
+    }
+    50% {
+     transform: rotate(-3deg);
+    }
+    70% {
+      transform: rotate(3deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+/**=====================
+  Popover CSS Ends
+==========================**/

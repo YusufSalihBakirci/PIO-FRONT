@@ -1,0 +1,239 @@
+/**=====================
+     Reset css start
+==========================**/
+/*====== Svg Width css starts ======*/
+$i: 12;
+@while $i<=50 {
+  .svg-w-#{$i} {
+    width:#{$i}px;
+    height:#{$i}px;
+  }
+  $i: $i+1;
+}
+/*====== Svg Width css ends ======*/
+/*====== Font-style css starts ======*/
+$i: normal,
+  italic,
+  oblique,
+  initial,
+  inherit;
+@each $val in $i {
+  .f-s-#{$val} {
+    font-style: $val;
+  }
+}
+/*====== Font-style css ends ======*/
+/*====== Font-size css starts ======*/
+$i: 12;
+@while $i<=100 {
+  .f-#{$i} {
+    font-size:#{$i}px !important;
+  }
+  $i: $i+1;
+}
+/*====== Font-size css ends ======*/
+/*====== Border-radius css starts ======*/
+$i: 0;
+@while $i<=50 {
+  .b-r-#{$i} {
+    border-radius: #{$i}px !important;
+  }
+  $i: $i + 1;
+}
+/*====== Border-radius css ends ======*/
+// ======= Image Sizes css start =======
+$i: 10;
+@while $i<=100 {
+  .img-#{$i} {
+    width: #{$i}px !important;
+  }
+  .img-h-#{$i} {
+    height:#{$i}px !important;
+  }
+  $i: $i + 2;
+}
+// ======= Image Sizes css ends =======
+/*====== Font-weight css starts ======*/
+$i: 100, 300, 500, 400, 600, 700, 900;
+@each $val in $i {
+  .f-w-#{$val} {
+    font-weight: $val;
+  }
+}
+/*====== Font-weight css ends ======*/
+/*====== All Padding css starts ======*/
+$i: 0;
+@while $i<=50 {
+  .p-#{$i} {
+    padding:#{$i}px;
+  }
+  .p-t-#{$i} {
+    padding-top:#{$i}px !important;
+  }
+  .p-b-#{$i} {
+    padding-bottom:#{$i}px !important;
+  }
+  .p-l-#{$i} {
+    padding-left:#{$i}px;
+  }
+  .p-r-#{$i} {
+    padding-right:#{$i}px;
+  }
+  $i: $i+5;
+}
+/*====== All Padding css ends ======*/
+/*====== All Margin css starts ======*/
+$i: 0;
+@while $i<=50 {
+  .m-#{$i} {
+    margin:#{$i}px;
+  }
+  .m-t-#{$i} {
+    margin-top:#{$i}px !important;
+  }
+  .m-b-#{$i} {
+    margin-bottom:#{$i}px !important;
+  }
+  .m-l-#{$i} {
+    margin-left:#{$i}px;
+  }
+  .m-r-#{$i} {
+    margin-right:#{$i}px;
+  }
+  $i: $i+5;
+}
+/*====== All Margin css ends ======*/
+/*===== Bg outline color css starts ======*/
+.breadcrumb-style4{
+  .breadcrumb-item{
+      i{
+          padding: 5px 6px;
+          background-color: rgba(var(--light-gray),1);
+      }
+  }
+}
+@each $breadcrumb-name, $breadcrumb-color in (primary, rgba(var(--primary-color),1)),
+(secondary, rgba(var(--secondary-color),1)),(warning, rgba(var(--warning-color),1)), (success, rgba(var(--success-color),1)),
+(danger, rgba(var(--danger-color),1)), (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1))
+{
+  .breadcrumb-#{$breadcrumb-name}{
+    color: $breadcrumb-color;
+    .breadcrumb-item{
+      + .breadcrumb-item{
+          &::before{
+              color: $breadcrumb-color;
+          }
+      }
+    } 
+  }
+}
+.color-breadcrumb{
+  .breadcrumb{
+      padding: 5px 10px;
+      border-radius: 5px;
+      .breadcrumb-item{
+          + .breadcrumb-item{
+              &::before{
+                  color: rgba(var(--white),1);
+              }
+          }
+        } 
+  }
+}
+/*===== Bg outline color css end ======*/
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+  * {
+    scrollbar-width: 0;
+    scrollbar-color: transparent;
+  }
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(var(--white),1);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--scrollbar-color),1);
+  border-radius: 10px;
+}
+
+/*======= Font-color css starts  ======= */
+
+@each $text-name, $text-color in (primary, rgba(var(--primary-color),1)),
+  (secondary, rgba(var(--secondary-color),1)), (success, rgba(var(--success-color),1)),
+  (danger, rgba(var(--danger-color),1)), (warning, rgba(var(--warning-color),1)),
+  (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1)),(dark, rgba(var(--body-font-color),1))
+
+{
+    .text-#{$text-name}{
+        color: $text-color !important;
+    }
+}
+//border
+$b-name: primary,
+  secondary,
+  success,
+  danger,
+  warning,
+  info,
+  light,
+  dark;
+  
+$b-color: rgba(var(--primary-color),1),
+rgba(var(--secondary-color),1),
+rgba(var(--success-color),1),
+rgba(var(--danger-color),1),
+rgba(var(--warning-color),1),
+rgba(var(--info-color),1),
+rgba(var(--light-color),1),
+rgba(var(--body-font-color),1);
+
+@each $var in $b-name {
+  $i: index($b-name, $var);
+
+  .b-#{$var} {
+    border: 1px solid nth($b-color, $i) !important;
+  }
+
+  .b-t-#{$var} {
+    border-top: 1px solid nth($b-color, $i) !important;
+  }
+
+  .border-t-#{$var} {
+    border-top: 1px solid nth($b-color, $i) !important;
+  }
+
+  .b-b-#{$var} {
+    border-bottom: 1px solid nth($b-color, $i) !important;
+  }
+
+  .border-b-#{$var} {
+    border-bottom: 1px solid nth($b-color, $i) !important;
+  }
+
+  .b-l-#{$var} {
+    border-left: 1px solid nth($b-color, $i) !important;
+  }
+
+  .border-l-#{$var} {
+    border-left: 1px solid nth($b-color, $i) !important;
+  }
+
+  .b-r-#{$var} {
+    border-right: 1px solid nth($b-color, $i) !important;
+  }
+
+  .border-r-#{$var} {
+    border-right: 1px solid nth($b-color, $i) !important;
+  }
+}
+/*======= Font-color css end  ======= */
+/**=====================
+     Reset css end
+==========================**/

@@ -1,0 +1,15 @@
+/**=====================
+     mixins
+==========================**/
+@mixin flex_common {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin bg_bolor {
+  background-color: rgba(var(--primary-light),1);
+  border: 1px solid rgba(var(--light-border),1);
+  border-radius: 30px;
+  width: 31px;
+  height: 31px;
+}

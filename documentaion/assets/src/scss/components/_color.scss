@@ -1,0 +1,122 @@
+/**=====================
+     color css start
+==========================**/
+// circle dot 
+@each $circle-name, $circle-color in (primary, rgba(var(--primary-color),1)),
+  (secondary, rgba(var(--secondary-color),1)),(success, rgba(var(--success-color),1)), (danger, rgba(var(--danger-color),1)), (warning, rgba(var(--warning-color),1)),
+  (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1)),(dark, rgba(var(--body-font-color),1))
+{
+  .circle-dot-#{$circle-name} {
+    width: 16px;
+    height: 16px;
+    border-radius: 10px;
+    border: rgba(var(--light-border),1);
+    @include flex_common;
+    span{
+      width: 8px;
+      height: 8px;
+      background-color: $circle-color;
+      border-radius: 10px;
+    }
+  }
+}
+// font-color
+@each $font-name, $font-color in (primary, rgba(var(--primary-color),1)),
+  (secondary, rgba(var(--secondary-color),1)), (success, rgba(var(--success-color),1)),
+  (danger, rgba(var(--danger-color),1)), (warning, rgba(var(--warning-color),1)),
+  (info, rgba(var(--info-color),1)), (light, rgba(var(--light-color),1)),(dark, rgba(var(--body-font-color),1))
+{
+  .font-#{$font-name} {
+    color: $font-color !important;
+  }
+  .stroke-#{$font-name} {
+    stroke: $font-color;
+  }
+  .fill-#{$font-name} {
+    fill: $font-color;
+  }
+  .toast-#{$font-name} {
+    color: $font-color;
+  }
+}
+.stroke-white{
+  stroke: rgba(var(--white),1);
+}
+// background css
+$background-name: primary,
+secondary,
+success,
+danger,
+warning,
+info,
+light,
+dark;
+$background-color: rgba(var(--primary-color),1),
+rgba(var(--secondary-color),1),
+rgba(var(--success-color),1),
+rgba(var(--danger-color),1),
+rgba(var(--warning-color),1),
+rgba(var(--info-color),1),
+rgba(var(--light-color),1),
+rgba(var(--body-font-color),1);
+
+@each $var in $background-name {
+  $i: index($background-name, $var);
+
+  .bg-#{$var} {
+    background-color: nth($background-color, $i) !important;
+    color: rgba(var(--white), 1) !important;
+  }
+}
+/*======= Background-color css end  ======= */
+/*======= Bg-light css starts  ======= */
+
+$bg-light-color: primary,
+secondary,
+success,
+danger,
+warning,
+info,
+light,
+dark;
+$background-color: rgba(var(--primary-color),0.1),
+rgba(var(--secondary-color),0.1),
+rgba(var(--success-color),0.1),
+rgba(var(--danger-color),0.1),
+rgba(var(--warning-color),0.1),
+rgba(var(--info-color),0.1),
+rgba(var(--light-color),0.1),
+rgba(var(--body-font-color),0.1);
+@each $var in $bg-light-color {
+  $i: index($bg-light-color, $var);
+
+  .bg-light-#{$var} {
+    background-color: nth($background-color, $i) !important;
+  }
+}
+$bg-light-color: primary,
+secondary,
+success,
+danger,
+warning,
+info,
+light,
+dark;
+$text-color: rgba(var(--primary-color),1),
+rgba(var(--secondary-color),1),
+rgba(var(--success-color),1),
+rgba(var(--danger-color),1),
+rgba(var(--warning-color),1),
+rgba(var(--info-color),1),
+rgba(var(--light-color),1),
+rgba(var(--body-font-color),1);
+@each $var in $bg-light-color {
+  $i: index($bg-light-color, $var);
+
+  .bg-light-#{$var} {
+    color: nth($text-color, $i) !important;
+  }
+}
+/**=====================
+     color css end
+==========================**/
