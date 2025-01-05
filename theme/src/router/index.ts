@@ -5,6 +5,7 @@ import LoginPage from "@/components/common/block/auth/LoginPage.vue"
 import IndexDefault from "@/pages/dashboards/IndexDefault.vue"
 import IndexEcommerce from "@/pages/dashboards/IndexEcommerce.vue"
 import IndexEducation from "@/pages/dashboards/IndexEducation.vue"
+import IndexExperience from "@/pages/dashboards/IndexExperience.vue"
 import IndexGeneral from "@/pages/widgets/IndexGeneral.vue"
 import IndexChart from "@/pages/widgets/IndexChart.vue"
 import IndexProjectlist from "@/pages/project/IndexProjectlist.vue"
@@ -211,6 +212,14 @@ const routes: Array<RouteRecordRaw> = [
         component: IndexEcommerce,
         meta: {
           title: 'Dashboards Ecommerce | Admiro - Premium Vue Admin Template',
+        }
+      },
+      {
+        path: "dashboard_experience",
+        name: "experience",
+        component: IndexExperience,
+        meta: {
+          title: 'Dashboards Experience | Admiro - Premium Vue Admin Template',
         }
       }
 

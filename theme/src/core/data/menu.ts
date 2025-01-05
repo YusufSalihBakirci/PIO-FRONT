@@ -26,7 +26,7 @@ export const menu: MenuItem[] = [
         icon1: "fill-home",
         type: "sub",
         badgeType: "badge",
-        bagde: "3",
+        bagde: "4",
         active: false,
         isPinned: false,
         children: [
@@ -43,6 +43,11 @@ export const menu: MenuItem[] = [
             {
                 path: "/dashboards/dashboard_education",
                 title: "Education",
+                type: "link"
+            },
+            {
+                path: "/dashboards/dashboard_experience",
+                title: "Experience",
                 type: "link"
             }
         ]
