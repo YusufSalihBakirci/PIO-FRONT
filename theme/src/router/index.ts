@@ -148,6 +148,7 @@ import IndexCk from "@/pages/editor/IndexCk.vue"
 import SimpleEditor from "@/pages/editor/SimpleEditor.vue"
 import IndexKnowledgebase from "@/pages/knowledgebase/IndexKnowledgebase.vue"
 import IndexSupport from "@/pages/support/IndexSupport.vue"
+import ListExperience from "@/pages/dashboards/ListExperience.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -219,7 +220,15 @@ const routes: Array<RouteRecordRaw> = [
         name: "experience",
         component: IndexExperience,
         meta: {
-          title: 'Dashboards Experience | Admiro - Premium Vue Admin Template',
+          title: 'Create Experience | Vue Admin Template',
+        }
+      },
+      {
+        path: "experience_list",
+        name: "experienceList",
+        component: ListExperience,
+        meta: {
+          title: 'Experience List | Vue Admin Template',
         }
       }
 

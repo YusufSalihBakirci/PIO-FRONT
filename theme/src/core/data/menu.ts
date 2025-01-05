@@ -49,6 +49,11 @@ export const menu: MenuItem[] = [
                 path: "/dashboards/dashboard_experience",
                 title: "Experience",
                 type: "link"
+            },
+            {
+                path: "/dashboards/experience_list",
+                title: "ExperienceList",
+                type: "link"
             }
         ]
     },

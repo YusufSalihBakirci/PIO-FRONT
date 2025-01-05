@@ -36,6 +36,7 @@
                                             in </button>
                                     </div>
                                 </div>
+                                
                                 <!-- <div class="login-social-title">
                                     <h6>Or Sign in with </h6>
                                 </div>
@@ -90,6 +91,7 @@ function doLogin() {
     else {
         toast.error('Opps... Invalid email and password ', { position: 'top-right', autoClose: 2000 });
     }
+
 
 
     // let user = false;
