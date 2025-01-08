@@ -1,10 +1,10 @@
 <template>
-    <div></div>
-     <!-- <div>
+  
+     <div>
     <h2>Resim Yükleme</h2>
     <input type="file" @change="handleFileChange" accept="image/*" />
     <button @click="uploadImage">Yükle</button>
-  </div> -->
+  </div>
 </template>
 <script setup>
 import axios from "axios";
