@@ -1,15 +1,8 @@
 <template>
-  <div id="input-panel-main" class="w-1/2 p-5">
+  <div id="input-panel-main" class="w-1/2 p-1">
     <!-- Target Main Category -->
-    <label class="block text-lg text-base font-semibold mb-1" for="target-type">
-      Target Main Type
-    </label>
-    <select
-      class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      name="target-type"
-      v-model="selectedOption"
-      @change="optionChange"
-    >
+    <label class="block text-lg text-base font-semibold mb-1" for="target-type"> Target Main Type </label>
+    <select class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500" name="target-type" v-model="selectedOption" @change="optionChange">
       <option value="" disabled selected :key="-1">Select target type</option>
       <option v-for="(value, key, index) in TargetConfig" :value="key" :key="index">
         {{ key }}
@@ -19,15 +12,8 @@
 
     <!-- Target Sub-Category -->
     <template v-if="selectedObjectElement">
-      <label class="block text-lg text-base font-semibold mb-1 ml-4" for="target-sub-type">
-        Target Sub-Type
-      </label>
-      <select
-        class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 ml-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        name="target-sub-type"
-        v-model="selectedSubOption"
-
-      >
+      <label class="block text-lg text-base font-semibold mb-1 ml-4" for="target-sub-type"> Target Sub-Type </label>
+      <select class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 ml-4 focus:outline-none focus:ring-2 focus:ring-blue-500" name="target-sub-type" v-model="selectedSubOption">
         <option value="" disabled selected :key="-1">Select target sub-type</option>
         <option v-for="(value, key) in selectedObjectElement" :value="key" :key="value.id">
           {{ key }}
@@ -35,26 +21,14 @@
       </select>
     </template>
     <!-- Target Sub-Category -->
-     
-    <button 
-      @click="subOptionChange"
-      class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md font-medium text-sm 
-             hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 
-             shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
-    >
-      Test
-    </button>
+
+    <button @click="subOptionChange" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md font-medium text-sm hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">Test</button>
 
     <!-- Target Requirements -->
     <div v-if="selectedTargetType" class="mt-4">
       <h2 class="font-bold text-lg ml-8">Target Requirements</h2>
       <!-- Inline target türleri için TargetCreator.vue içerisinde pageReader.js çalışacak. Inline targetlar için generalId değeri a olacak -->
-      <TargetCreator
-        class="ml-8"
-        :is-inline="generalIdToPass == 'a'"
-        :selected-target="selectedTargetType"
-        :data-id="selectedTargetType.id"
-      ></TargetCreator>
+      <TargetCreator class="ml-8" :is-inline="generalIdToPass == 'a'" :selected-target="selectedTargetType" :data-id="selectedTargetType.id"></TargetCreator>
     </div>
     <div v-else class="mt-4">
       <h2 class="font-bold text-gray-500 italic text-lg ml-8">Select a target type above</h2>
@@ -64,8 +38,8 @@
 </template>
 
 <script>
-import TargetCreator from './TargetCreator.vue'
-import TargetConfig from '../TargetTypes/TargetConfigs'
+import TargetCreator from "./TargetCreator.vue";
+import TargetConfig from "../TargetTypes/TargetConfigs";
 
 export default {
   components: {
@@ -74,41 +48,37 @@ export default {
   data() {
     return {
       TargetConfig,
-      selectedOption: '',
-      selectedSubOption: '',
+      selectedOption: "",
+      selectedSubOption: "",
       selectedObjectElement: null,
       selectedTargetType: null,
-      generalIdToPass: '',
-    }
+      generalIdToPass: "",
+    };
   },
   methods: {
     test() {
-      console.log(this.TargetConfig)
+      console.log(this.TargetConfig);
     },
     optionChange() {
       if (this.TargetConfig[this.selectedOption]) {
         //listede generalId'nin basilmasina gerek yoktu. destructure ile kullanilmasi engellendi
-        const { generalId, ...filteredObject } = this.TargetConfig[this.selectedOption]
-        this.generalIdToPass = generalId
-        this.selectedObjectElement = filteredObject
+        const { generalId, ...filteredObject } = this.TargetConfig[this.selectedOption];
+        this.generalIdToPass = generalId;
+        this.selectedObjectElement = filteredObject;
       } else {
         //secilmis herhangi bir secenek yoksa bos eleman gonder ki bir sonraki adim renderlanmasin
-        this.selectedObjectElement = null
+        this.selectedObjectElement = null;
       }
-      this.selectedSubOption = ''
-      this.selectedTargetType = null
-      console.log(this.selectedOption)
+      this.selectedSubOption = "";
+      this.selectedTargetType = null;
+      console.log(this.selectedOption);
     },
     subOptionChange() {
-      this.selectedTargetType = this.selectedObjectElement
-        ? this.selectedObjectElement[this.selectedSubOption]
-        : null
-
-      //secilmis herhangi bir secenek yoksa bos eleman gonder ki bir sonraki adim renderlanmasin
+      this.selectedTargetType = this.selectedObjectElement ? this.selectedObjectElement[this.selectedSubOption] : null;
     },
   },
   setup() {},
-}
+};
 </script>
 
 <style scoped>
@@ -138,8 +108,3 @@ export default {
   background: #555;
 }
 </style>
-
-/* * Target type secimine gore place to add ve where on element secenekleri acilacak. *
-inlinetargetlar icin place to add kisminda sadece top level elementlerin oldugu kisimlar
-secilebilecek *popup sadece sayfa ortasina, kulakcik ise sag ve solda sayfanin belirli noktalarinda
-olabilecek *target turunun isterlerine gore input alanlari olusturulacak */

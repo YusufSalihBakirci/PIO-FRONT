@@ -1,20 +1,17 @@
-import { useIframeStore } from '@/stores/iframeStore'
+import { iframeStore } from "../../iframeStore";
 
 export function FirePopup(basicInputsData) {
-  console.log(basicInputsData.targetRequirements['setImage.desktop-image-url'])
+  console.log(basicInputsData.targetRequirements["setImage.desktop-image-url"]);
   const config = {
-    desktopWidth: '600px',
-    mobileWidth: '320px',
-    img:
-      window.innerWidth > 768
-        ? basicInputsData.targetRequirements['setImage.desktop-image-url']
-        : basicInputsData.targetRequirements['setImage.mobile-image-url'],
-    url: '#',
-  }
-  const iframeStore = useIframeStore()
-  let target = iframeStore.content.contentWindow.document
-  if (!document.querySelector('#vl-popup-container')) {
-    var style = document.createElement('style')
+    desktopWidth: "600px",
+    mobileWidth: "320px",
+    img: window.innerWidth > 768 ? basicInputsData.targetRequirements["setImage.desktop-image-url"] : basicInputsData.targetRequirements["setImage.mobile-image-url"],
+    url: "#",
+  };
+  const iframeStore = useIframeStore();
+  let target = iframeStore.content.contentWindow.document;
+  if (!document.querySelector("#vl-popup-container")) {
+    var style = document.createElement("style");
     style.innerHTML = `
         #vl-popup-container {
             z-index: 10000;
@@ -74,11 +71,11 @@ export function FirePopup(basicInputsData) {
                 width:${config.mobileWidth};
             }
         }
-        `
-    target.head.append(style)
+        `;
+    target.head.append(style);
 
-    const popup = document.createElement('div')
-    popup.id = 'vl-popup-container'
+    const popup = document.createElement("div");
+    popup.id = "vl-popup-container";
     popup.innerHTML = `
         <div class="vl-popup-overlay"></div>
         <div class="vl-popup">
@@ -87,17 +84,17 @@ export function FirePopup(basicInputsData) {
             <img src=${config.img} class="vl-popup-image" alt="vl-popup-image" />
           </a>
         </div>
-        `
-    target.body.append(popup)
+        `;
+    target.body.append(popup);
 
-    popup.querySelector('.vl-popup-overlay').addEventListener('click', closePopup)
-    popup.querySelector('.vl-popup-close').addEventListener('click', closePopup)
+    popup.querySelector(".vl-popup-overlay").addEventListener("click", closePopup);
+    popup.querySelector(".vl-popup-close").addEventListener("click", closePopup);
 
-    popup.querySelector('a').addEventListener('click', clickPopup)
+    popup.querySelector("a").addEventListener("click", clickPopup);
 
     function closePopup() {
-      popup.remove()
-      style.remove()
+      popup.remove();
+      style.remove();
     }
 
     function clickPopup() {
@@ -108,7 +105,7 @@ export function FirePopup(basicInputsData) {
 }
 
 export function FireBanner(inputData) {
-  console.log('Data passed to the TargetCodes: ', inputData)
+  console.log("Data passed to the TargetCodes: ", inputData);
   const config = {
     backgroundColor: inputData.targetRequirements.general.backgroundColor,
     appendPosition: inputData.selectedPosition.value,
@@ -117,21 +114,21 @@ export function FireBanner(inputData) {
     text: inputData.targetRequirements.setText.textContent,
     fontWeight: inputData.targetRequirements.setText.fontWeight,
     fontSize: inputData.targetRequirements.setText.fontSize,
-  }
-  const iframeStore = useIframeStore()
-  let targetFrame = iframeStore.content.contentWindow.document
+  };
+  const iframeStore = useIframeStore();
+  let targetFrame = iframeStore.content.contentWindow.document;
 
-  if (targetFrame.querySelector('.hb-banner-container')) {
-    targetFrame.querySelectorAll('.hb-banner-container').forEach((b) => {
-      b.remove()
-    })
-    targetFrame.querySelector('#hb-banner-style').remove()
+  if (targetFrame.querySelector(".hb-banner-container")) {
+    targetFrame.querySelectorAll(".hb-banner-container").forEach((b) => {
+      b.remove();
+    });
+    targetFrame.querySelector("#hb-banner-style").remove();
   }
 
-  if (!targetFrame.querySelector('.hb-banner-container')) {
-    const url = '#'
-    const style = document.createElement(`style`)
-    style.id = 'hb-banner-style'
+  if (!targetFrame.querySelector(".hb-banner-container")) {
+    const url = "#";
+    const style = document.createElement(`style`);
+    style.id = "hb-banner-style";
 
     style.innerHTML = `
 .hb-banner-container{
@@ -161,25 +158,23 @@ export function FireBanner(inputData) {
   }
 }
 
-`
-    targetFrame.head.append(style)
+`;
+    targetFrame.head.append(style);
 
-    const banner = document.createElement('div')
-    banner.setAttribute('class', 'hb-banner-container')
+    const banner = document.createElement("div");
+    banner.setAttribute("class", "hb-banner-container");
     banner.innerHTML = `
 <div class='vl-banner-elements'>
 <a class='vl-banner-link' href=${url}> ${config.text}</a>
 </div>
 
-`
+`;
 
-    targetFrame
-      .querySelector(config.appendPosition)
-      .insertAdjacentElement(config.appendRelativePosition, banner)
+    targetFrame.querySelector(config.appendPosition).insertAdjacentElement(config.appendRelativePosition, banner);
 
-    banner.querySelector('.vl-banner-link').addEventListener('click', function () {
-      console.log('banner-click')
-    })
+    banner.querySelector(".vl-banner-link").addEventListener("click", function () {
+      console.log("banner-click");
+    });
     // <%VLSendImpressionFunc%>
   }
 }
