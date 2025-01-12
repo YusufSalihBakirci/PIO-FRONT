@@ -1,6 +1,6 @@
 <script setup>
-import TargetPreview from "../../IframeTarget/components/TargetPreview.vue";
-import InputPanel from "../../IframeTarget/components/InputPanel/InputPanel.vue";
+import TargetPreview from './components/TargetPreview.vue'
+import InputPanel from './components/InputPanel/InputPanel.vue'
 </script>
 
 <template>
