@@ -2,7 +2,7 @@
   <div class="experience-list">
     <Breadcrumbs main="Dashboard" mains="Experience List Page" title="Experiences" />
     <div class="experience-grid">
-      <div v-for="exp in experiences" :key="exp.id" class="experience-card">
+      <div v-for="exp in experiences" :key="exp.targetId" class="experience-card">
         <div class="card-header">
           <h3>{{ exp.name }}</h3>
           <button class="option-btn" :class="store.layout?.class === 'dark-only' ? 'text-white' : 'text-black'">⋮</button>
@@ -11,17 +11,17 @@
         <div class="card-image">
           <div class="slider">
             <div class="slider-wrapper" 
-                 :style="{ transform: `translateX(-${currentSlides[exp.id] * 100}%)` }">
+                 :style="{ transform: `translateX(-${currentSlides[exp.targetId] * 100}%)` }">
               <img v-for="(image, index) in exp.images" 
                    :key="index"
                    :src="image" 
                    alt="Deneyim Görseli">
             </div>
-            <button class="slider-btn prev" @click="prevSlide(exp.id)">❮</button>
-            <button class="slider-btn next" @click="nextSlide(exp.id)">❯</button>
+            <button class="slider-btn prev" @click="prevSlide(exp.targetId)">❮</button>
+            <button class="slider-btn next" @click="nextSlide(exp.targetId)">❯</button>
             <div class="slider-dots">
               <span v-for="i in 3" :key="i" 
-                    :class="['dot', (currentSlides[exp.id] || 0) === i-1 ? 'active' : '']">
+                    :class="['dot', (currentSlides[exp.targetId] || 0) === i-1 ? 'active' : '']">
               </span>
             </div>
           </div>
@@ -43,135 +43,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import experienceService from '@/api/ExperienceService';
 import { uselayoutStore } from '@/store/layout';
 
 const store = uselayoutStore();
 const currentSlides = ref({});
+const experiences = ref([]);
 
-const experiences = ref([
-  {
-    id: 1,
-    name: 'Deneyim 1',
-    description: 'Kürt kurdu tanır ama biz bunları tanımıyoruz.',
-    images: [
-      'https://picsum.photos/400/300?random=1',
-      'https://picsum.photos/400/300?random=2',
-      'https://picsum.photos/400/300?random=3'
-    ]
-  },
-  {
-    id: 2,
-    name: 'Deneyim 2',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=4',
-      'https://picsum.photos/400/300?random=5',
-      'https://picsum.photos/400/300?random=6'
-    ]
-  },
-  {
-    id: 3,
-    name: 'Deneyim 3',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=7',
-      'https://picsum.photos/400/300?random=8',
-      'https://picsum.photos/400/300?random=9'
-    ]
-  },
-  {
-    id: 4,
-    name: 'Deneyim 4',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=10',
-      'https://picsum.photos/400/300?random=11',
-      'https://picsum.photos/400/300?random=12'
-    ]
-  },
-  {
-    id: 5,
-    name: 'Deneyim 5',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=13',
-      'https://picsum.photos/400/300?random=14',
-      'https://picsum.photos/400/300?random=15'
-    ]
-  },
-  {
-    id: 6,
-    name: 'Deneyim 6',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=16',
-      'https://picsum.photos/400/300?random=17',
-      'https://picsum.photos/400/300?random=18'
-    ]
-  },
-  {
-    id: 7,
-    name: 'Deneyim 7',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=19',
-      'https://picsum.photos/400/300?random=20',
-      'https://picsum.photos/400/300?random=21'
-    ]
-  },
-  {
-    id: 8,
-    name: 'Deneyim 8',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=22',
-      'https://picsum.photos/400/300?random=23',
-      'https://picsum.photos/400/300?random=24'
-    ]
-  },
-  {
-    id: 9,
-    name: 'Deneyim 9',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=25',
-      'https://picsum.photos/400/300?random=26',
-      'https://picsum.photos/400/300?random=27'
-    ]
-  },
-  {
-    id: 10,
-    name: 'Deneyim 10',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=28',
-      'https://picsum.photos/400/300?random=29',
-      'https://picsum.photos/400/300?random=30'
-    ]
-  },
-  {
-    id: 11,
-    name: 'Deneyim 11',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=31',
-      'https://picsum.photos/400/300?random=32',
-      'https://picsum.photos/400/300?random=33'
-    ]
-  },
-  {
-    id: 12,
-    name: 'Deneyim 12',
-    description: 'Bu deneyim hakkında kısa açıklama',
-    images: [
-      'https://picsum.photos/400/300?random=34',
-      'https://picsum.photos/400/300?random=35',
-      'https://picsum.photos/400/300?random=36'
-    ]
-  }
-]);
-
+// Slider işlevleri
 const nextSlide = (expId) => {
   if (!currentSlides.value[expId]) currentSlides.value[expId] = 0;
   currentSlides.value[expId] = (currentSlides.value[expId] + 1) % 3;
@@ -181,6 +61,17 @@ const prevSlide = (expId) => {
   if (!currentSlides.value[expId]) currentSlides.value[expId] = 0;
   currentSlides.value[expId] = (currentSlides.value[expId] - 1 + 3) % 3;
 };
+
+// API çağrısı
+onMounted(async () => {
+  try {
+        const targetId = 1000; // targetId seçilene göre dinamik alınacak
+        experiences.value = await experienceService.getDefaultTargets(targetId);
+      } catch (error) {
+        console.error('Veriler yüklenirken bir hata oluştu:', error);
+      }
+});
+
 </script>
 
 <style lang="scss">
