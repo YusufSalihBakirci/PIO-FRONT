@@ -149,6 +149,9 @@ import SimpleEditor from "@/pages/editor/SimpleEditor.vue"
 import IndexKnowledgebase from "@/pages/knowledgebase/IndexKnowledgebase.vue"
 import IndexSupport from "@/pages/support/IndexSupport.vue"
 import ListExperience from "@/pages/dashboards/ListExperience.vue"
+import Gamification from "@/pages/dashboards/Gamification.vue"
+import InlineExperience from "@/pages/dashboards/InlineExperience.vue"
+import ExternalExperience from "@/pages/dashboards/ExternalExperience.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -230,8 +233,31 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: 'Experience List | Vue Admin Template',
         }
+      },
+      {
+        path: "gamification",
+        name: "gamification",
+        component: Gamification,
+        meta: {
+          title: 'Gamification | Vue Admin Template',
+        }
+      },
+      {
+        path: "inline_experience",
+        name: "inlineExperience",
+        component: InlineExperience,
+        meta: {
+          title: 'Inline Experience | Vue Admin Template',
+        }
+      },
+      {
+        path: "external_experience",
+        name: "externalExperience",
+        component: ExternalExperience,
+        meta: {
+          title: 'External Experience | Vue Admin Template',
+        }
       }
-
     ]
   },
   {

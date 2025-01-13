@@ -54,6 +54,21 @@ export const menu: MenuItem[] = [
                 path: "/dashboards/experience_list",
                 title: "ExperienceList",
                 type: "link"
+            },
+            {
+                path: "/dashboards/inline_experience",
+                title: "Inline Experience",
+                type: "link"
+            },
+            {
+                path: "/dashboards/external_experience",
+                title: "External Experience",
+                type: "link"
+            },
+            {
+                path: "/dashboards/gamification",
+                title: "Gamification",
+                type: "link"
             }
         ]
     },
