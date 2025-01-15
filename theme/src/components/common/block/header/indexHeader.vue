@@ -4,7 +4,7 @@
         <div class="header-left">
             <SearchData :class="store.active ? 'open' : ''" />
             <SearchBar />
-        </div>
+        </div> 
         <div class="nav-right">
             <ul class="header-right">
                 <li class="custom-dropdown ">

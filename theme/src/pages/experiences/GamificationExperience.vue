@@ -1,6 +1,6 @@
 <template>
   <div class="experience-list">
-    <Breadcrumbs main="Dashboard" mains="Inline Experience Page" title="Inline Experiences" />
+    <Breadcrumbs main="Dashboard" mains="Gamification Experience Page" title="Gamification Experiences" />
     <div class="experience-grid">
       <div v-for="exp in experiences" :key="exp.id" class="experience-card">
         <div class="card-header">
@@ -52,15 +52,34 @@ const currentSlides = ref({});
 const experiences = ref([
   {
     id: 1,
-    name: 'Inline Deneyim 1',
-    description: 'Inline deneyim açıklaması',
+    name: 'Gamification Deneyim 1',
+    description: 'Gamification deneyim açıklaması',
     images: [
-      'https://picsum.photos/400/300?random=101',
-      'https://picsum.photos/400/300?random=102',
-      'https://picsum.photos/400/300?random=103'
+      'https://picsum.photos/400/300?random=301',
+      'https://picsum.photos/400/300?random=302',
+      'https://picsum.photos/400/300?random=303'
     ]
   },
-  // Diğer deneyimler...
+  {
+    id: 2,
+    name: 'Gamification Deneyim 1',
+    description: 'Gamification deneyim açıklaması',
+    images: [
+      'https://picsum.photos/400/300?random=301',
+      'https://picsum.photos/400/300?random=302',
+      'https://picsum.photos/400/300?random=303'
+    ]
+  },
+  {
+    id: 3,
+    name: 'Gamification Deneyim 1',
+    description: 'Gamification deneyim açıklaması',
+    images: [
+      'https://picsum.photos/400/300?random=301',
+      'https://picsum.photos/400/300?random=302',
+      'https://picsum.photos/400/300?random=303'
+    ]
+  },
 ]);
 
 const nextSlide = (expId) => {

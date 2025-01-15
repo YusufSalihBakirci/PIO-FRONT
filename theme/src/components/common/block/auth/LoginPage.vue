@@ -67,7 +67,6 @@ import { ref } from "vue"
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useRouter } from 'vue-router'
-import { loginUser } from '@/api/auth'
 import CryptoJS from "crypto-js"; 
 import axios, { AxiosResponse } from 'axios';
 let type = ref<string>('password')

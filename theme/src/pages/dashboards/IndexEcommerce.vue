@@ -1,5 +1,5 @@
 <template>
-    <Breadcrumbs main="Dashboard" ecommorcedesc="true" mains="Ecommerce dashboard" title="Ecommerce" />
+    <Breadcrumbs main="Dashboard" ecommorcedesc="true" mains="Experia GA4  Dashboard" title="Experia GA4 Analytics" />
     <div class="container-fluid dashboard-2">
         <div class="row">
             <SalesAnalytics />
@@ -11,9 +11,6 @@
             <BestSeller />
             <SellingRate />
             <SwiperSlide colClass="col-xxl-3 col-xl-4 col-sm-6 box-col-6" :data="swipers" />
-            <ActivityTimeline />
-            <OurTarget />
-            <RecentOrders />
         </div>
     </div>
 </template>

@@ -5,7 +5,7 @@ import LoginPage from "@/components/common/block/auth/LoginPage.vue"
 import IndexDefault from "@/pages/dashboards/IndexDefault.vue"
 import IndexEcommerce from "@/pages/dashboards/IndexEcommerce.vue"
 import IndexEducation from "@/pages/dashboards/IndexEducation.vue"
-import IndexExperience from "@/pages/dashboards/IndexExperience.vue"
+import IndexExperience from "@/pages/experiences/IndexExperience.vue"
 import IndexGeneral from "@/pages/widgets/IndexGeneral.vue"
 import IndexChart from "@/pages/widgets/IndexChart.vue"
 import IndexProjectlist from "@/pages/project/IndexProjectlist.vue"
@@ -148,10 +148,10 @@ import IndexCk from "@/pages/editor/IndexCk.vue"
 import SimpleEditor from "@/pages/editor/SimpleEditor.vue"
 import IndexKnowledgebase from "@/pages/knowledgebase/IndexKnowledgebase.vue"
 import IndexSupport from "@/pages/support/IndexSupport.vue"
-import ListExperience from "@/pages/dashboards/ListExperience.vue"
-import Gamification from "@/pages/dashboards/Gamification.vue"
-import InlineExperience from "@/pages/dashboards/InlineExperience.vue"
-import ExternalExperience from "@/pages/dashboards/ExternalExperience.vue"
+import ListExperience from "@/pages/experiences/ListExperience.vue"
+import GamificationExperience from "@/pages/experiences/GamificationExperience.vue"
+import InlineExperience from "@/pages/experiences/InlineExperience.vue"
+import ExternalExperience from "@/pages/experiences/ExternalExperience.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -159,11 +159,11 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/dashboards/dashboard_default"
   },
   {
-    path: '/',
-    name: 'home',
+    path: "/",
+    name: "home",
     component: BodyView,
     meta: {
-      title: 'Admiro - Premium Vue Admin Template',
+      title: 'Experia - Self Service Experiences ',
     },
     children: [
       {
@@ -171,8 +171,53 @@ const routes: Array<RouteRecordRaw> = [
         name: 'defaultRoot',
         component: IndexDefault,
         meta: {
-          title: 'Admiro - Premium Vue Admin Template',
+          title: 'Experia - Self Service Experiences ',
         }
+      },
+      {
+        path: "experiences",
+        children: [
+          {
+            path: "create",
+            name: "createexperience",
+            component: IndexExperience,
+            meta: {
+              title: 'Create Experience | Vue Admin Template',
+            }
+          },
+          {
+            path: "list",
+            name: "experiencelist",
+            component: ListExperience,
+            meta: {
+              title: 'Experience List | Vue Admin Template',
+            }
+          },
+          {
+            path: "inline",
+            name: "inlineexperience",
+            component: InlineExperience,
+            meta: {
+              title: 'Inline Experience | Vue Admin Template',
+            }
+          },
+          {
+            path: "external",
+            name: "externalexperience",
+            component: ExternalExperience,
+            meta: {
+              title: 'External Experience | Vue Admin Template',
+            }
+          },
+          {
+            path: "gamification",
+            name: "gamification",
+            component: GamificationExperience,
+            meta: {
+              title: 'Gamification | Vue Admin Template',
+            }
+          }
+        ]
       }
     ]
   },
@@ -185,7 +230,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "login",
         component: LoginPage,
         meta: {
-          title: 'Admiro - Premium Vue Admin Template',
+          title: 'Experia - Self Service Experiences ',
         }
       }
     ]
@@ -199,7 +244,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "default",
         component: IndexDefault,
         meta: {
-          title: 'Dashboards | Admiro - Premium Vue Admin Template',
+          title: 'Dashboards | Experia - Self Service Experiences ',
         }
       },
       {
@@ -207,7 +252,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "education",
         component: IndexEducation,
         meta: {
-          title: 'Dashboards Education | Admiro - Premium Vue Admin Template',
+          title: 'Dashboards Education | Experia - Self Service Experiences ',
         }
       },
       {
@@ -215,7 +260,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "ecommerce",
         component: IndexEcommerce,
         meta: {
-          title: 'Dashboards Ecommerce | Admiro - Premium Vue Admin Template',
+          title: 'Dashboards Ecommerce | Experia - Self Service Experiences ',
         }
       },
       {
@@ -236,8 +281,8 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "gamification",
-        name: "gamification",
-        component: Gamification,
+        name: "GamificationExperience",
+        component: GamificationExperience,
         meta: {
           title: 'Gamification | Vue Admin Template',
         }
@@ -269,7 +314,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "General",
         component: IndexGeneral,
         meta: {
-          title: 'Widgets General | Admiro - Premium Vue Admin Template',
+          title: 'Widgets General | Experia - Self Service Experiences ',
         }
       },
       {
@@ -277,7 +322,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "charts",
         component: IndexChart,
         meta: {
-          title: 'Widgets Chart | Admiro - Premium Vue Admin Template',
+          title: 'Widgets Chart | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -291,7 +336,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "projectList",
         component: IndexProjectlist,
         meta: {
-          title: 'Project List| Admiro - Premium Vue Admin Template',
+          title: 'Project List| Experia - Self Service Experiences ',
         }
       },
       {
@@ -299,7 +344,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "createProject",
         component: IndexCreateProject,
         meta: {
-          title: 'Create Project| Admiro - Premium Vue Admin Template',
+          title: 'Create Project| Experia - Self Service Experiences ',
         }
       }
     ]
@@ -313,7 +358,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "fileManager",
         component: IndexFileManeger,
         meta: {
-          title: 'File Manager| Admiro - Premium Vue Admin Template',
+          title: 'File Manager| Experia - Self Service Experiences ',
         }
       },
       {
@@ -321,7 +366,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "kanbanBoard",
         component: IndexKanbanBoard,
         meta: {
-          title: 'kanban Board| Admiro - Premium Vue Admin Template',
+          title: 'kanban Board| Experia - Self Service Experiences ',
         }
       },
       {
@@ -329,7 +374,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "letterbox",
         component: IndexLetterBox,
         meta: {
-          title: 'Letter Box| Admiro - Premium Vue Admin Template',
+          title: 'Letter Box| Experia - Self Service Experiences ',
         }
       },
       {
@@ -337,7 +382,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Chatapp",
         component: IndexPrivateChat,
         meta: {
-          title: 'Private Chat| Admiro - Premium Vue Admin Template',
+          title: 'Private Chat| Experia - Self Service Experiences ',
         }
       },
       {
@@ -345,7 +390,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Group Chat",
         component: IndexGroupChat,
         meta: {
-          title: 'Group Chat| Admiro - Premium Vue Admin Template',
+          title: 'Group Chat| Experia - Self Service Experiences ',
         }
       },
       {
@@ -353,7 +398,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "bookmark",
         component: IndexBookmark,
         meta: {
-          title: 'Bookmark| Admiro - Premium Vue Admin Template',
+          title: 'Bookmark| Experia - Self Service Experiences ',
         }
       },
       {
@@ -361,7 +406,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "contacts",
         component: IndexContact,
         meta: {
-          title: 'contact| Admiro - Premium Vue Admin Template',
+          title: 'contact| Experia - Self Service Experiences ',
         }
       },
       {
@@ -369,7 +414,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "todo",
         component: IndexTodo,
         meta: {
-          title: 'To Do| Admiro - Premium Vue Admin Template',
+          title: 'To Do| Experia - Self Service Experiences ',
         }
       },
       {
@@ -377,7 +422,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "task",
         component: IndexTask,
         meta: {
-          title: 'Task| Admiro - Premium Vue Admin Template',
+          title: 'Task| Experia - Self Service Experiences ',
         }
       },
       {
@@ -385,7 +430,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "calendar",
         component: IndexCalendar,
         meta: {
-          title: 'Calendar| Admiro - Premium Vue Admin Template',
+          title: 'Calendar| Experia - Self Service Experiences ',
         }
       },
       {
@@ -393,7 +438,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "button",
         component: IndexButtons,
         meta: {
-          title: 'Buttons | Admiro - Premium Vue Admin Template',
+          title: 'Buttons | Experia - Self Service Experiences ',
         }
       },
 
@@ -408,7 +453,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "addporduct",
         component: IndexAddProduct,
         meta: {
-          title: 'Add Product | Admiro - Premium Vue Admin Template',
+          title: 'Add Product | Experia - Self Service Experiences ',
         }
       },
       {
@@ -416,7 +461,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "product",
         component: IndexProduct,
         meta: {
-          title: 'Product | Admiro - Premium Vue Admin Template',
+          title: 'Product | Experia - Self Service Experiences ',
         }
       },
       {
@@ -424,7 +469,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "cart",
         component: IndexCart,
         meta: {
-          title: 'Cart | Admiro - Premium Vue Admin Template',
+          title: 'Cart | Experia - Self Service Experiences ',
         }
       },
       {
@@ -432,7 +477,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "productPage",
         component: IndexProductPage,
         meta: {
-          title: 'Product Page | Admiro - Premium Vue Admin Template',
+          title: 'Product Page | Experia - Self Service Experiences ',
         }
       },
 
@@ -441,7 +486,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "paymentDetail",
         component: IndexPaymentDetail,
         meta: {
-          title: 'Payment Detail | Admiro - Premium Vue Admin Template',
+          title: 'Payment Detail | Experia - Self Service Experiences ',
         }
       },
       {
@@ -449,7 +494,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_1",
         component: IndexInvoiceOne,
         meta: {
-          title: 'Invoice | Admiro - Premium Vue Admin Template',
+          title: 'Invoice | Experia - Self Service Experiences ',
         }
       },
       {
@@ -457,7 +502,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_2",
         component: IndexInvoiceTwo,
         meta: {
-          title: 'Invoice Two | Admiro - Premium Vue Admin Template',
+          title: 'Invoice Two | Experia - Self Service Experiences ',
         }
       },
       {
@@ -465,7 +510,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_3",
         component: IndexInvoiceThree,
         meta: {
-          title: 'Invoice Three | Admiro - Premium Vue Admin Template',
+          title: 'Invoice Three | Experia - Self Service Experiences ',
         }
       },
       {
@@ -473,7 +518,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_4",
         component: IndexInvoiceFour,
         meta: {
-          title: 'Invoice Four | Admiro - Premium Vue Admin Template',
+          title: 'Invoice Four | Experia - Self Service Experiences ',
         }
       },
       {
@@ -481,7 +526,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_5",
         component: IndexInvoiceFive,
         meta: {
-          title: 'Invoice Five | Admiro - Premium Vue Admin Template',
+          title: 'Invoice Five | Experia - Self Service Experiences ',
         }
       },
       {
@@ -489,7 +534,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Invoice_6",
         component: IndexInvoiceSix,
         meta: {
-          title: 'Invoice Six | Admiro - Premium Vue Admin Template',
+          title: 'Invoice Six | Experia - Self Service Experiences ',
         }
       },
       {
@@ -497,7 +542,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Checkout",
         component: IndexCheckout,
         meta: {
-          title: 'Checkout | Admiro - Premium Vue Admin Template',
+          title: 'Checkout | Experia - Self Service Experiences ',
         }
       },
       {
@@ -505,7 +550,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "pricing",
         component: IndexPricing,
         meta: {
-          title: 'Pricing | Admiro - Premium Vue Admin Template',
+          title: 'Pricing | Experia - Self Service Experiences ',
         }
       },
       {
@@ -513,7 +558,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Wishlist",
         component: IndexWishlist,
         meta: {
-          title: 'Wish List | Admiro - Premium Vue Admin Template',
+          title: 'Wish List | Experia - Self Service Experiences ',
         }
       },
       {
@@ -521,7 +566,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Orderhistory",
         component: IndexOrder,
         meta: {
-          title: 'Order History | Admiro - Premium Vue Admin Template',
+          title: 'Order History | Experia - Self Service Experiences ',
         }
       },
       {
@@ -529,7 +574,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "productlist",
         component: IndexProductList,
         meta: {
-          title: 'Product list | Admiro - Premium Vue Admin Template',
+          title: 'Product list | Experia - Self Service Experiences ',
         }
       },
       {
@@ -537,7 +582,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "category page",
         component: IndexCategory,
         meta: {
-          title: 'Category Page | Admiro - Premium Vue Admin Template',
+          title: 'Category Page | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -552,7 +597,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "userProfile",
         component: IndexProfile,
         meta: {
-          title: 'User Profile| Admiro - Premium Vue Admin Template',
+          title: 'User Profile| Experia - Self Service Experiences ',
         }
       },
       {
@@ -560,7 +605,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexEdit",
         component: IndexEdit,
         meta: {
-          title: 'User Edit| Admiro - Premium Vue Admin Template',
+          title: 'User Edit| Experia - Self Service Experiences ',
         }
       },
       {
@@ -568,7 +613,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "usercard",
         component: IndexCard,
         meta: {
-          title: 'User Cards| Admiro - Premium Vue Admin Template',
+          title: 'User Cards| Experia - Self Service Experiences ',
         }
       }
     ]
@@ -582,7 +627,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "socialapp",
         component: IndexSoical,
         meta: {
-          title: 'Social App| Admiro - Premium Vue Admin Template',
+          title: 'Social App| Experia - Self Service Experiences ',
         }
       },
       {
@@ -590,7 +635,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "searchresult",
         component: IndexSearch,
         meta: {
-          title: 'Search| Admiro - Premium Vue Admin Template',
+          title: 'Search| Experia - Self Service Experiences ',
         }
       },
       {
@@ -598,7 +643,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "samplepage",
         component: IndexSample,
         meta: {
-          title: 'Simple Page| Admiro - Premium Vue Admin Template',
+          title: 'Simple Page| Experia - Self Service Experiences ',
         }
       },
       {
@@ -606,7 +651,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Internationalization",
         component: IndexInternationalization,
         meta: {
-          title: 'Internationalization| Admiro - Premium Vue Admin Template',
+          title: 'Internationalization| Experia - Self Service Experiences ',
         }
       },
       {
@@ -614,7 +659,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "faq",
         component: IndexFaq,
         meta: {
-          title: 'Faq| Admiro - Premium Vue Admin Template',
+          title: 'Faq| Experia - Self Service Experiences ',
         }
       },
       {
@@ -622,7 +667,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Support",
         component: IndexSupport,
         meta: {
-          title: 'Support | Admiro - Premium Vue Admin Template',
+          title: 'Support | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -636,7 +681,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Typography",
         component: IndexTypography,
         meta: {
-          title: 'Uikits Typography | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Typography | Experia - Self Service Experiences ',
         }
       },
       {
@@ -644,7 +689,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Avatars",
         component: IndexAvatars,
         meta: {
-          title: 'Uikits Avatars | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Avatars | Experia - Self Service Experiences ',
         }
       },
       {
@@ -652,7 +697,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Helper",
         component: IndexHelper,
         meta: {
-          title: 'Uikits Helper Classes | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Helper Classes | Experia - Self Service Experiences ',
         }
       },
       {
@@ -660,7 +705,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Grid",
         component: IndexGrid,
         meta: {
-          title: 'Uikits Grid | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Grid | Experia - Self Service Experiences ',
         }
       },
       {
@@ -668,7 +713,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "TagPills",
         component: IndexTagPills,
         meta: {
-          title: 'Uikits Tag & Pills | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Tag & Pills | Experia - Self Service Experiences ',
         }
       },
       {
@@ -676,7 +721,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Progress",
         component: IndexProgress,
         meta: {
-          title: 'Uikits Progressbar | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Progressbar | Experia - Self Service Experiences ',
         }
       },
       {
@@ -684,7 +729,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "model",
         component: IndexModal,
         meta: {
-          title: 'Uikits Modal | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Modal | Experia - Self Service Experiences ',
         }
       },
       {
@@ -692,7 +737,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "alert",
         component: IndexAlert,
         meta: {
-          title: 'Uikits Alert | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Alert | Experia - Self Service Experiences ',
         }
       },
       {
@@ -700,7 +745,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "popover",
         component: IndexPopover,
         meta: {
-          title: 'Uikits popover | Admiro - Premium Vue Admin Template',
+          title: 'Uikits popover | Experia - Self Service Experiences ',
         }
       },
       {
@@ -708,7 +753,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "tooltip",
         component: IndexTooltip,
         meta: {
-          title: 'Uikits Tooltip | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Tooltip | Experia - Self Service Experiences ',
         }
       },
       {
@@ -716,7 +761,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Dropdown",
         component: IndexDropdown,
         meta: {
-          title: 'Uikits Dropdown | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Dropdown | Experia - Self Service Experiences ',
         }
       },
       {
@@ -724,7 +769,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Accordion",
         component: IndexAccordion,
         meta: {
-          title: 'Uikits Accordion | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Accordion | Experia - Self Service Experiences ',
         }
       },
       {
@@ -732,7 +777,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Tabs",
         component: IndexTabs,
         meta: {
-          title: 'Uikits Tabs | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Tabs | Experia - Self Service Experiences ',
         }
       },
       {
@@ -740,7 +785,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "lists",
         component: IndexLists,
         meta: {
-          title: 'Uikits Lists | Admiro - Premium Vue Admin Template',
+          title: 'Uikits Lists | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -754,7 +799,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Scrollable",
         component: IndexScrollable,
         meta: {
-          title: 'Bonus UI  Scrollable | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Scrollable | Experia - Self Service Experiences ',
         }
       },
       {
@@ -762,7 +807,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "tree",
         component: IndexTree,
         meta: {
-          title: 'Bonus UI  Tree | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Tree | Experia - Self Service Experiences ',
         }
       },
       {
@@ -770,7 +815,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Toasts",
         component: IndexToasts,
         meta: {
-          title: 'Bonus UI  Toasts | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Toasts | Experia - Self Service Experiences ',
         }
       },
       {
@@ -778,7 +823,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "rating",
         component: IndexRating,
         meta: {
-          title: 'Bonus UI  Rating | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Rating | Experia - Self Service Experiences ',
         }
       },
       {
@@ -786,7 +831,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Dropzone",
         component: IndexDropzone,
         meta: {
-          title: 'Bonus UI  Dropzone | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Dropzone | Experia - Self Service Experiences ',
         }
       },
       {
@@ -794,7 +839,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "tour",
         component: IndexTour,
         meta: {
-          title: 'Bonus UI  Tour | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Tour | Experia - Self Service Experiences ',
         }
       },
       {
@@ -802,7 +847,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "sweetalert",
         component: IndexSweetalert,
         meta: {
-          title: 'Bonus UI  SweetAlert | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  SweetAlert | Experia - Self Service Experiences ',
         }
       },
       {
@@ -810,7 +855,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "animationModal",
         component: AnimationModal,
         meta: {
-          title: 'Bonus UI  Animated Modal | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Animated Modal | Experia - Self Service Experiences ',
         }
       },
       {
@@ -818,7 +863,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "slider",
         component: IndexSlider,
         meta: {
-          title: 'Bonus UI  Slider | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Slider | Experia - Self Service Experiences ',
         }
       },
       {
@@ -826,7 +871,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "ribbon",
         component: IndexRibbon,
         meta: {
-          title: 'Bonus UI  Ribbons | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Ribbons | Experia - Self Service Experiences ',
         }
       },
       {
@@ -834,7 +879,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "pagenation",
         component: IndexPagenation,
         meta: {
-          title: 'Bonus UI  Pagenation | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Pagenation | Experia - Self Service Experiences ',
         }
       },
       {
@@ -842,7 +887,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Breadcrumb",
         component: IndexBreadcrumb,
         meta: {
-          title: 'Bonus UI  Breadcrumb | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Breadcrumb | Experia - Self Service Experiences ',
         }
       },
       {
@@ -850,7 +895,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Range",
         component: IndexRange,
         meta: {
-          title: 'Bonus UI  Range | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Range | Experia - Self Service Experiences ',
         }
       },
       {
@@ -858,7 +903,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "imageCropper",
         component: IndexCropper,
         meta: {
-          title: 'Bonus UI  imageCropper | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  imageCropper | Experia - Self Service Experiences ',
         }
       },
       {
@@ -866,7 +911,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Basiccard",
         component: IndexBasiccard,
         meta: {
-          title: 'Bonus UI  Basic Card | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Basic Card | Experia - Self Service Experiences ',
         }
       },
       {
@@ -874,7 +919,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Creative",
         component: IndexCreative,
         meta: {
-          title: 'Bonus UI  Creative Card | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Creative Card | Experia - Self Service Experiences ',
         }
       },
       {
@@ -882,7 +927,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Draggable",
         component: IndexDraggable,
         meta: {
-          title: 'Bonus UI  Draggable Card | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Draggable Card | Experia - Self Service Experiences ',
         }
       },
       {
@@ -890,7 +935,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexTimeline",
         component: IndexTimeline,
         meta: {
-          title: 'Bonus UI  Timeline | Admiro - Premium Vue Admin Template',
+          title: 'Bonus UI  Timeline | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -904,7 +949,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "animate",
         component: IndexAnimate,
         meta: {
-          title: 'Animate | Admiro - Premium Vue Admin Template',
+          title: 'Animate | Experia - Self Service Experiences ',
         }
       },
       {
@@ -912,7 +957,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "aos",
         component: IndexAos,
         meta: {
-          title: 'Aos Animation | Admiro - Premium Vue Admin Template',
+          title: 'Aos Animation | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -926,7 +971,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Fontawesome",
         component: IndexFontawesome,
         meta: {
-          title: 'Icons Fontawesome | Admiro - Premium Vue Admin Template',
+          title: 'Icons Fontawesome | Experia - Self Service Experiences ',
         }
       },
       {
@@ -934,7 +979,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Themify",
         component: IndexThemify,
         meta: {
-          title: 'Icons Themify | Admiro - Premium Vue Admin Template',
+          title: 'Icons Themify | Experia - Self Service Experiences ',
         }
       },
       {
@@ -942,7 +987,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Feather",
         component: IndexFeather,
         meta: {
-          title: 'Icons Feather | Admiro - Premium Vue Admin Template',
+          title: 'Icons Feather | Experia - Self Service Experiences ',
         }
       },
       {
@@ -950,7 +995,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Iconlys",
         component: IndexIconly,
         meta: {
-          title: 'Icons Iconly | Admiro - Premium Vue Admin Template',
+          title: 'Icons Iconly | Experia - Self Service Experiences ',
         }
       },
 
@@ -965,7 +1010,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Apexchart",
         component: IndexApexchart,
         meta: {
-          title: 'Chart Apex Chart | Admiro - Premium Vue Admin Template',
+          title: 'Chart Apex Chart | Experia - Self Service Experiences ',
         }
       },
       {
@@ -973,7 +1018,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "google",
         component: IndexGoogle,
         meta: {
-          title: 'Chart Google Chart | Admiro - Premium Vue Admin Template',
+          title: 'Chart Google Chart | Experia - Self Service Experiences ',
         }
       },
       {
@@ -981,7 +1026,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "chartist",
         component: IndexChartist,
         meta: {
-          title: 'Chart Chartist Chart | Admiro - Premium Vue Admin Template',
+          title: 'Chart Chartist Chart | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -995,7 +1040,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "formValidation",
         component: IndexValidation,
         meta: {
-          title: 'Form Controls Form Validation | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Form Validation | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1003,7 +1048,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexInputs",
         component: IndexInputs,
         meta: {
-          title: 'Form Controls Base Input | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Base Input | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1011,7 +1056,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexCheckbox",
         component: IndexCheckbox,
         meta: {
-          title: 'Form Controls Checkbox & Radio | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Checkbox & Radio | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1019,7 +1064,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Select",
         component: IndexSelect,
         meta: {
-          title: 'Form Widgets Select | Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Select | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1027,7 +1072,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexGroups",
         component: IndexGroups,
         meta: {
-          title: 'Form Controls Input Groups | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Input Groups | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1035,7 +1080,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexMask",
         component: IndexMask,
         meta: {
-          title: 'Form Controls Input Mask | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Input Mask | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1043,7 +1088,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexMega",
         component: IndexMega,
         meta: {
-          title: 'Form Controls Mega Options | Admiro - Premium Vue Admin Template',
+          title: 'Form Controls Mega Options | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1051,7 +1096,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "datapicker",
         component: IndexDatapicker,
         meta: {
-          title: 'Form Widgets Datepicker | Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Datepicker | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1059,7 +1104,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexTouchspin",
         component: IndexTouchspin,
         meta: {
-          title: 'Form Widgets Touchspin | Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Touchspin | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1067,7 +1112,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexSwitch",
         component: IndexSwitch,
         meta: {
-          title: 'Form Widgets Switch| Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Switch| Experia - Self Service Experiences ',
         }
       },
       {
@@ -1075,7 +1120,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexTypeahead",
         component: IndexTypeahead,
         meta: {
-          title: 'Form Widgets Typeahead | Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Typeahead | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1083,7 +1128,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "indexClipboard",
         component: IndexClipboard,
         meta: {
-          title: 'Form Widgets Clipboard | Admiro - Premium Vue Admin Template',
+          title: 'Form Widgets Clipboard | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1091,7 +1136,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "formWizardtwo",
         component: FormWizard2,
         meta: {
-          title: 'Form Layout Form Wizard 2 | Admiro - Premium Vue Admin Template',
+          title: 'Form Layout Form Wizard 2 | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1099,7 +1144,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Two Factor",
         component: IndexTwofactor,
         meta: {
-          title: 'Form Layout Two Factor| Admiro - Premium Vue Admin Template',
+          title: 'Form Layout Two Factor| Experia - Self Service Experiences ',
         }
       },
       {
@@ -1107,7 +1152,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "formWizard",
         component: FormWizard,
         meta: {
-          title: 'Form Layout Form Wizard 2| Admiro - Premium Vue Admin Template',
+          title: 'Form Layout Form Wizard 2| Experia - Self Service Experiences ',
         }
       },
     ]
@@ -1121,7 +1166,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "bootstrp",
         component: IndexBootstrap,
         meta: {
-          title: 'Table Bootstrap Table | Admiro - Premium Vue Admin Template',
+          title: 'Table Bootstrap Table | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1129,7 +1174,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "tablecomponent",
         component: IndexComponent,
         meta: {
-          title: 'Table Table Components | Admiro - Premium Vue Admin Template',
+          title: 'Table Table Components | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1137,7 +1182,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "basicinit",
         component: IndexInit,
         meta: {
-          title: 'Table Basic Init | Admiro - Premium Vue Admin Template',
+          title: 'Table Basic Init | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1147,7 +1192,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage1",
     component: IndexErrorPage1,
     meta: {
-      title: 'Error Page1 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page1 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1155,7 +1200,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage2",
     component: IndexErrorPage2,
     meta: {
-      title: 'Error Page2 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page2 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1163,7 +1208,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage3",
     component: IndexErrorPage3,
     meta: {
-      title: 'Error Page3 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page3 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1171,7 +1216,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage4",
     component: IndexErrorPage4,
     meta: {
-      title: 'Error Page4 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page4 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1179,7 +1224,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage5",
     component: IndexErrorPage5,
     meta: {
-      title: 'Error Page5 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page5 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1187,7 +1232,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "errorPage6",
     component: IndexErrorPage6,
     meta: {
-      title: 'Error Page6 | Admiro - Premium Vue Admin Template',
+      title: 'Error Page6 | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1195,7 +1240,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "comingsoonPage",
     component: IndexComingsoonSimple,
     meta: {
-      title: 'Comingsoon Page | Admiro - Premium Vue Admin Template',
+      title: 'Comingsoon Page | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1203,7 +1248,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "comingsoonVideo",
     component: IndexComingsoonVideo,
     meta: {
-      title: 'Comingsoon Video | Admiro - Premium Vue Admin Template',
+      title: 'Comingsoon Video | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1211,7 +1256,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "comingsoonImage",
     component: IndexComingsoonImage,
     meta: {
-      title: 'Comingsoon Image | Admiro - Premium Vue Admin Template',
+      title: 'Comingsoon Image | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1219,7 +1264,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "loginsimple",
     component: LoginSimple,
     meta: {
-      title: 'Login Simple | Admiro - Premium Vue Admin Template',
+      title: 'Login Simple | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1227,7 +1272,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "visuallogin",
     component: LoginImage,
     meta: {
-      title: 'Visual Login| Admiro - Premium Vue Admin Template',
+      title: 'Visual Login| Experia - Self Service Experiences ',
     }
   },
   {
@@ -1235,7 +1280,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "loginImagetwo",
     component: LoginImageTwo,
     meta: {
-      title: 'Visual Login Two | Admiro - Premium Vue Admin Template',
+      title: 'Visual Login Two | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1243,7 +1288,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "loginValidation",
     component: LoginValidation,
     meta: {
-      title: ' Validation Login | Admiro - Premium Vue Admin Template',
+      title: ' Validation Login | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1251,7 +1296,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "loginTooltip",
     component: LoginTooltip,
     meta: {
-      title: 'Tooltip Login | Admiro - Premium Vue Admin Template',
+      title: 'Tooltip Login | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1259,7 +1304,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "loginSweetalert",
     component: LoginSweetalert,
     meta: {
-      title: 'Login Sweetalert | Admiro - Premium Vue Admin Template',
+      title: 'Login Sweetalert | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1267,7 +1312,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "registerImagetwo",
     component: RegisterImageTwo,
     meta: {
-      title: 'Visual Register Image Two | Admiro - Premium Vue Admin Template',
+      title: 'Visual Register Image Two | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1275,7 +1320,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "registerSimple",
     component: RegisterSimple,
     meta: {
-      title: 'Register | Admiro - Premium Vue Admin Template',
+      title: 'Register | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1283,7 +1328,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "registerImage",
     component: RegisterImage,
     meta: {
-      title: 'Register Image | Admiro - Premium Vue Admin Template',
+      title: 'Register Image | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1291,7 +1336,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "registerWizard",
     component: RegisterWizard,
     meta: {
-      title: 'Register Wizard | Admiro - Premium Vue Admin Template',
+      title: 'Register Wizard | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1299,7 +1344,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "unlockUser",
     component: UnlockUser,
     meta: {
-      title: 'Unlock User | Admiro - Premium Vue Admin Template',
+      title: 'Unlock User | Experia - Self Service Experiences ',
     }
   },
 
@@ -1308,7 +1353,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "forgetPassword",
     component: ForgetPassword,
     meta: {
-      title: 'Forget Password | Admiro - Premium Vue Admin Template',
+      title: 'Forget Password | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1316,7 +1361,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "resetPassword",
     component: ResetPassword,
     meta: {
-      title: 'Reset Password | Admiro - Premium Vue Admin Template',
+      title: 'Reset Password | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1324,7 +1369,7 @@ const routes: Array<RouteRecordRaw> = [
     name: "maintenanceView",
     component: MaintenanceView,
     meta: {
-      title: 'Maintenance | Admiro - Premium Vue Admin Template',
+      title: 'Maintenance | Experia - Self Service Experiences ',
     }
   },
   {
@@ -1336,7 +1381,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Gallerygrid",
         component: IndexGallery,
         meta: {
-          title: 'Grid Gallery | Admiro - Premium Vue Admin Template',
+          title: 'Grid Gallery | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1344,7 +1389,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "griddesc",
         component: IndexGriddesc,
         meta: {
-          title: 'Grid Gallery With Desc | Admiro - Premium Vue Admin Template',
+          title: 'Grid Gallery With Desc | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1352,7 +1397,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Masonry",
         component: IndexMasonry,
         meta: {
-          title: 'Masonry | Admiro - Premium Vue Admin Template',
+          title: 'Masonry | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1360,7 +1405,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Masonarydesc",
         component: IndexMasonarydesc,
         meta: {
-          title: 'Masonry Desc | Admiro - Premium Vue Admin Template',
+          title: 'Masonry Desc | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1368,7 +1413,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "hovergallery",
         component: IndexHoverGallery,
         meta: {
-          title: 'Hover Gallery | Admiro - Premium Vue Admin Template',
+          title: 'Hover Gallery | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1382,7 +1427,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "blogsingle",
         component: IndexSingle,
         meta: {
-          title: 'Blog Single | Admiro - Premium Vue Admin Template',
+          title: 'Blog Single | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1390,7 +1435,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "blogdetails",
         component: IndexDetails,
         meta: {
-          title: 'Blog Details | Admiro - Premium Vue Admin Template',
+          title: 'Blog Details | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1398,7 +1443,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "addpost",
         component: IndexAdd,
         meta: {
-          title: 'Add Post | Admiro - Premium Vue Admin Template',
+          title: 'Add Post | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1412,7 +1457,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "jobcard",
         component: IndexCards,
         meta: {
-          title: 'Job Card | Admiro - Premium Vue Admin Template',
+          title: 'Job Card | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1421,7 +1466,7 @@ const routes: Array<RouteRecordRaw> = [
         component: IndexDetail,
         props: true,
         meta: {
-          title: 'Job Details | Admiro - Premium Vue Admin Template',
+          title: 'Job Details | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1429,7 +1474,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "jobapply",
         component: IndexApply,
         meta: {
-          title: 'Job Apply | Admiro - Premium Vue Admin Template',
+          title: 'Job Apply | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1437,7 +1482,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "joblist",
         component: IndexList,
         meta: {
-          title: 'Job List | Admiro - Premium Vue Admin Template',
+          title: 'Job List | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1451,7 +1496,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Learninglist",
         component: IndexLearning,
         meta: {
-          title: 'Learning List | Admiro - Premium Vue Admin Template',
+          title: 'Learning List | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1459,7 +1504,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "coursedetailed",
         component: IndexCourse,
         meta: {
-          title: 'course Detailed | Admiro - Premium Vue Admin Template',
+          title: 'course Detailed | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1473,7 +1518,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "googlemaps",
         component: IndexGoogleMap,
         meta: {
-          title: 'Google Map | Admiro - Premium Vue Admin Template',
+          title: 'Google Map | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1481,7 +1526,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "mapLeaflet",
         component: IndexLeaflet,
         meta: {
-          title: 'Leaflet Map | Admiro - Premium Vue Admin Template',
+          title: 'Leaflet Map | Experia - Self Service Experiences ',
         }
       },
 
@@ -1496,7 +1541,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "simpleEditor",
         component: SimpleEditor,
         meta: {
-          title: 'Simple Editor | Admiro - Premium Vue Admin Template',
+          title: 'Simple Editor | Experia - Self Service Experiences ',
         }
       },
       {
@@ -1504,7 +1549,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "ckeditor",
         component: IndexCk,
         meta: {
-          title: 'Ck Editor | Admiro - Premium Vue Admin Template',
+          title: 'Ck Editor | Experia - Self Service Experiences ',
         }
       }
     ]
@@ -1518,7 +1563,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "Knowledgebase",
         component: IndexKnowledgebase,
         meta: {
-          title: 'Knowledgebase | Admiro - Premium Vue Admin Template',
+          title: 'Knowledgebase | Experia - Self Service Experiences ',
         }
       },
     ]

@@ -8,7 +8,7 @@
             </div>
             <div class="card-body">
                 <div class="d-flex align-center">
-                    <h1>Hello, Amirreza <img src="@/assets/images/dashboard-1/hand.png" alt="" /></h1>
+                    <h1>Hello, Yusuf Salih <img src="@/assets/images/dashboard-1/hand.png" alt="" /></h1>
                 </div>
                 <p> Welcome back! Let’s start from where you left.</p>
                 <div class="d-flex align-center justify-content-between"><a class="btn btn-pill btn-primary" href="">Whats
