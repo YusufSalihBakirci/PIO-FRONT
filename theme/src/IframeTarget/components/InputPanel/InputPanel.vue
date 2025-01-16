@@ -1,5 +1,5 @@
 <template>
-  <div id="input-panel-main" class="w-1/2 p-1">
+  <div id="input-panel-main" class="w-1/2 p-3">
     <!-- Target Main Category -->
     <label class="block text-lg text-base font-semibold mb-1" for="target-type"> Target Main Type </label>
     <select class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500" name="target-type" v-model="selectedOption" @change="optionChange">
