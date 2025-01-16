@@ -1,6 +1,7 @@
 <template>
+    <div class="flex p-0">
+    <LogoView />
     <div class="page-main-header col">
-        <LogoView />
         <div class="header-left">
             <SearchData :class="store.active ? 'open' : ''" />
             <SearchBar />
@@ -37,6 +38,7 @@
             </ul>
         </div>
     </div>
+</div>
 </template>
 <script lang="ts" setup>
 import { defineAsyncComponent, defineEmits, } from 'vue'
