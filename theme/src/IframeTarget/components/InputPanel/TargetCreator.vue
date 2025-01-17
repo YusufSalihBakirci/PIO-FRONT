@@ -135,7 +135,7 @@
     </div>
 
     <div class="flex justify-end mt-8 pt-4 border-t border-gray-200">
-      <button class="px-6 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg active:shadow-md" @click="onPreview">
+      <button class="px-6 py-2.5 bg-[#308e87] text-white rounded-lg hover:bg-[#277571] transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg active:shadow-md" @click="onPreview">
         Preview
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />

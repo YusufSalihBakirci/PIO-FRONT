@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col w-full relative p-3 gap-7">
     <div class="flex justify-between block text-lg text-base font-semibold mb-1 w-full h-fit">
-      <span class="flex items-center w-96 gap-2 justify-between ml-2 px-2 py-1 bg-blue-600 text-white rounded-md font-medium">
+      <span class="flex items-center w-96 gap-2 justify-between ml-2 px-2 py-1 bg-[#308e87] text-white rounded-md font-medium">
         Selected View:
-        <span class="device-type bg-zinc-600 rounded-md px-1 py-1 w-25 text-center">
+        <span class="device-type bg-[#f39159] rounded-md px-1 py-1 w-25 text-center">
           {{ capitalize(selectedResolution.deviceType) }}
         </span>
       </span>
@@ -22,7 +22,9 @@
     </div>
 
     <!-- Iframe Container -->
-    <iframe id="piovare-frame" ref="siteFrame" :src="iframeContent" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-same-origin allow-scripts"></iframe>
+    <div class="relative w-full h-full min-w-[920px]">
+      <iframe id="piovare-frame" ref="siteFrame" :src="iframeContent" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-same-origin allow-scripts"></iframe>
+    </div>
   </div>
 </template>
 
