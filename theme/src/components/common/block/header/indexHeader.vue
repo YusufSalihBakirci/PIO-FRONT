@@ -8,9 +8,9 @@
         </div> 
         <div class="nav-right">
             <ul class="header-right">
-                <li class="custom-dropdown ">
+                <!-- <li class="custom-dropdown ">
                     <LanguageView />
-                </li>
+                </li> -->
                 <li class="search d-lg-none d-flex">
                     <SearchInput @click="store.openActives()" />
                 </li>

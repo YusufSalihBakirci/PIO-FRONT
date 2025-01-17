@@ -1,23 +1,23 @@
 <template>
-    <TapTop />
     <div class="page-wrapper"
-        :class="[!store.togglesidebar ? 'sidebar-open' : '', display ? 'compact-wrapper ' : layoutobj]" id="pageWrapper">
-        <header class="page-header row">
-            <Header @click="sidebar_toggle" />
-        </header>
-        <div class="page-body-wrapper">
-            <div class="overlay"></div>
-            <aside class="page-sidebar" :class="storeLayout.svg == 'stroke-svg' ? '' : 'iconcolor-sidebar'"
-                :data-sidebar-layout="storeLayout.svg == 'stroke-svg' ? 'stroke-svg' : 'iconcolor-sidebar'">
-                <Sidebar />
-            </aside>
-            <div class="page-body">
-                <router-view></router-view>
-            </div>
-            <FooterView />
-        </div>
+    :class="[!store.togglesidebar ? 'sidebar-open' : '', display ? 'compact-wrapper ' : layoutobj]" id="pageWrapper">
+    <header class="page-header row">
+        <Header @click="sidebar_toggle" />
+    </header>
+    <div class="page-body-wrapper">
+        <div class="overlay"></div>
+        <aside class="page-sidebar" :class="storeLayout.svg == 'stroke-svg' ? '' : 'iconcolor-sidebar'"
+        :data-sidebar-layout="storeLayout.svg == 'stroke-svg' ? 'stroke-svg' : 'iconcolor-sidebar'">
+        <Sidebar />
+    </aside>
+    <div class="page-body">
+        <router-view></router-view>
     </div>
-    <Customizer />
+    <FooterView />
+</div>
+<TapTop />
+    </div>
+    <!-- <Customizer/> -->
 </template>
 <script lang="ts" setup>
 import { defineAsyncComponent, ref, onMounted, watch } from 'vue'
