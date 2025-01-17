@@ -1,39 +1,111 @@
 <template>
   <div id="input-panel-main" class="w-1/2 p-3">
-    <!-- Target Main Category -->
-    <label class="block text-lg text-base font-semibold mb-1" for="target-type"> Target Main Type </label>
-    <select class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500" name="target-type" v-model="selectedOption" @change="optionChange">
-      <option value="" disabled selected :key="-1">Select target type</option>
-      <option v-for="(value, key, index) in TargetConfig" :value="key" :key="index">
-        {{ key }}
-      </option>
-    </select>
-    <!-- Target Main Category -->
+    <template v-if="!showRequirements">
+      <!-- Target Main Category -->
+      <div class="mb-6">
+        <label class="block text-lg font-semibold mb-4">Target Main Type</label>
+        <div class="grid grid-cols-2 gap-4">
+          <button
+            v-for="type in targetTypes"
+            :key="type.id"
+            @click="selectMainType(type.value)"
+            class="flex flex-col items-center p-4 border rounded-xl transition-all duration-200 hover:shadow-lg"
+            :class="[
+              selectedOption === type.value 
+                ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-md' 
+                : 'border-gray-200 hover:border-blue-300'
+            ]"
+          >
+            <div class="w-12 h-12 flex items-center justify-center mb-3">
+              <img :src="type.image" :alt="type.label" class="w-[50px] h-[50px] object-cover rounded-lg">
+            </div>
+            <span class="font-medium">{{ type.label }}</span>
+          </button>
+        </div>
+      </div>
 
-    <!-- Target Sub-Category -->
-    <template v-if="selectedObjectElement">
-      <label class="block text-lg text-base font-semibold mb-1 ml-4" for="target-sub-type"> Target Sub-Type </label>
-      <select class="w-60 p-2 border border-gray-300 rounded-md shadow-sm mb-2 ml-4 focus:outline-none focus:ring-2 focus:ring-blue-500" name="target-sub-type" v-model="selectedSubOption">
-        <option value="" disabled selected :key="-1">Select target sub-type</option>
-        <option v-for="(value, key) in selectedObjectElement" :value="key" :key="value.id">
-          {{ key }}
-        </option>
-      </select>
+      <!-- Target Sub-Category -->
+      <template v-if="selectedObjectElement">
+        <label class="block text-lg font-semibold mb-1 ml-4">Target Sub-Type</label>
+        <div class="relative ml-4">
+          <div 
+            class="w-full border border-gray-300 rounded-lg bg-white shadow-md mb-2 cursor-pointer"
+            @click="toggleDropdown"
+          >
+            <div class="p-3 flex items-center justify-between">
+              <span class="text-gray-500">{{ selectedSubOption || 'Select target sub-type' }}</span>
+              <svg 
+                class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                :class="{ 'rotate-180': isDropdownOpen }"
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Custom Dropdown Menu -->
+          <div 
+            v-if="isDropdownOpen"
+            class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg"
+          >
+            <div 
+              v-for="(value, key) in selectedObjectElement" 
+              :key="key"
+              @click="selectOption(key)"
+              class="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3 border-b border-gray-100 last:border-b-0"
+            >
+              <img 
+                :src="getSubTypeImage(key)" 
+                :alt="key"
+                class="w-[50px] h-[50px] object-cover rounded-lg"
+              >
+              <div class="flex flex-col">
+                <span class="font-medium text-gray-700">{{ key }}</span>
+                <span class="text-sm text-gray-500">{{ getSubTypeDescription(key) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create Button -->
+        <div class="flex justify-end mt-4 mr-4" v-if="selectedSubOption">
+          <button 
+            @click="createTarget"
+            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+          >
+            <span>Create Target</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </template>
     </template>
-    <!-- Target Sub-Category -->
-
-    <button @click="subOptionChange" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md font-medium text-sm hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">Test</button>
 
     <!-- Target Requirements -->
-    <div v-if="selectedTargetType" class="mt-4">
+    <div v-if="showRequirements" class="mt-4">
+      <div class="flex items-center gap-2 ml-8 mb-4">
+        <h1 class="font-bold text-2xl text-blue-600">{{ selectedOption }}</h1>
+        <span class="text-gray-400">></span>
+        <h2 class="font-bold text-xl text-gray-600">{{ selectedSubOption }}</h2>
+      </div>
       <h2 class="font-bold text-lg ml-8">Target Requirements</h2>
-      <!-- Inline target türleri için TargetCreator.vue içerisinde pageReader.js çalışacak. Inline targetlar için generalId değeri a olacak -->
-      <TargetCreator class="ml-8" :is-inline="generalIdToPass == 'a'" :selected-target="selectedTargetType" :data-id="selectedTargetType.id"></TargetCreator>
+      <TargetCreator 
+        class="ml-8" 
+        :is-inline="generalIdToPass == 'a'" 
+        :selected-target="selectedTargetType" 
+        :data-id="selectedTargetType.id"
+      />
+    </div>
+    <div v-else-if="selectedSubOption" class="mt-4">
+      <h2 class="font-bold text-gray-500 italic text-lg ml-8">Click Create Target to continue</h2>
     </div>
     <div v-else class="mt-4">
       <h2 class="font-bold text-gray-500 italic text-lg ml-8">Select a target type above</h2>
     </div>
-    <!-- Target Requirements -->
   </div>
 </template>
 
@@ -53,31 +125,98 @@ export default {
       selectedObjectElement: null,
       selectedTargetType: null,
       generalIdToPass: "",
+      isDropdownOpen: false,
+      showRequirements: false,
+      targetTypes: [
+        {
+          id: 1,
+          label: 'Inline',
+          value: 'Inline Target',
+          image: 'https://picsum.photos/50/50?random=5'
+        },
+        {
+          id: 2,
+          label: 'External',
+          value: 'External Target',
+          image: 'https://picsum.photos/50/50?random=6'
+        },
+        {
+          id: 3,
+          label: 'Gamification',
+          value: 'Gamification',
+          image: 'https://picsum.photos/50/50?random=7'
+        },
+        {
+          id: 4,
+          label: 'Customize',
+          value: 'Customize',
+          image: 'https://picsum.photos/50/50?random=8'
+        }
+      ],
+      subTypeDetails: {
+        'Banner': {
+          image: 'https://picsum.photos/50/50?random=1',
+          description: 'Create engaging banners for your website'
+        },
+        'Pop-up': {
+          image: 'https://picsum.photos/50/50?random=2',
+          description: 'Design interactive pop-up messages'
+        },
+        'FindToWin': {
+          image: 'https://picsum.photos/50/50?random=3',
+          description: 'Create interactive treasure hunt experiences'
+        },
+        'CustomizeExperience': {
+          image: 'https://picsum.photos/50/50?random=4',
+          description: 'Build custom interactive experiences'
+        }
+      }
     };
   },
   methods: {
-    test() {
-      console.log(this.TargetConfig);
+    selectMainType(type) {
+      this.selectedOption = type;
+      this.optionChange();
     },
     optionChange() {
       if (this.TargetConfig[this.selectedOption]) {
-        //listede generalId'nin basilmasina gerek yoktu. destructure ile kullanilmasi engellendi
         const { generalId, ...filteredObject } = this.TargetConfig[this.selectedOption];
         this.generalIdToPass = generalId;
         this.selectedObjectElement = filteredObject;
       } else {
-        //secilmis herhangi bir secenek yoksa bos eleman gonder ki bir sonraki adim renderlanmasin
         this.selectedObjectElement = null;
       }
       this.selectedSubOption = "";
       this.selectedTargetType = null;
-      console.log(this.selectedOption);
+      this.showRequirements = false;
     },
-    subOptionChange() {
-      this.selectedTargetType = this.selectedObjectElement ? this.selectedObjectElement[this.selectedSubOption] : null;
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
     },
+    selectOption(option) {
+      this.selectedSubOption = option;
+      this.isDropdownOpen = false;
+    },
+    getSubTypeImage(type) {
+      return this.subTypeDetails[type]?.image || 'https://picsum.photos/50/50?random=0';
+    },
+    getSubTypeDescription(type) {
+      return this.subTypeDetails[type]?.description || 'Select a target sub-type';
+    },
+    createTarget() {
+      if (this.selectedObjectElement && this.selectedSubOption) {
+        this.selectedTargetType = this.selectedObjectElement[this.selectedSubOption];
+        this.showRequirements = true;
+      }
+    }
   },
-  setup() {},
+  mounted() {
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#input-panel-main')) {
+        this.isDropdownOpen = false;
+      }
+    });
+  }
 };
 </script>
 
@@ -92,18 +231,14 @@ export default {
   width: 5px;
 }
 
-/* Track */
 #input-panel-main::-webkit-scrollbar-track {
   background: #f1f1f1;
-  padding: 0px 10px;
 }
 
-/* Handle */
 #input-panel-main::-webkit-scrollbar-thumb {
   background: #888;
 }
 
-/* Handle on hover */
 #input-panel-main::-webkit-scrollbar-thumb:hover {
   background: #555;
 }

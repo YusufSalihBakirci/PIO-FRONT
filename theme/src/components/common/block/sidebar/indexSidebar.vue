@@ -79,7 +79,6 @@ function display2() {
 }
 onMounted(() => {
     setTimeout(() => {
-        const elmnt = document.getElementById("myDIV");
 
         store.menuWidth > window.innerWidth ? ((store.hideRightArrow = false), (store.hideLeftArrowRTL = false)) : ((store.hideRightArrow = false), (store.hideLeftArrowRTL = true));
     }, 500);

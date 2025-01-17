@@ -45,7 +45,7 @@ export default {
         tablet: { width: 810, height: 1080, fillRatio: 0.6 },
         mobile: { width: 390, height: 844, fillRatio: 0.8 },
       },
-      iframeContent: "http://127.0.0.1:5500/FoodMart-1.0.0/index.html",
+      iframeContent: "http://127.0.0.1:3000/",
     };
   },
 
