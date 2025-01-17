@@ -71,7 +71,7 @@ const TargetConfig = {
           description: "General Settings",
           backgroundColor: {
             type: "color",
-            value: "",
+            value: "#555555",
             description: "Background color of the banner"
           },
           pageToApply: {

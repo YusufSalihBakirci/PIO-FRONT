@@ -81,16 +81,17 @@ function showPassword() {
     }
 }
 async function doLogin() {
-    // if (email === "test@admin.com" && password === "test@123456") {
+    
+    if (email === "test@admin.com" && password === "test@123456") {
 
-    //     localStorage.setItem('user', email)
-    //     localStorage.setItem("SidebarType", 'compact-wrapper')
-    //     router.push('/');
-    //     toast.success('Login Successfully ', { position: 'top-right', autoClose: 2000 });
-    // }
-    // else {
-    //     toast.error('Opps... Invalid email and password ', { position: 'top-right', autoClose: 2000 });
-    // }
+        localStorage.setItem('user', email)
+        localStorage.setItem("SidebarType", 'compact-wrapper')
+        router.push('/');
+        toast.success('Login Successfully ', { position: 'top-right', autoClose: 2000 });
+    }
+    else {
+        toast.error('Opps... Invalid email and password ', { position: 'top-right', autoClose: 2000 });
+    }
 
     // try {
     //     const response = await loginUser(email, password);
@@ -105,26 +106,26 @@ async function doLogin() {
     //     console.error('Login error:', error);
     // }
 
-    let user = false;
-		const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
-		console.log(user , email)
-		axios.post('https://localhost:7228/api/Login/login', {
-        email: email,
-        password: hashedPassword
-      })
-      .then(response => {
-        console.log('API Yanıtı:', response.data);
-        localStorage.setItem('user', email);
-        localStorage.setItem("SidebarType", 'compact-wrapper');
-        router.push('/');
-        toast.success('Login Successfully', { position: 'top-right', autoClose: 2000 });
-      })
-      .catch(error => {
-        toast.error('Opps... Invalid email and password', { position: 'top-right', autoClose: 2000 });
-        console.error('Hata:', error);
-      });
+    // let user = false;
+	// 	const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex);
+	// 	console.log(user , email)
+	// 	axios.post('https://localhost:7228/api/Login/login', {
+    //     email: email,
+    //     password: hashedPassword
+    //   })
+    //   .then(response => {
+    //     console.log('API Yanıtı:', response.data);
+    //     localStorage.setItem('user', email);
+    //     localStorage.setItem("SidebarType", 'compact-wrapper');
+    //     router.push('/');
+    //     toast.success('Login Successfully', { position: 'top-right', autoClose: 2000 });
+    //   })
+    //   .catch(error => {
+    //     toast.error('Opps... Invalid email and password', { position: 'top-right', autoClose: 2000 });
+    //     console.error('Hata:', error);
+    //   });
  
-           console.log("run");
+    //        console.log("run");
 
 
 }
