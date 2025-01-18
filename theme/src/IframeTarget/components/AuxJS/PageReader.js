@@ -1,190 +1,259 @@
-import { useIframeContent, useIframeUrl } from "../../iframeStore.js";
+export function pageReader(frameContent) {
+  console.log('pageRead')
+  let frameHTML = frameContent.contentWindow.document
 
-// Define excluded keywords and tags
-const excludeKeywords = new Set(["header", "footer", "nav", "navigation", "menu", "sidebar", "advertisement", "ad", "popup", "modal", "cookie", "banner", "notification"]);
+  // Elemanin gorunurlugunu kontrol eder
+  function isVisible(element) {
+    const style = getComputedStyle(element)
+    const rect = element.getBoundingClientRect()
 
-const excludeTags = new Set(["script", "style", "noscript", "iframe", "nav", "header", "footer"]);
+    return (
+      style.display !== 'none' &&
+      style.visibility !== 'hidden' &&
+      style.position !== 'absolute' &&
+      rect.width > 0 &&
+      rect.height > 0
+    )
+  }
 
-export const checkIframeAccess = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/iframe-check");
-    if (!response.ok) {
-      throw new Error("Server not configured for iframe access");
+  // Eleman parent'a gore yeterince genis mi?
+  function isFullWidth(element) {
+    const parent = element.parentElement
+
+    if (!parent) return false // Parent yoksa atla
+
+    const parentWidth = parent.getBoundingClientRect().width || window.innerWidth // Fallback olarak parent kullan
+    const elementWidth = element.getBoundingClientRect().width
+
+    return elementWidth / parentWidth > 0.95 // Fak miktarda hata payına izin ver
+  }
+
+  // Eleman ekran genisligine gore çok küçük mü kontrolü.
+  function isSignificantlySmallerThanViewport(element, widthPercent) {
+    const rect = element.getBoundingClientRect()
+    const viewportWidth = window.innerWidth
+
+    return rect.width < viewportWidth * widthPercent
+  }
+
+  // Aşağıdaki kelimeleri içeren CLASS ve ID isimleri son listeden exclude edilecektir.
+  const excludeKeywords = new Set([
+    'swiper',
+    'slick',
+    'owl',
+    'carousel',
+    'empty',
+    'singlebanner__wrap__background',
+    'singlebanner__wrap__foreground',
+    'singlebanner__wrap',
+    'homepage-seo-container',
+    'full-contained-widget',
+    'secondary-menu-shown',
+    'header__navigation-toggle',
+    'modal__assembler',
+    'firsat-kuponlari',
+    'cf',
+    'modal',
+    'variants',
+    'noSwipe',
+    'is-layout-constrained',
+    'hidden-xs', // hidden-xs class'ı dahil edilmez
+    'none', // none class'ı dahil edilmez
+    '\\', // Eğer id içinde ters eğik çizgi (\) varsa, bu da dahil edilmez
+  ])
+
+  // Listeye tagName ekleyelim
+  const excludeTags = new Set(['picture', 'ul', 'ol', 'li'])
+
+  function classOrIdToExclude(element) {
+    const idContainsExcludedKeyword =
+      element.id && [...excludeKeywords].some((keyword) => element.id === keyword)
+
+    const classContainsExcludedKeyword = Array.from(element.classList).some(
+      (cls) => excludeKeywords.has(cls), // classList'teki class ile eşleşen keyword
+    )
+
+    const tagNameContainsExcludedKeyword = excludeTags.has(element.tagName.toLowerCase()) // tagName kontrolü (case insensitive)
+
+    return (
+      idContainsExcludedKeyword || classContainsExcludedKeyword || tagNameContainsExcludedKeyword
+    )
+  }
+
+  // Görünür ve tam genişliğe sahip elemanları kontrol eder
+  function getVisibleFullWidthElementsFromArray(elementsArray) {
+    const elements = []
+
+    elementsArray.forEach((container) => {
+      if (!container || !container.children) {
+        return // Geçersiz HTML elemanlarını atla
+      }
+
+      const children = Array.from(container.children)
+
+      for (const child of children) {
+        if (classOrIdToExclude(child)) {
+          continue // Carousel kütüphaneleri ve exclude edilen class isimlerini atla
+        }
+
+        if (isSignificantlySmallerThanViewport(child, 0.9)) {
+          continue // Yukarıdaki eşik değeri altındaki elemanları atla
+        }
+
+        // Eğer görünür ve tam genişliğe sahipse, bu elemanları ekle
+        if (isVisible(child) && isFullWidth(child)) {
+          elements.push(child)
+
+          // Child elemanları recursive olarak seç
+          elements.push(...getVisibleFullWidthElementsFromArray([child]))
+        }
+      }
+    })
+
+    return elements
+  }
+
+  // Herhangi bir elemana özel selector oluştur
+  function getUniqueSelector(element) {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      throw new Error('Verilen eleman geçerli bir HTML element değil.')
     }
-    return true;
-  } catch (error) {
-    console.error("Iframe access check failed:", error);
-    return false;
-  }
-};
 
-export const pageReader = async (iframeUrl) => {
-  // First check if iframe access is possible
-  const canAccess = await checkIframeAccess();
-  if (!canAccess) {
-    throw new Error("Cannot access iframe - server configuration issue");
+    // If element has an ID, use it
+    if (element.id) {
+      return `#${element.id}`
+    }
+
+    // Tag name and classes
+    let selector = element.tagName.toLowerCase()
+    if (element.classList.length > 0) {
+      selector += `.${Array.from(element.classList).join('.')}`
+    }
+
+    // Check uniqueness of the selector
+    if (document.querySelectorAll(selector).length === 1) {
+      return selector
+    }
+
+    // Use nth-child with parent selector if needed
+    const parent = element.parentElement
+    if (parent) {
+      const siblings = Array.from(parent.children)
+      const index = siblings.indexOf(element) + 1
+      selector += `:nth-child(${index})`
+
+      const parentSelector = getUniqueSelector(parent)
+      if (parentSelector) {
+        selector = `${parentSelector} > ${selector}`
+      }
+    }
+
+    return selector
   }
 
-  return fetch(iframeUrl)
-    .then((response) => {
-      if (!response.ok) throw new Error("Network response was not ok");
-      return response.text();
+  // Seçimi istenen tag'leri burada seç
+  function main() {
+    const containers = frameHTML.querySelectorAll('div, section, body')
+
+    if (!containers || containers.length === 0) {
+      // console.log('Hiçbir container bulunamadı.')
+      return []
+    }
+
+    // HTMLCollection'i Array olarak dönüştür
+    const visibleFullWidthElements = getVisibleFullWidthElementsFromArray(Array.from(containers))
+
+    if (visibleFullWidthElements.length === 0) {
+      // console.log('Görünür ve tam genişlikte eleman bulunamadı.')
+      return []
+    }
+
+    // Tüm elemanlar için selector oluştur
+    const uniqueSelectors = visibleFullWidthElements.map(getUniqueSelector)
+
+    // Son olarak, exclude edilen keyword'leri içeren selector'ları filtrele
+    const filteredSelectors = uniqueSelectors.filter((selector) => {
+      // Daha hızlı arama için Set kullanılıyor
+      return ![...excludeKeywords].some((keyword) => selector.includes(keyword))
     })
-    .then((html) => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
 
-      // Store both URL and content
-      const iframeUrlStore = useIframeUrl();
-      const iframeContentStore = useIframeContent();
+    return filteredSelectors
+  }
 
-      iframeUrlStore.content.value = iframeUrl;
-      iframeContentStore.content.value = doc;
+  // Measure the execution time of the 'main' function
+  // console.time('Execution Time')
 
-      // Create a preview element
-      const previewContent = document.createElement("div");
-      previewContent.innerHTML = html;
-      iframeContentStore.previewElement.value = previewContent;
+  let selectorList = Array.from(new Set(main(frameContent)))
 
-      // Get main content areas while excluding unwanted elements
-      function getMainContentAreas(document) {
-        const mainSelectors = ["main", "#main", "#content", ".main-content", "article", ".content", '[role="main"]', ".page-content", ".site-content", ".container", ".wrapper"];
+  // Log the execution time in seconds
+  // console.timeEnd('Execution Time')
 
-        const elements = [];
-        mainSelectors.forEach((selector) => {
-          const found = document.querySelectorAll(selector);
-          found.forEach((el) => {
-            if (!shouldExcludeElement(el)) {
-              elements.push(el);
-            }
-          });
-        });
+  // console.log(selectorList)
+  return selectorList
+}
 
-        return elements;
+export function highligthSelection(frameContent, selectedId) {
+  let frameHTML = frameContent.contentWindow.document
+  console.log(selectedId)
+
+  // Create style element to add styles for highlighted element
+  let highlight = frameHTML.createElement('style')
+  highlight.innerHTML = `
+    .element-highlight {
+      position: relative;
+      background-color: rgba(0, 123, 255, 0.3);
+      border: 2px solid rgba(0, 123, 255, 0.7);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+      overflow: hidden;
+      height: auto;
+    }
+
+    .element-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 5%;
+      height: 100%;
+      background-color: white;
+      transform: skewY(-15deg);
+      animation: moveLine 6s infinite cubic-bezier(0.42, 0, 0.58, 1); /* Improved smoothness */
+    }
+
+    @keyframes moveLine {
+      0% {
+        transform: translateX(-100%) skewY(-15deg);
       }
-
-      // Check if element should be excluded
-      function shouldExcludeElement(element) {
-        // Check for excluded keywords in ID and classes
-        if (element.id && excludeKeywords.has(element.id)) return true;
-        if (Array.from(element.classList).some((cls) => excludeKeywords.has(cls))) return true;
-
-        // Check for excluded tags
-        if (excludeTags.has(element.tagName.toLowerCase())) return true;
-
-        // Check if element is hidden
-        const style = element.getAttribute("style") || "";
-        if (style.includes("display: none") || style.includes("visibility: hidden")) return true;
-
-        return false;
+      50% {
+        transform: translateX(100%) skewY(-15deg);
       }
-
-      // Generate unique selector for an element
-      function generateSelector(element) {
-        if (!element) return null;
-
-        // Try ID first
-        if (element.id) {
-          return `#${element.id}`;
-        }
-
-        // Try unique class combination
-        const classes = Array.from(element.classList).filter((cls) => !excludeKeywords.has(cls));
-
-        if (classes.length > 0) {
-          const classSelector = `.${classes.join(".")}`;
-          // Check if this selector is unique
-          if (doc.querySelectorAll(classSelector).length === 1) {
-            return classSelector;
-          }
-        }
-
-        // Use tag with parent context if needed
-        let selector = element.tagName.toLowerCase();
-        const parent = element.parentElement;
-        if (parent) {
-          const siblings = Array.from(parent.children);
-          const index = siblings.indexOf(element) + 1;
-          return `${generateSelector(parent)} > ${selector}:nth-child(${index})`;
-        }
-
-        return selector;
+      100% {
+        transform: translateX(-100%) skewY(-15deg);
       }
+    }
+  `
+  frameHTML.head.append(highlight)
 
-      // Main function to get all valid selectors
-      function getAllValidSelectors() {
-        const mainAreas = getMainContentAreas(doc);
-        const selectors = new Set();
+  // Get the previously highlighted element, if any
+  let previousIframeEl = frameHTML.querySelector('.element-highlight') || null
 
-        mainAreas.forEach((area) => {
-          // Get the area's selector
-          const areaSelector = generateSelector(area);
-          if (areaSelector) selectors.add(areaSelector);
+  // Get the newly selected element
+  let selectedIframeEl = frameHTML.querySelector(selectedId)
 
-          // Get direct children that could be good insertion points
-          const children = area.children;
-          Array.from(children).forEach((child) => {
-            if (!shouldExcludeElement(child)) {
-              const childSelector = generateSelector(child);
-              if (childSelector) selectors.add(childSelector);
-            }
-          });
-        });
+  if (selectedIframeEl) {
+    // Remove the highlight from the previous element if it exists
+    if (previousIframeEl) {
+      previousIframeEl.classList.remove('element-highlight')
+    }
 
-        return Array.from(selectors);
-      }
+    // Add the highlight class to the selected element
+    selectedIframeEl.classList.add('element-highlight')
 
-      const selectors = getAllValidSelectors();
-
-      return selectors;
+    // Smooth scroll to the selected element using scrollIntoView()
+    selectedIframeEl.scrollIntoView({
+      behavior: 'smooth', // Ensures smooth scrolling
+      block: 'center', // Aligns the element in the center vertically
+      inline: 'nearest', // Ensures horizontal scrolling happens if necessary
     })
-    .catch((error) => {
-      console.error("Error reading page:", error);
-      return [];
-    });
-};
-
-export function highligthSelection(_, selectedId) {
-  const iframe = document.getElementById("piovare-frame");
-  if (!iframe || !iframe.contentWindow || !iframe.contentDocument) {
-    console.error("Iframe not accessible");
-    return;
-  }
-
-  // Add highlight styles to iframe document
-  const styleId = "highlight-styles";
-  if (!iframe.contentDocument.getElementById(styleId)) {
-    const style = iframe.contentDocument.createElement("style");
-    style.id = styleId;
-    style.textContent = `
-      .element-highlight {
-        position: relative !important;
-        background-color: rgba(0, 123, 255, 0.3) !important;
-        border: 2px solid rgba(0, 123, 255, 0.7) !important;
-        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5) !important;
-        transition: all 0.3s ease !important;
-        pointer-events: none !important;
-      }
-    `;
-    iframe.contentDocument.head.appendChild(style);
-  }
-
-  // Remove existing highlights
-  const existingHighlight = iframe.contentDocument.querySelector(".element-highlight");
-  if (existingHighlight) {
-    existingHighlight.classList.remove("element-highlight");
-  }
-
-  // Find and highlight the selected element
-  const selectedElement = iframe.contentDocument.querySelector(selectedId);
-  if (selectedElement) {
-    selectedElement.classList.add("element-highlight");
-    selectedElement.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "nearest",
-    });
-  } else {
-    console.warn("Selected element not found:", selectedId);
   }
 }

@@ -2,28 +2,61 @@
   <div v-if="steps.length > 0" :key="selectedTarget.id" :data-id="dataId" class="bg-white p-6 rounded-lg shadow-lg">
     <div class="space-y-4">
       <div v-for="(step, index) in steps" :key="index" class="border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
-        <div class="flex justify-between items-center p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-t-lg border-b border-gray-200" @click="toggleStep(index)">
+        <div 
+          class="flex justify-between items-center p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-t-lg border-b border-gray-200"
+          @click="toggleStep(index)"
+        >
           <h3 class="text-lg font-medium text-gray-800">
             {{ step.title }}
           </h3>
-          <svg class="w-5 h-5 transition-transform duration-200 text-gray-600" :class="{ 'rotate-180': activeStep === index }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <svg 
+            class="w-5 h-5 transition-transform duration-200 text-gray-600"
+            :class="{'rotate-180': activeStep === index}"
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 20 20" 
+            fill="currentColor"
+          >
             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </div>
 
-        <div v-show="activeStep === index" class="p-4 border-t bg-white">
+        <div 
+          v-show="activeStep === index"
+          class="p-4 border-t bg-white"
+        >
           <div v-if="isInline && index === 0" class="space-y-4 mb-6">
             <div class="form-group">
-              <label for="location" class="block text-sm font-medium text-gray-700 mb-2"> Eklenecek Alan: </label>
-              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="location" id="location" v-model="selectedPosition" @change="onSelectPosition">
+              <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+                Eklenecek Alan:
+              </label>
+              <select 
+                class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                name="location" 
+                id="location" 
+                v-model="selectedPosition" 
+                @change="onSelectPosition"
+              >
                 <option value="" disabled>Secim Yapiniz</option>
-                <option v-for="(posValue, posIndex) in insertPositions" :key="posIndex" :value="posValue">Position - {{ posIndex }} // {{ posValue }}</option>
+                <option 
+                  v-for="(posValue, posIndex) in insertPositions" 
+                  :key="posIndex" 
+                  :value="posValue"
+                >
+                  Position - {{ posIndex }} // {{ posValue }}
+                </option>
               </select>
             </div>
 
             <div class="form-group">
-              <label class="block text-sm font-medium text-gray-700 mb-2" for="where"> Eklenecek Pozisyon: </label>
-              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="where" id="where" v-model="selectedRelativePosition">
+              <label class="block text-sm font-medium text-gray-700 mb-2" for="where">
+                Eklenecek Pozisyon:
+              </label>
+              <select 
+                class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                name="where" 
+                id="where" 
+                v-model="selectedRelativePosition"
+              >
                 <option value="afterbegin">Elemanin Baslangici</option>
                 <option value="beforeend">Eleman Sonu</option>
                 <option value="afterend">Elemandan Sonra</option>
@@ -40,28 +73,43 @@
 
               <template v-if="field.type === 'color'">
                 <div class="relative">
-                  <div class="color-picker-trigger flex items-center p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg cursor-pointer transition-all duration-200" @click="() => toggleColorPicker(key)">
-                    <div class="w-6 h-6 rounded-full border-2 border-white shadow-sm mr-3" :style="{ backgroundColor: field.value || '#ffffff' }"></div>
+                  <div 
+                    class="color-picker-trigger flex items-center p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg cursor-pointer transition-all duration-200"
+                    @click="() => toggleColorPicker(key)"
+                  >
+                    <div 
+                      class="w-6 h-6 rounded-full border-2 border-white shadow-sm mr-3"
+                      :style="{ backgroundColor: field.value || '#ffffff' }"
+                    ></div>
                     <span class="text-gray-700 flex-1">
-                      {{ field.value || "#ffffff" }}
+                      {{ field.value || '#ffffff' }}
                     </span>
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    <svg 
+                      class="w-5 h-5 text-gray-400" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        stroke-width="2" 
+                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" 
+                      />
                     </svg>
                   </div>
-                  <input
-                    type="color"
-                    :name="key"
-                    :id="key"
-                    :value="field.value"
-                    @input="
-                      (e) => {
-                        handleInputChange(step.key + '.' + key, e.target.value);
-                        hideColorPicker(key);
-                      }
-                    "
+                  <input 
+                    type="color" 
+                    :name="key" 
+                    :id="key" 
+                    :value="field.value" 
+                    @input="(e) => {
+                      handleInputChange(step.key + '.' + key, e.target.value);
+                      hideColorPicker(key);
+                    }"
                     class="sr-only"
-                    ref="colorInput" />
+                    ref="colorInput"
+                  />
                 </div>
               </template>
 
@@ -102,8 +150,8 @@
 </template>
 
 <script>
-import { reactive, watch, ref, computed, onMounted } from "vue";
-import { useIframeUrl, useIframeContent } from "../../iframeStore";
+import { reactive, watch, ref, computed } from "vue";
+import { useIframeStore } from "../../iframeStore";
 import { FirePopup, FireBanner } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
 
@@ -128,45 +176,13 @@ export default {
 
   setup(props) {
     let insertPositions = ref([]);
-    let currentUrl = ref(null);
     const selectedPosition = ref("");
     const selectedRelativePosition = ref("");
     const activeStep = ref(null);
-    const iframeStore = useIframeUrl();
-    const isLoading = ref(false);
-    const error = ref(null);
-    const maxWaitTime = 15000; // Increased to 15 seconds
-
-    onMounted(async () => {
-      try {
-        const iframeContentUrl = iframeStore.content.value;
-        console.log("targetCreator.vue", iframeContentUrl);
-        if (!iframeContentUrl) {
-          console.error("Iframe content URL is not available in the store.");
-          return;
-        }
-
-        // Call the pageReader function with the iframe content URL
-        const positions = await pageReader(iframeContentUrl);
-
-        // Update the refs with the processed data
-        if (Array.isArray(positions) && positions.length > 0) {
-          insertPositions.value = positions;
-          console.log("Populated positions:", insertPositions.value);
-        } else {
-          console.warn("No positions returned from pageReader");
-          insertPositions.value = [];
-        }
-      } catch (error) {
-        console.error("Error setting up positions:", error);
-      }
-    });
+    const iframeStore = useIframeStore();
 
     const onSelectPosition = () => {
-      if (selectedPosition.value) {
-        console.log("Highlighting position:", selectedPosition.value);
-        highligthSelection(null, selectedPosition.value);
-      }
+      highligthSelection(iframeStore.content, selectedPosition.value);
     };
 
     const getRequirements = () => {
@@ -197,62 +213,16 @@ export default {
       }
     };
 
-    const waitForPreviewFrame = () => {
-      return new Promise((resolve, reject) => {
-        const startTime = Date.now();
-
-        const checkFrame = () => {
-          const previewFrame = document.querySelector("#previewFrame");
-          if (previewFrame && previewFrame.contentWindow) {
-            resolve();
-          } else if (Date.now() - startTime > maxWaitTime) {
-            reject(new Error("Preview frame creation timeout"));
-          } else {
-            setTimeout(checkFrame, 100);
-          }
+    const onPreview = () => {
+      if (props.isInline) {
+        const proxyReqToPass = {
+          selectedPosition,
+          selectedRelativePosition,
+          ...proxyReq,
         };
-
-        checkFrame();
-      });
-    };
-
-    const onPreview = async () => {
-      isLoading.value = true;
-      error.value = null;
-
-      try {
-        // Show preview frame
-        window.dispatchEvent(new CustomEvent("showPreview"));
-
-        console.log("Waiting for preview frame creation...");
-        await waitForPreviewFrame();
-
-        console.log("Preview frame ready, proceeding with banner creation");
-
-        // Ensure we have all required data
-        if (!props.selectedTarget?.targetRequirements) {
-          throw new Error("Missing target requirements");
-        }
-
-        const bannerData = {
-          selectedPosition: selectedPosition.value,
-          selectedRelativePosition: selectedRelativePosition.value,
-          targetRequirements: props.selectedTarget.targetRequirements,
-        };
-
-        // Add timeout to FireBanner call
-        const bannerPromise = FireBanner(bannerData);
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Banner creation timeout")), maxWaitTime));
-
-        await Promise.race([bannerPromise, timeoutPromise]);
-        console.log("Banner created successfully");
-      } catch (err) {
-        console.error("Error creating banner:", err);
-        error.value = err.message || "An error occurred while creating the banner";
-        // Hide preview frame on error
-        window.dispatchEvent(new CustomEvent("hidePreview"));
-      } finally {
-        isLoading.value = false;
+        FireBanner(proxyReqToPass);
+      } else {
+        FirePopup(proxyReq);
       }
     };
 
@@ -331,8 +301,6 @@ export default {
       toggleStep,
       toggleColorPicker,
       hideColorPicker,
-      isLoading,
-      error,
     };
   },
 };

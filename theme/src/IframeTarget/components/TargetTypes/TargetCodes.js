@@ -1,4 +1,4 @@
-import { useIframeUrl, useIframeContent } from "../../iframeStore";
+import { iframeStore } from "../../iframeStore";
 
 export function FirePopup(basicInputsData) {
   console.log(basicInputsData.targetRequirements["setImage.desktop-image-url"]);
@@ -8,7 +8,7 @@ export function FirePopup(basicInputsData) {
     img: window.innerWidth > 768 ? basicInputsData.targetRequirements["setImage.desktop-image-url"] : basicInputsData.targetRequirements["setImage.mobile-image-url"],
     url: "#",
   };
-  const iframeStore = useIframeUrl();
+  const iframeStore = useIframeStore();
   let target = iframeStore.content.contentWindow.document;
   if (!document.querySelector("#vl-popup-container")) {
     var style = document.createElement("style");
@@ -105,123 +105,76 @@ export function FirePopup(basicInputsData) {
 }
 
 export function FireBanner(inputData) {
-  return new Promise((resolve, reject) => {
-    const maxAttempts = 50; // 5 seconds total with 100ms intervals
-    let attempts = 0;
+  console.log("Data passed to the TargetCodes: ", inputData);
+  const config = {
+    backgroundColor: inputData.targetRequirements.general.backgroundColor,
+    appendPosition: inputData.selectedPosition.value,
+    appendRelativePosition: inputData.selectedRelativePosition.value,
+    url: inputData.targetRequirements.general.redirectUrl,
+    text: inputData.targetRequirements.setText.textContent,
+    fontWeight: inputData.targetRequirements.setText.fontWeight,
+    fontSize: inputData.targetRequirements.setText.fontSize,
+  };
+  const iframeStore = useIframeStore();
+  let targetFrame = iframeStore.content.contentWindow.document;
 
-    const tryAccessIframe = () => {
-      const mainIframe = document.getElementById("piovare-frame");
-      const previewIframe = document.getElementById("preview-frame");
+  if (targetFrame.querySelector(".hb-banner-container")) {
+    targetFrame.querySelectorAll(".hb-banner-container").forEach((b) => {
+      b.remove();
+    });
+    targetFrame.querySelector("#hb-banner-style").remove();
+  }
 
-      // First ensure we have both iframes
-      if (!mainIframe || !previewIframe) {
-        console.log("Waiting for iframes to be created...");
-        if (attempts++ < maxAttempts) {
-          setTimeout(tryAccessIframe, 100);
-        } else {
-          reject(new Error("Timeout waiting for iframes"));
-        }
-        return;
-      }
+  if (!targetFrame.querySelector(".hb-banner-container")) {
+    const url = "#";
+    const style = document.createElement(`style`);
+    style.id = "hb-banner-style";
 
-      // Then ensure we can access their content
-      if (!mainIframe.contentWindow || !mainIframe.contentDocument || !previewIframe.contentWindow || !previewIframe.contentDocument) {
-        console.log("Waiting for iframe content to be accessible...");
-        if (attempts++ < maxAttempts) {
-          setTimeout(tryAccessIframe, 100);
-        } else {
-          reject(new Error("Timeout waiting for iframe content"));
-        }
-        return;
-      }
+    style.innerHTML = `
+.hb-banner-container{
+  height: auto;
+  margin: auto;
+  background-color: ${config.backgroundColor};
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 15px;
+  font-size: ${config.fontSize}px;
+  text-align: center;
+}
+.vl-banner-link{
+  text-decoration: none;
+    color: white;
+}
 
-      try {
-        const config = {
-          backgroundColor: inputData.targetRequirements.general.backgroundColor,
-          appendPosition: inputData.selectedPosition.value,
-          appendRelativePosition: inputData.selectedRelativePosition.value,
-          url: inputData.targetRequirements.general.redirectUrl,
-          text: inputData.targetRequirements.setText.textContent,
-          fontWeight: inputData.targetRequirements.setText.fontWeight,
-          fontSize: inputData.targetRequirements.setText.fontSize,
-        };
+@media only screen and (max-width: 768px) {
+  .hb-banner-container{
+    height: 50px;
+    font-size: 13px;
+    padding: 2px 15px;
+    margin-top: 15px;
+  }
+}
 
-        // Apply to both iframes
-        [mainIframe, previewIframe].forEach((iframe) => {
-          const targetFrame = iframe.contentDocument;
+`;
+    targetFrame.head.append(style);
 
-          // Remove existing banners if any
-          const existingBanners = targetFrame.querySelectorAll(".hb-banner-container");
-          existingBanners.forEach((banner) => banner.remove());
-          targetFrame.querySelector("#hb-banner-style")?.remove();
+    const banner = document.createElement("div");
+    banner.setAttribute("class", "hb-banner-container");
+    banner.innerHTML = `
+<div class='vl-banner-elements'>
+<a class='vl-banner-link' href=${url}> ${config.text}</a>
+</div>
 
-          // Add styles
-          const style = targetFrame.createElement("style");
-          style.id = "hb-banner-style";
-          style.innerHTML = `
-            .hb-banner-container {
-              height: auto;
-              margin: auto;
-              background-color: ${config.backgroundColor};
-              border-radius: 4px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: white;
-              margin-bottom: 15px;
-              font-size: ${config.fontSize}px;
-              text-align: center;
-              padding: 10px;
-            }
-            .vl-banner-link {
-              text-decoration: none;
-              color: white;
-            }
-            @media only screen and (max-width: 768px) {
-              .hb-banner-container {
-                height: 50px;
-                font-size: 13px;
-                padding: 2px 15px;
-                margin-top: 15px;
-              }
-            }
-          `;
+`;
 
-          targetFrame.head.appendChild(style);
+    targetFrame.querySelector(config.appendPosition).insertAdjacentElement(config.appendRelativePosition, banner);
 
-          // Create banner
-          const banner = targetFrame.createElement("div");
-          banner.setAttribute("class", "hb-banner-container");
-          banner.innerHTML = `
-            <div class='vl-banner-elements'>
-              <a class='vl-banner-link' href=${config.url}>${config.text}</a>
-            </div>
-          `;
-
-          // Find target element and insert banner
-          const targetElement = targetFrame.querySelector(config.appendPosition);
-          if (!targetElement) {
-            console.warn(`Target element ${config.appendPosition} not found in iframe`);
-            return;
-          }
-
-          targetElement.insertAdjacentElement(config.appendRelativePosition, banner);
-
-          // Add click event listener
-          banner.querySelector(".vl-banner-link").addEventListener("click", (e) => {
-            e.preventDefault();
-            console.log("banner-click");
-          });
-        });
-
-        resolve();
-      } catch (error) {
-        console.error("Error applying banner:", error);
-        reject(error);
-      }
-    };
-
-    // Start the process
-    tryAccessIframe();
-  });
+    banner.querySelector(".vl-banner-link").addEventListener("click", function () {
+      console.log("banner-click");
+    });
+    // <%VLSendImpressionFunc%>
+  }
 }
