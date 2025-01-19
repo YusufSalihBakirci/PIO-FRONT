@@ -95,7 +95,7 @@
       <h2 class="font-bold text-lg ml-8">Target Requirements</h2>
       <TargetCreator 
         class="ml-8" 
-        :is-inline="generalIdToPass == 'a'" 
+        :is-inline="false"
         :selected-target="selectedTargetType" 
         :data-id="selectedTargetType.id"
       />

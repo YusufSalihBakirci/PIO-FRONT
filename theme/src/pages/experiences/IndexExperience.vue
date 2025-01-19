@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full justify-between h-screen">
     <InputPanel></InputPanel>
-    <TargetPreview></TargetPreview>
+    <!-- <TargetPreview></TargetPreview> Bu component faz 2 de iframe içerisinde experience görüntülemek için kullanılacak. -->
   </div>
 </template>
 

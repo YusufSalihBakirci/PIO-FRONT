@@ -182,7 +182,9 @@ export default {
     const iframeStore = useIframeStore();
 
     const onSelectPosition = () => {
-      highligthSelection(iframeStore.content, selectedPosition.value);
+      return true 
+      // bu alan faz2 de iframe içerisinde eklenecek alanı highlight etmek için kullanılacak.
+      // highligthSelection(iframeStore.content, selectedPosition.value);
     };
 
     const getRequirements = () => {
