@@ -2,61 +2,28 @@
   <div v-if="steps.length > 0" :key="selectedTarget.id" :data-id="dataId" class="bg-white p-6 rounded-lg shadow-lg">
     <div class="space-y-4">
       <div v-for="(step, index) in steps" :key="index" class="border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
-        <div 
-          class="flex justify-between items-center p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-t-lg border-b border-gray-200"
-          @click="toggleStep(index)"
-        >
+        <div class="flex justify-between items-center p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-t-lg border-b border-gray-200" @click="toggleStep(index)">
           <h3 class="text-lg font-medium text-gray-800">
             {{ step.title }}
           </h3>
-          <svg 
-            class="w-5 h-5 transition-transform duration-200 text-gray-600"
-            :class="{'rotate-180': activeStep === index}"
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 20 20" 
-            fill="currentColor"
-          >
+          <svg class="w-5 h-5 transition-transform duration-200 text-gray-600" :class="{ 'rotate-180': activeStep === index }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </div>
 
-        <div 
-          v-show="activeStep === index"
-          class="p-4 border-t bg-white"
-        >
+        <div v-show="activeStep === index" class="p-4 border-t bg-white">
           <div v-if="isInline && index === 0" class="space-y-4 mb-6">
             <div class="form-group">
-              <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
-                Eklenecek Alan:
-              </label>
-              <select 
-                class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-                name="location" 
-                id="location" 
-                v-model="selectedPosition" 
-                @change="onSelectPosition"
-              >
+              <label for="location" class="block text-sm font-medium text-gray-700 mb-2"> Eklenecek Alan: </label>
+              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="location" id="location" v-model="selectedPosition" @change="onSelectPosition">
                 <option value="" disabled>Secim Yapiniz</option>
-                <option 
-                  v-for="(posValue, posIndex) in insertPositions" 
-                  :key="posIndex" 
-                  :value="posValue"
-                >
-                  Position - {{ posIndex }} // {{ posValue }}
-                </option>
+                <option v-for="(posValue, posIndex) in insertPositions" :key="posIndex" :value="posValue">Position - {{ posIndex }} // {{ posValue }}</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label class="block text-sm font-medium text-gray-700 mb-2" for="where">
-                Eklenecek Pozisyon:
-              </label>
-              <select 
-                class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-                name="where" 
-                id="where" 
-                v-model="selectedRelativePosition"
-              >
+              <label class="block text-sm font-medium text-gray-700 mb-2" for="where"> Eklenecek Pozisyon: </label>
+              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="where" id="where" v-model="selectedRelativePosition">
                 <option value="afterbegin">Elemanin Baslangici</option>
                 <option value="beforeend">Eleman Sonu</option>
                 <option value="afterend">Elemandan Sonra</option>
@@ -73,43 +40,28 @@
 
               <template v-if="field.type === 'color'">
                 <div class="relative">
-                  <div 
-                    class="color-picker-trigger flex items-center p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg cursor-pointer transition-all duration-200"
-                    @click="() => toggleColorPicker(key)"
-                  >
-                    <div 
-                      class="w-6 h-6 rounded-full border-2 border-white shadow-sm mr-3"
-                      :style="{ backgroundColor: field.value || '#ffffff' }"
-                    ></div>
+                  <div class="color-picker-trigger flex items-center p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg cursor-pointer transition-all duration-200" @click="() => toggleColorPicker(key)">
+                    <div class="w-6 h-6 rounded-full border-2 border-white shadow-sm mr-3" :style="{ backgroundColor: field.value || '#ffffff' }"></div>
                     <span class="text-gray-700 flex-1">
-                      {{ field.value || '#ffffff' }}
+                      {{ field.value || "#ffffff" }}
                     </span>
-                    <svg 
-                      class="w-5 h-5 text-gray-400" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path 
-                        stroke-linecap="round" 
-                        stroke-linejoin="round" 
-                        stroke-width="2" 
-                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" 
-                      />
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                     </svg>
                   </div>
-                  <input 
-                    type="color" 
-                    :name="key" 
-                    :id="key" 
-                    :value="field.value" 
-                    @input="(e) => {
-                      handleInputChange(step.key + '.' + key, e.target.value);
-                      hideColorPicker(key);
-                    }"
+                  <input
+                    type="color"
+                    :name="key"
+                    :id="key"
+                    :value="field.value"
+                    @input="
+                      (e) => {
+                        handleInputChange(step.key + '.' + key, e.target.value);
+                        hideColorPicker(key);
+                      }
+                    "
                     class="sr-only"
-                    ref="colorInput"
-                  />
+                    ref="colorInput" />
                 </div>
               </template>
 
@@ -123,6 +75,10 @@
 
               <template v-else-if="field.type === 'url'">
                 <input type="url" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" :name="key" :id="key" :value="field.value" placeholder="https://" @input="(e) => handleInputChange(step.key + '.' + key, e.target.value)" />
+              </template>
+
+              <template v-else-if="field.type === 'string' && step.key === 'general' && key === 'code'">
+                <CodeEditor v-model="field.value" @run-code="handleCodeRun" :readOnly="false" />
               </template>
 
               <template v-else>
@@ -154,8 +110,12 @@ import { reactive, watch, ref, computed } from "vue";
 import { useIframeStore } from "../../iframeStore";
 import { FirePopup, FireBanner } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
+import CodeEditor from "./CodeEditor.vue";
 
 export default {
+  components: {
+    CodeEditor,
+  },
   props: {
     selectedTarget: {
       type: Object,
@@ -182,7 +142,7 @@ export default {
     const iframeStore = useIframeStore();
 
     const onSelectPosition = () => {
-      return true 
+      return true;
       // bu alan faz2 de iframe içerisinde eklenecek alanı highlight etmek için kullanılacak.
       // highligthSelection(iframeStore.content, selectedPosition.value);
     };
@@ -290,6 +250,11 @@ export default {
       }
     };
 
+    const handleCodeRun = (code) => {
+      console.log("Code executed from CodeEditor:", code);
+      // Handle any additional logic needed when code is run
+    };
+
     return {
       proxyReq,
       onPreview,
@@ -303,6 +268,7 @@ export default {
       toggleStep,
       toggleColorPicker,
       hideColorPicker,
+      handleCodeRun,
     };
   },
 };
