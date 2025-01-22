@@ -5,18 +5,20 @@
     </template>
 
     <template v-else>
-      <InputPanel @option-selected="handleOptionSelection" />
+      <InputPanel @option-selected="handleOptionSelection" @update-preview="handlePreviewUpdate" />
       <BetterTargetPreview />
     </template>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import CodeEditor from "@/IframeTarget/components/InputPanel/CodeEditor.vue";
 import InputPanel from "@/IframeTarget/components/InputPanel/InputPanel.vue";
 import BetterTargetPreview from "@/IframeTarget/components/BetterTargetPreview.vue";
+import { usePreviewStore } from "@/IframeTarget/store/previewStore";
 
+const previewStore = usePreviewStore();
 const selectedOption = ref("");
 
 const handleOptionSelection = (option) => {
@@ -24,9 +26,10 @@ const handleOptionSelection = (option) => {
   selectedOption.value = option;
 };
 
-watch(selectedOption, (newVal) => {
-  console.log("selectedOption changed to:", newVal);
-});
+const handlePreviewUpdate = (content) => {
+  console.log("Updating preview store with:", content);
+  previewStore.previewContent = content;
+};
 
 const handleCodeRun = (code) => {
   console.log("Custom Code:", code);

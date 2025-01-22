@@ -44,6 +44,7 @@ import { usePreviewStore } from "../store/previewStore";
 
 const previewStore = usePreviewStore();
 
+console.log(previewStore.previewContent);
 const props = defineProps({
   previewContent: {
     type: String,

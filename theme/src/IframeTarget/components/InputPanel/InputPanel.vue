@@ -193,7 +193,7 @@ export default {
     },
     handlePreviewUpdate(content) {
       console.log("Preview content received in InputPanel:", content);
-      // Implement the logic to update the preview
+      this.$emit("update-preview", content);
     },
   },
   mounted() {
