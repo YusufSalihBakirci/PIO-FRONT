@@ -111,6 +111,7 @@ import { useIframeStore } from "../../iframeStore";
 import { FirePopup, FireBanner } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
 import CodeEditor from "./CodeEditor.vue";
+import { usePreviewStore } from "../../store/previewStore";
 
 export default {
   components: {
@@ -134,12 +135,13 @@ export default {
     },
   },
 
-  setup(props) {
+  setup(props, { emit }) {
     let insertPositions = ref([]);
     const selectedPosition = ref("");
     const selectedRelativePosition = ref("");
     const activeStep = ref(null);
     const iframeStore = useIframeStore();
+    const previewStore = usePreviewStore();
 
     const onSelectPosition = () => {
       return true;
@@ -176,15 +178,22 @@ export default {
     };
 
     const onPreview = () => {
+      console.log("Preview clicked, proxyReq:", proxyReq);
       if (props.isInline) {
         const proxyReqToPass = {
           selectedPosition,
           selectedRelativePosition,
           ...proxyReq,
         };
-        FireBanner(proxyReqToPass);
+        console.log("Banner data:", proxyReqToPass);
+        const bannerHtml = FireBanner(proxyReqToPass);
+        console.log("Banner HTML:", bannerHtml);
+        emit("update-preview", bannerHtml);
       } else {
-        FirePopup(proxyReq);
+        console.log("Popup data:", proxyReq);
+        const popupHtml = FirePopup(proxyReq);
+        console.log("Popup HTML:", popupHtml);
+        emit("update-preview", popupHtml);
       }
     };
 

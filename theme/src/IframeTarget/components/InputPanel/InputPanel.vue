@@ -1,5 +1,5 @@
 <template>
-  <div id="input-panel-main" :class="['h-full p-3', selectedOption === 'Customize' ? 'w-full' : 'w-1/2']">
+  <div id="input-panel-main" :class="['h-full p-3', selectedOption === 'Customize' ? 'w-full' : 'w-2/6']">
     <template v-if="!showRequirements">
       <!-- Target Main Category - Hide when code editor is shown -->
       <div v-if="selectedOption !== 'Customize'" class="mb-6">
@@ -67,7 +67,7 @@
         <h2 class="font-bold text-xl text-gray-600">{{ selectedSubOption }}</h2>
       </div>
       <h2 class="font-bold text-lg ml-8">Target Requirements</h2>
-      <TargetCreator class="ml-8" :is-inline="false" :selected-target="selectedTargetType" :data-id="selectedTargetType.id" />
+      <TargetCreator :selectedTarget="selectedTarget" :isInline="isInline" :dataId="dataId" @update-preview="handlePreviewUpdate" />
     </div>
     <div v-else-if="selectedSubOption" class="mt-4">
       <h2 class="font-bold text-gray-500 italic text-lg ml-8">Click Create Target to continue</h2>
@@ -91,7 +91,12 @@ export default {
       selectedOption: "",
       selectedSubOption: "",
       selectedObjectElement: null,
-      selectedTargetType: null,
+      selectedTarget: {
+        type: "",
+        // Add other default properties your target needs
+      },
+      isInline: false,
+      dataId: 0,
       generalIdToPass: "",
       isDropdownOpen: false,
       showRequirements: false,
@@ -145,12 +150,7 @@ export default {
   methods: {
     selectMainType(type) {
       this.selectedOption = type;
-
-      // Skip sub-type selection for Customize option
-      if (type === "Customize") {
-        this.selectedObjectElement = null;
-      }
-
+      this.$emit("option-selected", type);
       this.optionChange();
     },
     optionChange() {
@@ -162,7 +162,9 @@ export default {
         this.selectedObjectElement = null;
       }
       this.selectedSubOption = "";
-      this.selectedTargetType = null;
+      this.selectedTarget = { type: "" };
+      this.isInline = false;
+      this.dataId = 0;
       this.showRequirements = false;
     },
     toggleDropdown() {
@@ -180,7 +182,7 @@ export default {
     },
     createTarget() {
       if (this.selectedObjectElement && this.selectedSubOption) {
-        this.selectedTargetType = this.selectedObjectElement[this.selectedSubOption];
+        this.selectedTarget = this.selectedObjectElement[this.selectedSubOption];
         this.showRequirements = true;
       }
     },
@@ -188,6 +190,10 @@ export default {
       console.log("=== Custom Code Content ===");
       console.log("Code to be executed:");
       console.log(code);
+    },
+    handlePreviewUpdate(content) {
+      console.log("Preview content received in InputPanel:", content);
+      // Implement the logic to update the preview
     },
   },
   mounted() {
