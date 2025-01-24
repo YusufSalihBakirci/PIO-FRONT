@@ -2,9 +2,9 @@
   <div class="flex flex-col w-4/6 relative p-3 gap-7">
     <!-- Device Type Selector -->
     <div class="flex justify-between block text-lg text-base font-semibold mb-1 w-full h-fit">
-      <span class="flex items-center w-96 gap-2 justify-between ml-2 px-2 py-1 bg-[#308e87] text-white rounded-md font-medium">
+      <span class="flex items-center gap-2 justify-between ml-2 px-2 py-1 bg-[#308e87] text-white rounded-md font-medium">
         Selected View:
-        <span class="device-type bg-[#f39159] rounded-md px-1 py-1 w-25 text-center">
+        <span class="device-type bg-[#f39159] rounded-md px-1 py-1 text-center">
           {{ capitalize(selectedDevice) }}
         </span>
       </span>
@@ -23,7 +23,7 @@
     </div>
 
     <!-- Preview Area -->
-    <div class="preview-container bg-gray-100 rounded-lg flex-1">
+    <div class="preview-container rounded-lg flex-1">
       <div
         class="preview-frame"
         :style="{
@@ -81,7 +81,7 @@ const capitalize = (str) => {
 
 .preview-frame {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   background-color: white;
   border-radius: 8px;

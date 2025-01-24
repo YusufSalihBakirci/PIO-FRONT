@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen bg-[#f8f9fd]">
+  <div class="flex h-[80vh] bg-[#f8f9fd]">
     <template v-if="selectedOption === 'Customize'">
       <CodeEditor class="w-full" @run-code="handleCodeRun" />
     </template>

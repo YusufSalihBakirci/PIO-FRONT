@@ -7,7 +7,7 @@
         <div class="grid grid-cols-2 gap-4">
           <button v-for="type in targetTypes" :key="type.id" @click="selectMainType(type.value)" class="flex flex-col items-center p-4 border rounded-xl transition-all duration-200 hover:shadow-lg" :class="[selectedOption === type.value ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-md' : 'border-gray-200 hover:border-blue-300']">
             <div class="w-12 h-12 flex items-center justify-center mb-3">
-              <img :src="type.image" :alt="type.label" class="w-[50px] h-[50px] object-cover rounded-lg" />
+              <img :src="type.image" :alt="type.label" class="object-cover rounded-lg" />
             </div>
             <span class="font-medium">{{ type.label }}</span>
           </button>
@@ -49,7 +49,7 @@
 
         <!-- Create Button -->
         <div class="flex justify-end mt-4 mr-4" v-if="selectedSubOption">
-          <button @click="createTarget" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg">
+          <button @click="createTarget" class="px-6 py-3 bg-[#308e87] text-white rounded-lg  transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg">
             <span>Create Target</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -106,25 +106,25 @@ export default {
           id: 1,
           label: "Inline",
           value: "Inline Target",
-          image: "https://picsum.photos/50/50?random=5",
+          image: require("@/assets/images/create-experiences-icons/inline_exp.png"),
         },
         {
           id: 2,
           label: "External",
           value: "External Target",
-          image: "https://picsum.photos/50/50?random=6",
+          image: require("@/assets/images/create-experiences-icons/external_exp.png"),
         },
         {
           id: 3,
           label: "Gamification",
           value: "Gamification",
-          image: "https://picsum.photos/50/50?random=7",
+          image: require("@/assets/images/create-experiences-icons/gamification.png"),
         },
         {
           id: 4,
-          label: "Customize",
+          label: "Custom",
           value: "Customize",
-          image: "https://picsum.photos/50/50?random=8",
+          image: require("@/assets/images/create-experiences-icons/custom_exp.png"),
         },
       ],
       subTypeDetails: {
@@ -208,7 +208,6 @@ export default {
 
 <style scoped>
 #input-panel-main {
-  height: calc(100vh - 80px); /* Adjust based on your header height */
   overflow-y: auto;
 }
 

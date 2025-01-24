@@ -1,9 +1,9 @@
 <template>
-  <div class="code-editor-wrapper" :class="editorTheme">
+  <div class="code-editor-wrapper h-[80vh]" :class="editorTheme">
     <!-- Settings Menu -->
     <div class="editor-settings mb-3 flex items-center justify-between gap-3">
       <!-- Left side with title -->
-      <h2 class="font-medium" :class="getLabelClasses">Custom Code Editor</h2>
+      <h2 class="font-medium" :class="getLabelClasses">Experia Code Editor</h2>
 
       <!-- All controls on the right -->
       <div class="flex items-center gap-3">
@@ -307,7 +307,6 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   padding: 1rem;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
