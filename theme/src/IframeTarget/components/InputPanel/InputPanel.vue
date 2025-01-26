@@ -49,7 +49,7 @@
 
         <!-- Create Button -->
         <div class="flex justify-end mt-4 mr-4" v-if="selectedSubOption">
-          <button @click="createTarget" class="px-6 py-3 bg-[#308e87] text-white rounded-lg  transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg">
+          <button @click="createTarget" class="px-6 py-3 bg-[#308e87] text-white rounded-lg transition-colors duration-200 flex items-center gap-2 shadow-md hover:shadow-lg">
             <span>Create Target</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -182,8 +182,13 @@ export default {
     },
     createTarget() {
       if (this.selectedObjectElement && this.selectedSubOption) {
-        this.selectedTarget = this.selectedObjectElement[this.selectedSubOption];
+        this.selectedTarget = {
+          ...this.selectedObjectElement[this.selectedSubOption],
+          type: this.selectedSubOption.toLowerCase(), // This will set 'banner' for Banner, etc.
+        };
+        this.isInline = this.selectedOption === "Inline Target";
         this.showRequirements = true;
+        console.log("Created target:", this.selectedTarget); // Debug log
       }
     },
     handleCodeRun(code) {

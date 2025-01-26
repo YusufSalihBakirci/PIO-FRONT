@@ -11,6 +11,16 @@ const TargetConfig = {
             value: "",
             description: "Background color of the banner",
           },
+          desktopHeight: {
+            type: "string",
+            value: "60px",
+            description: "Height of banner on desktop",
+          },
+          mobileHeight: {
+            type: "string",
+            value: "200px",
+            description: "Height of banner on mobile",
+          },
           pageToApply: {
             type: "string",
             value: "",
@@ -20,6 +30,22 @@ const TargetConfig = {
             type: "url",
             value: "",
             description: "Redirect URL when the banner is clicked",
+          },
+          querySelector: {
+            type: "string",
+            value: "",
+            description: "CSS selector for target element",
+          },
+          insertPosition: {
+            type: "select",
+            value: "",
+            options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
+            description: "Position relative to the selected element",
+          },
+          additionalStyles: {
+            type: "string",
+            value: "",
+            description: "Additional CSS styles for banner container (optional)",
           },
         },
         setText: {
@@ -34,6 +60,23 @@ const TargetConfig = {
             value: "",
             description: "Text color",
           },
+          position: {
+            type: "select",
+            value: "",
+            options: ["left", "middle", "right"],
+            description: "Position of the text",
+          },
+          fontSize: {
+            type: "string",
+            value: "16px",
+            description: "Font size of the text",
+          },
+          fontWeight: {
+            type: "select",
+            value: "normal",
+            options: ["normal", "bold", "100", "200", "300", "400", "500", "600", "700", "800", "900"],
+            description: "Font weight of the text",
+          },
         },
         setCountdown: {
           description: "Countdown Settings",
@@ -42,21 +85,41 @@ const TargetConfig = {
             value: "",
             description: "Finish date for the countdown",
           },
+          position: {
+            type: "select",
+            value: "",
+            options: ["left", "middle", "right"],
+            description: "Position of the countdown",
+          },
+          format: {
+            type: "select",
+            value: "",
+            options: ["day-hour-minute", "hour-minute-second"],
+            description: "Format of the countdown display",
+          },
+          showText: {
+            type: "select",
+            value: "",
+            options: ["show", "hide"],
+            description: "Show or hide 'Days', 'Hours', etc.",
+          },
+          additionalStyles: {
+            type: "string",
+            value: "",
+            description: "Additional CSS styles for countdown (optional)",
+          },
         },
         setImage: {
           description: "Image Settings",
-          imageUrl: {
+          desktopImageUrl: {
             type: "url",
             value: "",
-            description: "Image URL",
+            description: "Desktop image URL",
           },
-        },
-        setVideo: {
-          description: "Video Settings",
-          videoUrl: {
+          mobileImageUrl: {
             type: "url",
             value: "",
-            description: "Video URL",
+            description: "Mobile image URL",
           },
         },
       },
@@ -83,6 +146,17 @@ const TargetConfig = {
             type: "url",
             value: "",
             description: "Redirect URL when the banner is clicked",
+          },
+          querySelector: {
+            type: "string",
+            value: "",
+            description: "CSS selector for target element",
+          },
+          insertPosition: {
+            type: "select",
+            value: "",
+            options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
+            description: "Position relative to the selected element",
           },
         },
         setText: {
@@ -126,6 +200,12 @@ const TargetConfig = {
             type: "date",
             value: "",
             description: "Finish date for the countdown",
+          },
+          position: {
+            type: "select",
+            value: "",
+            options: ["left", "middle", "right"],
+            description: "Position of the countdown",
           },
         },
         setCampaignCode: {

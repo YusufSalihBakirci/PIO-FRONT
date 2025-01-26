@@ -192,53 +192,98 @@ export function FirePopup(basicInputsData) {
 }
 
 export function FireBanner(inputData) {
-  console.log("Data passed to the TargetCodes: ", inputData);
-  const config = {
-    backgroundColor: inputData.targetRequirements.general.backgroundColor,
-    appendPosition: inputData.selectedPosition.value,
-    appendRelativePosition: inputData.selectedRelativePosition.value,
-    url: inputData.targetRequirements.general.redirectUrl,
-    text: inputData.targetRequirements.setText.textContent,
-    fontWeight: inputData.targetRequirements.setText.fontWeight,
-    fontSize: inputData.targetRequirements.setText.fontSize,
-  };
-  // const iframeStore = useIframeStore();
-  // let targetFrame = iframeStore.content.contentWindow.document;
+  console.log("Banner Input Data:", inputData);
 
-  // Return the HTML content instead of manipulating DOM
+  const config = {
+    // General Settings
+    backgroundColor: inputData.targetRequirements?.general?.backgroundColor?.trim() || "#000000",
+    appendPosition: inputData?.selectedPosition?.value,
+    appendRelativePosition: inputData?.selectedRelativePosition?.value,
+    url: inputData.targetRequirements?.general?.redirectUrl || "#",
+    padding: inputData.targetRequirements?.general?.padding || "10px 15px",
+    borderRadius: inputData.targetRequirements?.general?.borderRadius || "4px",
+    desktopHeight: inputData.targetRequirements?.general?.desktopHeight || "60px",
+    mobileHeight: inputData.targetRequirements?.general?.mobileHeight || "200px",
+    position: inputData.targetRequirements?.general?.position || "relative",
+    zIndex: inputData.targetRequirements?.general?.zIndex || "999999",
+
+    // Text Settings
+    text: inputData.targetRequirements?.setText?.textContent || "",
+    fontFamily: inputData.targetRequirements?.setText?.fontFamily || "inherit",
+    fontWeight: inputData.targetRequirements?.setText?.fontWeight || "normal",
+    fontSize: inputData.targetRequirements?.setText?.fontSize || "16",
+    textColor: inputData.targetRequirements?.setText?.textColor?.trim() || "#ffffff",
+    textAlign: inputData.targetRequirements?.setText?.textAlign || "center",
+    letterSpacing: inputData.targetRequirements?.setText?.letterSpacing || "normal",
+    lineHeight: inputData.targetRequirements?.setText?.lineHeight || "1.5",
+
+    // Border Settings
+    borderWidth: inputData.targetRequirements?.border?.width || "0",
+    borderStyle: inputData.targetRequirements?.border?.style || "solid",
+    borderColor: inputData.targetRequirements?.border?.color?.trim() || "transparent",
+
+    // Shadow Settings
+    boxShadow: inputData.targetRequirements?.shadow?.enabled ? `${inputData.targetRequirements.shadow.x || "0"}px ${inputData.targetRequirements.shadow.y || "0"}px ${inputData.targetRequirements.shadow.blur || "0"}px ${inputData.targetRequirements.shadow.spread || "0"}px ${inputData.targetRequirements.shadow.color || "rgba(0,0,0,0.2)"}` : "none",
+  };
+
   return `
-    <style>
-      .hb-banner-container {
-        height: auto;
-        margin: auto;
+    <div id="vl-banner-wrapper" style="
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      position: ${config.position};
+      z-index: ${config.zIndex};
+    ">
+      <div class="hb-banner-container" style="
+        width: 100%;
+        height: ${config.desktopHeight};
+        min-height: ${config.desktopHeight};
+        margin: 0 auto;
         background-color: ${config.backgroundColor};
-        border-radius: 4px;
+        border-radius: ${config.borderRadius};
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        margin-bottom: 15px;
-        font-size: ${config.fontSize}px;
-        text-align: center;
-      }
-      .vl-banner-link{
-        text-decoration: none;
-          color: white;
-      }
-
+        padding: ${config.padding};
+        box-sizing: border-box;
+        border: ${config.borderWidth}px ${config.borderStyle} ${config.borderColor};
+        box-shadow: ${config.boxShadow};
+      ">
+        <div class="vl-banner-elements" style="
+          width: 100%;
+          text-align: ${config.textAlign};
+          margin: 0;
+          padding: 0;
+        ">
+          <a class="vl-banner-link" href="${config.url}" style="
+            text-decoration: none;
+            color: ${config.textColor};
+            font-size: ${config.fontSize}px;
+            font-weight: ${config.fontWeight};
+            font-family: ${config.fontFamily};
+            display: block;
+            width: 100%;
+            line-height: ${config.lineHeight};
+            letter-spacing: ${config.letterSpacing};
+            margin: 0;
+            padding: 0;
+          ">${config.text}</a>
+        </div>
+      </div>
+    </div>
+    <style>
       @media only screen and (max-width: 768px) {
-        .hb-banner-container{
-          height: 50px;
-          font-size: 13px;
-          padding: 2px 15px;
-          margin-top: 15px;
+        #vl-banner-wrapper .hb-banner-container {
+          height: ${config.mobileHeight} !important;
+          min-height: ${config.mobileHeight} !important;
+          padding: ${config.padding};
+        }
+        #vl-banner-wrapper .vl-banner-link {
+          font-size: calc(${config.fontSize}px * 0.8);
         }
       }
     </style>
-    <div class="hb-banner-container">
-      <div class='vl-banner-elements'>
-        <a class='vl-banner-link' href=${config.url}>${config.text}</a>
-      </div>
-    </div>
   `;
 }

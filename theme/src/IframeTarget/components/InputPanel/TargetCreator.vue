@@ -12,26 +12,6 @@
         </div>
 
         <div v-show="activeStep === index" class="p-4 border-t bg-white">
-          <div v-if="isInline && index === 0" class="space-y-4 mb-6">
-            <div class="form-group">
-              <label for="location" class="block text-sm font-medium text-gray-700 mb-2"> Eklenecek Alan: </label>
-              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="location" id="location" v-model="selectedPosition" @change="onSelectPosition">
-                <option value="" disabled>Secim Yapiniz</option>
-                <option v-for="(posValue, posIndex) in insertPositions" :key="posIndex" :value="posValue">Position - {{ posIndex }} // {{ posValue }}</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="block text-sm font-medium text-gray-700 mb-2" for="where"> Eklenecek Pozisyon: </label>
-              <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" name="where" id="where" v-model="selectedRelativePosition">
-                <option value="afterbegin">Elemanin Baslangici</option>
-                <option value="beforeend">Eleman Sonu</option>
-                <option value="afterend">Elemandan Sonra</option>
-                <option value="beforebegin">Elemandan Once</option>
-              </select>
-            </div>
-          </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div v-for="(field, key) in step.fields" :key="key" class="form-group">
               <label :for="key" class="block text-sm font-medium text-gray-700 mb-2">
@@ -65,8 +45,8 @@
                 </div>
               </template>
 
-              <template v-else-if="field.type === 'date'">
-                <input type="datetime-local" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" :name="key" :id="key" :value="field.value" @input="(e) => handleInputChange(step.key + '.' + key, e.target.value)" />
+              <template v-else-if="field.type === 'date'" class="flex gap-2">
+                <input type="datetime-local" :min="getCurrentDate()" :value="formatDateTimeForInput(field.value)" @input="validateDateTime($event, field)" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" />
               </template>
 
               <template v-else-if="field.type === 'number'">
@@ -75,6 +55,15 @@
 
               <template v-else-if="field.type === 'url'">
                 <input type="url" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" :name="key" :id="key" :value="field.value" placeholder="https://" @input="(e) => handleInputChange(step.key + '.' + key, e.target.value)" />
+              </template>
+
+              <template v-else-if="field.type === 'select'">
+                <select class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" :name="key" :id="key" :value="field.value" @change="(e) => handleInputChange(step.key + '.' + key, e.target.value)">
+                  <option value="" disabled>Select an option</option>
+                  <option v-for="option in field.options" :key="option" :value="option">
+                    {{ option.charAt(0).toUpperCase() + option.slice(1) }}
+                  </option>
+                </select>
               </template>
 
               <template v-else-if="field.type === 'string' && step.key === 'general' && key === 'code'">
@@ -179,20 +168,30 @@ export default {
 
     const onPreview = () => {
       console.log("Preview clicked, proxyReq:", proxyReq);
-      if (props.isInline) {
+      console.log("Selected Target:", props.selectedTarget);
+      console.log("Target type:", props.selectedTarget?.type);
+      console.log("Is inline?", props.isInline);
+
+      if (!props.selectedTarget) {
+        console.warn("No target selected!");
+        return;
+      }
+
+      if (props.isInline || props.selectedTarget.type === "banner") {
+        console.log("Using FireBanner - Inline or Banner type detected");
         const proxyReqToPass = {
           selectedPosition,
           selectedRelativePosition,
           ...proxyReq,
         };
-        console.log("Banner data:", proxyReqToPass);
+        console.log("Banner proxyReqToPass:", proxyReqToPass);
         const bannerHtml = FireBanner(proxyReqToPass);
-        console.log("Banner HTML:", bannerHtml);
         emit("update-preview", bannerHtml);
       } else {
+        console.log("Using FirePopup - Regular popup type");
         console.log("Popup data:", proxyReq);
         const popupHtml = FirePopup(proxyReq);
-        console.log("Popup HTML:", popupHtml);
+        console.log("Generated Popup HTML:", popupHtml);
         emit("update-preview", popupHtml);
       }
     };
@@ -200,14 +199,6 @@ export default {
     const steps = computed(() => {
       const reqs = props.selectedTarget?.TargetRequire || {};
       const stepArray = [];
-
-      if (props.isInline) {
-        stepArray.push({
-          key: "position",
-          title: "Pozisyon Ayarları",
-          fields: {},
-        });
-      }
 
       if (reqs) {
         Object.entries(reqs).forEach(([groupKey, groupValue]) => {
@@ -264,6 +255,30 @@ export default {
       // Handle any additional logic needed when code is run
     };
 
+    const getCurrentDate = () => {
+      const today = new Date();
+      return today.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+    };
+
+    const formatDateTimeForInput = (value) => {
+      if (!value) return "";
+      return new Date(value).toISOString().slice(0, 16);
+    };
+
+    const validateDateTime = (event, field) => {
+      const selectedDate = new Date(event.target.value);
+      const now = new Date();
+
+      if (selectedDate < now) {
+        // If selected datetime is in the past, set it to next hour
+        const futureDate = new Date(now.getTime() + 60 * 60 * 1000); // Add 1 hour
+        field.value = futureDate.toISOString();
+        event.target.value = formatDateTimeForInput(field.value);
+      } else {
+        field.value = selectedDate.toISOString();
+      }
+    };
+
     return {
       proxyReq,
       onPreview,
@@ -278,12 +293,15 @@ export default {
       toggleColorPicker,
       hideColorPicker,
       handleCodeRun,
+      getCurrentDate,
+      formatDateTimeForInput,
+      validateDateTime,
     };
   },
 };
 </script>
 
-<style scoped>
+<style>
 .rotate-180 {
   transform: rotate(180deg);
 }
