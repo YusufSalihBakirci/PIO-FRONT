@@ -156,7 +156,6 @@ onMounted(() => {
 
 .controls {
   position: relative;
-  z-index: 1001;
 }
 
 .enlarged-controls {
