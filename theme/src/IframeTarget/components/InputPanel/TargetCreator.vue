@@ -97,7 +97,7 @@
 <script>
 import { reactive, watch, ref, computed } from "vue";
 import { useIframeStore } from "../../iframeStore";
-import { FirePopup, FireBanner } from "../TargetTypes/TargetCodes";
+import { FireBanner, FirePopup, fireFTW } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
 import CodeEditor from "./CodeEditor.vue";
 import { usePreviewStore } from "../../store/previewStore";
@@ -167,33 +167,33 @@ export default {
     };
 
     const onPreview = () => {
-      console.log("Preview clicked, proxyReq:", proxyReq);
-      console.log("Selected Target:", props.selectedTarget);
-      console.log("Target type:", props.selectedTarget?.type);
-      console.log("Is inline?", props.isInline);
+      const targetType = props.selectedTarget.type.toLowerCase();
+      const subOption = props.selectedTarget.subOption?.toLowerCase();
 
-      if (!props.selectedTarget) {
-        console.warn("No target selected!");
-        return;
+      // Create input data object with all necessary configurations
+      const inputData = {
+        targetType: subOption,
+        targetRequirements: proxyReq.targetRequirements,
+        selectedPosition: selectedPosition.value,
+        selectedRelativePosition: selectedRelativePosition.value,
+      };
+
+      let previewContent;
+
+      // Generate the appropriate target code based on type
+      if (targetType === "inline target") {
+        previewContent = FireBanner(inputData);
+      } else if (targetType === "external target") {
+        previewContent = FirePopup(inputData);
+      } else if (targetType === "gamification") {
+        previewContent = fireFTW(inputData);
       }
 
-      if (props.isInline || props.selectedTarget.type === "banner") {
-        console.log("Using FireBanner - Inline or Banner type detected");
-        const proxyReqToPass = {
-          selectedPosition,
-          selectedRelativePosition,
-          ...proxyReq,
-        };
-        console.log("Banner proxyReqToPass:", proxyReqToPass);
-        const bannerHtml = FireBanner(proxyReqToPass);
-        emit("update-preview", bannerHtml);
-      } else {
-        console.log("Using FirePopup - Regular popup type");
-        console.log("Popup data:", proxyReq);
-        const popupHtml = FirePopup(proxyReq);
-        console.log("Generated Popup HTML:", popupHtml);
-        emit("update-preview", popupHtml);
-      }
+      // Store the target type in previewStore
+      previewStore.setTargetType(subOption);
+
+      // Emit the preview content
+      emit("update-preview", previewContent);
     };
 
     const steps = computed(() => {

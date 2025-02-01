@@ -9,7 +9,7 @@ const TargetConfig = {
           backgroundColor: {
             type: "color",
             value: "",
-            description: "Background color of the banner",
+            description: "Background color",
           },
           desktopHeight: {
             type: "string",
@@ -24,7 +24,7 @@ const TargetConfig = {
           pageToApply: {
             type: "string",
             value: "",
-            description: "Page where the banner will be applied",
+            description: "Page to apply",
           },
           redirectUrl: {
             type: "url",
@@ -90,6 +90,12 @@ const TargetConfig = {
             value: "",
             options: ["left", "middle", "right"],
             description: "Position of the countdown",
+          },
+          layout: {
+            type: "select",
+            value: "stacked",
+            options: ["inline", "stacked"],
+            description: "Layout relative to banner text (stacked = countdown below text)",
           },
           format: {
             type: "select",
@@ -274,18 +280,170 @@ const TargetConfig = {
           description: "General Settings",
           backgroundColor: {
             type: "color",
-            value: "",
-            description: "Background color of the banner",
+            value: "#000000a3",
+            description: "Background color of the game container",
           },
-          pageToApply: {
+          zIndex: {
             type: "string",
-            value: "",
-            description: "Page where the banner will be applied",
+            value: "999999",
+            description: "Z-index of the game container",
           },
-          redirectUrl: {
+          gameDuration: {
+            type: "number",
+            value: 60,
+            description: "Game duration in seconds",
+          },
+        },
+        gameConfig: {
+          description: "Game Configuration",
+          gridRows: {
+            type: "number",
+            value: 3,
+            description: "Number of rows in the game grid",
+          },
+          gridCols: {
+            type: "number",
+            value: 3,
+            description: "Number of columns in the game grid",
+          },
+          cardImages: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=1, https://picsum.photos/100/100?random=2, https://picsum.photos/100/100?random=3, https://picsum.photos/100/100?random=4",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+          backCardImage: {
+            type: "url",
+            value: "https://imgvisilabsnet.azureedge.net/banner/uploaded_images/418_1455_20241209195350115.jpg",
+            description: "Image URL for card back",
+          },
+          emptyCardImage: {
+            type: "url",
+            value: "https://static.thenounproject.com/png/4653780-200.png",
+            description: "Image URL for empty card",
+          },
+          backgroundImage: {
+            type: "url",
+            value: "https://voyagemaison.com/cdn/shop/files/BOWMONT_WPO_PHE_2.jpg?format=pjpg&v=1710155491&width=720",
+            description: "Background image URL for game area",
+          },
+        },
+        startScreen: {
+          description: "Start Screen Settings",
+          backgroundColor: {
+            type: "color",
+            value: "#000000",
+            description: "Background color for start screen",
+          },
+          backgroundImage: {
             type: "url",
             value: "",
-            description: "Redirect URL when the banner is clicked",
+            description: "Background image URL for start screen",
+          },
+          title: {
+            type: "string",
+            value: "Memory Match Challenge",
+            description: "Title text for start screen",
+          },
+          titleColor: {
+            type: "color",
+            value: "#ffffff",
+            description: "Title text color",
+          },
+          titleFontSize: {
+            type: "string",
+            value: "48px",
+            description: "Title font size",
+          },
+          description: {
+            type: "string",
+            value: "Match all pairs as quickly as possible to win bigger discounts!",
+            description: "Description text for start screen",
+          },
+          descriptionColor: {
+            type: "color",
+            value: "#ffffff",
+            description: "Description text color",
+          },
+          descriptionFontSize: {
+            type: "string",
+            value: "36px",
+            description: "Description font size",
+          },
+          buttonText: {
+            type: "string",
+            value: "START GAME",
+            description: "Start button text",
+          },
+          buttonColor: {
+            type: "color",
+            value: "#1ec4d2",
+            description: "Start button color",
+          },
+          buttonFontSize: {
+            type: "string",
+            value: "40px",
+            description: "Button font size",
+          },
+        },
+        promoCodes: {
+          description: "Promo Code Settings",
+          timeRanges: {
+            type: "string",
+            value: `[
+              {"minTime":0, "maxTime":5, "staticcode":"WIN100", "campaignText":"Congratulations! You've won a 100% discount!"},
+              {"minTime":6, "maxTime":15, "staticcode":"SAVE75", "campaignText":"Amazing! Enjoy 75% off!"},
+              {"minTime":16, "maxTime":25, "staticcode":"HALF50", "campaignText":"Great job! Get 50% off!"},
+              {"minTime":26, "maxTime":999, "staticcode":"QUICK25", "campaignText":"Nice work! Take 25% off!"}
+            ]`,
+            description: "JSON string of time-based promo codes and messages",
+          },
+        },
+        visual: {
+          description: "Visual Settings",
+          cardBorderRadius: {
+            type: "string",
+            value: "10px",
+            description: "Border radius for cards",
+          },
+          scoreBoardRadius: {
+            type: "string",
+            value: "5px",
+            description: "Border radius for scoreboard",
+          },
+          closeButtonColor: {
+            type: "color",
+            value: "black",
+            description: "Close button color",
+          },
+          fontFamily: {
+            type: "string",
+            value: "'Arial', sans-serif",
+            description: "Custom font family",
+          },
+          mobileFontSizes: {
+            type: "string",
+            value: `{
+              "timer": "32px",
+              "closeButton": "32px",
+              "title": "48px",
+              "description": "36px",
+              "button": "40px"
+            }`,
+            description: "JSON string of mobile font sizes",
+          },
+        },
+        sound: {
+          description: "Sound Settings",
+          enabled: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Enable game sounds",
+          },
+          soundUrl: {
+            type: "url",
+            value: "https://bariisarslans.github.io/giftcatchgame/sound.mp3",
+            description: "URL for game sound effect",
           },
         },
       },

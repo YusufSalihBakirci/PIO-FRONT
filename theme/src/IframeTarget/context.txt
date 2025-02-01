@@ -1,0 +1,58 @@
+File Structure:
+theme/src/
+├── IframeTarget/
+│   ├── components/
+│   │   ├── InputPanel/
+│   │   │   ├── InputPanel.vue (Handles target selection and creation)
+│   │   │   ├── TargetCreator.vue (Creates target configurations)
+│   │   │   ├── CodeEditor.vue (Monaco editor for custom code)
+│   │   │   └── TargetJSCreator.vue (Generates target JS code)
+│   │   ├── TargetTypes/
+│   │   │   ├── TargetCodes.js (Generates actual target code)
+│   │   │   └── TargetConfigs.js (Defines target configurations)
+│   │   ├── AuxJS/
+│   │   │   ├── PageReader.js (Reads and analyzes page elements)
+│   │   │   ├── EcommerceTemplate.js (Template generation)
+│   │   │   └── SvgVectors.js (UI icons and vectors)
+│   │   ├── BetterTargetPreview.vue (New preview component)
+│   │   └── TargetPreview.vue (Original preview component)
+│   ├── store/
+│   │   ├── previewStore.js (Preview state management)
+│   │   └── iframeStore.js (Iframe content management)
+│   └── public/
+       └── FoodMart-1.0.0/ (Template assets)
+
+Data Flow:
+User Action ─► InputPanel.vue
+                  │
+                  ▼
+            TargetCreator.vue ──► TargetCodes.js/CodeEditor.vue
+                  │                    │
+                  │                    ▼
+                  │              Generates Code
+                  │                    │
+                  ▼                    ▼
+            previewStore.js ◄─── JSON String
+                  │
+                  ▼
+        BetterTargetPreview.vue
+                  │
+                  ▼
+            Displays Preview
+
+Key Components:
+1. InputPanel: Main interface for target creation
+2. CodeEditor: Monaco-based code editor for custom JS
+3. PageReader: Analyzes page structure for target placement
+4. TargetCodes: Generates popup/banner code
+5. BetterTargetPreview: Renders preview in template
+
+State Management:
+- previewStore: Manages preview content and target type
+- iframeStore: Manages iframe content and interactions
+
+Current Focus:
+- Improving preview rendering
+- Handling code execution in preview
+- Managing target code generation
+- Maintaining clean code structure

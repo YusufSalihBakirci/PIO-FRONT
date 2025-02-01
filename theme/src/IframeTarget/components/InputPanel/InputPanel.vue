@@ -79,6 +79,7 @@
 import CodeEditor from "./CodeEditor.vue";
 import TargetCreator from "./TargetCreator.vue";
 import TargetConfig from "../TargetTypes/TargetConfigs";
+import { usePreviewStore } from "../../store/previewStore";
 
 export default {
   components: {
@@ -184,11 +185,13 @@ export default {
       if (this.selectedObjectElement && this.selectedSubOption) {
         this.selectedTarget = {
           ...this.selectedObjectElement[this.selectedSubOption],
-          type: this.selectedSubOption.toLowerCase(), // This will set 'banner' for Banner, etc.
+          type: this.selectedOption,
+          subOption: this.selectedSubOption.toLowerCase(),
+          TargetRequire: this.selectedObjectElement[this.selectedSubOption].TargetRequire,
         };
         this.isInline = this.selectedOption === "Inline Target";
         this.showRequirements = true;
-        console.log("Created target:", this.selectedTarget); // Debug log
+        console.log("Created target:", this.selectedTarget);
       }
     },
     handleCodeRun(code) {
@@ -197,7 +200,11 @@ export default {
       console.log(code);
     },
     handlePreviewUpdate(content) {
-      console.log("Preview content received in InputPanel:", content);
+      // Update the preview store
+      const previewStore = usePreviewStore();
+      previewStore.setPreviewContent(content);
+
+      // Also emit the event for any parent components
       this.$emit("update-preview", content);
     },
   },

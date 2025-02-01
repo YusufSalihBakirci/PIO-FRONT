@@ -1,15 +1,17 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const usePreviewStore = defineStore("preview", () => {
-  const previewContent = ref("");
-
-  function updatePreview(content) {
-    previewContent.value = content;
-  }
-
-  return {
-    previewContent,
-    updatePreview,
-  };
+export const usePreviewStore = defineStore("preview", {
+  state: () => ({
+    previewContent: null,
+    targetType: null,
+  }),
+  actions: {
+    setPreviewContent(content) {
+      this.previewContent = content;
+    },
+    setTargetType(type) {
+      this.targetType = type;
+    },
+  },
 });
