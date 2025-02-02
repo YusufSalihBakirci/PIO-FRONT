@@ -10,29 +10,32 @@
         </span>
       </span>
 
-      <!-- Device Buttons and Enlarge -->
+      <!-- Device Buttons and Controls -->
       <div class="flex items-center gap-3">
-        <span class="flex gap-2">
-          <button
-            class="resolution-btn bg-zinc-300 rounded-md p-1.5 w-10 h-10 flex items-center justify-center"
-            :class="{
-              border: true,
-              'border-black': selectedDevice === btnKey,
-              'border-transparent': selectedDevice !== btnKey,
-            }"
-            v-for="(btnValue, btnKey) in svgObject"
-            :key="btnKey"
-            v-html="btnValue"
-            @click="selectDevice(btnKey)"></button>
-        </span>
+        <!-- Device Buttons and Enlarge -->
+        <div class="flex items-center gap-3">
+          <span class="flex gap-2">
+            <button
+              class="resolution-btn bg-zinc-300 rounded-md p-1.5 w-10 h-10 flex items-center justify-center"
+              :class="{
+                border: true,
+                'border-black': selectedDevice === btnKey,
+                'border-transparent': selectedDevice !== btnKey,
+              }"
+              v-for="(btnValue, btnKey) in svgObject"
+              :key="btnKey"
+              v-html="btnValue"
+              @click="selectDevice(btnKey)"></button>
+          </span>
 
-        <!-- Enlarge Button -->
-        <button @click="toggleEnlarge" class="bg-[#308e87] text-white rounded-md p-1.5 w-10 h-10 flex items-center justify-center hover:bg-[#277873] transition-colors" :title="isEnlarged ? 'Shrink preview' : 'Enlarge preview'">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-            <path v-if="!isEnlarged" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H3m0 0v6m0-6l7 7m5 11h6m0 0v-6m0 6L14 14" />
-          </svg>
-        </button>
+          <!-- Enlarge Button -->
+          <button @click="toggleEnlarge" class="bg-[#308e87] text-white rounded-md p-1.5 w-10 h-10 flex items-center justify-center hover:bg-[#277873] transition-colors" :title="isEnlarged ? 'Shrink preview' : 'Enlarge preview'">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+              <path v-if="!isEnlarged" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H3m0 0v6m0-6l7 7m5 11h6m0 0v-6m0 6L14 14" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -72,7 +75,9 @@ const deviceSizes = ref({
 const handleIframeLoad = () => {
   if (previewStore.previewContent && previewIframe.value) {
     try {
-      const content = JSON.parse(previewStore.previewContent);
+      // Parse the content if it's a string, otherwise use it directly
+      const content = typeof previewStore.previewContent === "string" ? JSON.parse(previewStore.previewContent) : previewStore.previewContent;
+
       const iframeDoc = previewIframe.value.contentDocument;
 
       // Add styles
@@ -85,8 +90,6 @@ const handleIframeLoad = () => {
       // Execute JavaScript with proper container handling
       if (content.js) {
         const scriptElement = iframeDoc.createElement("script");
-
-        // Create a safer execution environment
         scriptElement.textContent = `
           (function(document) {
             try {
@@ -103,7 +106,6 @@ const handleIframeLoad = () => {
             }
           })(document);
         `;
-
         iframeDoc.body.appendChild(scriptElement);
       }
     } catch (error) {
@@ -121,15 +123,8 @@ const processPreviewContent = (content) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(template, "text/html");
 
-    // Parse the stringified JSON content
-    let targetContent;
-    try {
-      targetContent = JSON.parse(content);
-      console.log("Parsed target content:", targetContent);
-    } catch (parseError) {
-      console.error("Error parsing JSON:", parseError);
-      return template;
-    }
+    // Parse the content if it's a string, otherwise use it directly
+    const targetContent = typeof content === "string" ? JSON.parse(content) : content;
 
     // Add styles if they exist
     if (targetContent.css) {
@@ -145,12 +140,12 @@ const processPreviewContent = (content) => {
   }
 };
 
-// Watch for changes in preview store
+// Watch for changes in preview store, but only update on preview button click
 watch(
   () => previewStore.previewContent,
   (newContent) => {
-    console.log("Preview content received:", newContent);
-    if (newContent) {
+    // Only process if it's a preview button click (content will be stringified)
+    if (newContent && typeof newContent === "string") {
       previewContent.value = processPreviewContent(newContent);
     }
   },

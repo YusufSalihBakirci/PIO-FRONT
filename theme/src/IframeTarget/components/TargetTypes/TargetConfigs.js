@@ -40,7 +40,7 @@ const TargetConfig = {
             type: "select",
             value: "",
             options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
-            description: "Position relative to the selected element",
+            description: "Insert position",
           },
           additionalStyles: {
             type: "string",
@@ -95,7 +95,7 @@ const TargetConfig = {
             type: "select",
             value: "stacked",
             options: ["inline", "stacked"],
-            description: "Layout relative to banner text (stacked = countdown below text)",
+            description: "Layout style",
           },
           format: {
             type: "select",
@@ -107,7 +107,7 @@ const TargetConfig = {
             type: "select",
             value: "",
             options: ["show", "hide"],
-            description: "Show or hide 'Days', 'Hours', etc.",
+            description: "Show time unit labels",
           },
           additionalStyles: {
             type: "string",
@@ -126,6 +126,209 @@ const TargetConfig = {
             type: "url",
             value: "",
             description: "Mobile image URL",
+          },
+        },
+      },
+    },
+    "Sliding Banner": {
+      id: 1001,
+      TargetRequire: {
+        general: {
+          description: "General Settings",
+          backgroundColor: {
+            type: "color",
+            value: "#FF6B6B",
+            description: "Background color",
+          },
+          desktopHeight: {
+            type: "string",
+            value: "60px",
+            description: "Height of banner on desktop",
+          },
+          mobileHeight: {
+            type: "string",
+            value: "120px",
+            description: "Height of banner on mobile",
+          },
+          pageToApply: {
+            type: "string",
+            value: "",
+            description: "Page to apply",
+          },
+          querySelector: {
+            type: "string",
+            value: "body",
+            description: "CSS selector for target element",
+          },
+          insertPosition: {
+            type: "select",
+            value: "beforeend",
+            options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
+            description: "Position relative to the selected element",
+          },
+          additionalStyles: {
+            type: "string",
+            value: "",
+            description: "Additional CSS styles for banner container (optional)",
+          },
+        },
+        setCarousel: {
+          description: "Carousel Settings",
+          slidePosition: {
+            type: "select",
+            value: "right",
+            options: ["top", "bottom", "left", "right"],
+            description: "Slide-in direction",
+          },
+          slideSpeed: {
+            type: "string",
+            value: "0.5s",
+            description: "Animation duration for slide effect",
+          },
+          autoplay: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Autoplay the banner",
+          },
+          autoplaySpeed: {
+            type: "string",
+            value: "3s",
+            description: "Speed of the autoplay",
+          },
+          loop: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Loop the banner",
+          },
+          sliderButtons: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Show slider buttons",
+          },
+          showPagination: {
+            type: "select",
+            value: "false",
+            options: ["true", "false"],
+            description: "Show pagination dots",
+          },
+          swiperCustomCSS: {
+            type: "string",
+            value: "",
+            description: "Custom CSS for Swiper container",
+          },
+        },
+        setSlides: {
+          description: "Slides Settings",
+          slides: {
+            type: "array",
+            value: [
+              {
+                content: "🎉 Welcome to our store!",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                finishDate: "",
+                layout: "inline",
+                format: "day-hour-minute",
+                showText: "show",
+                backgroundColor: "#4ECDC4",
+                customCSS: "",
+              },
+              {
+                content: "🛍️ Check out our latest offers",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                finishDate: "",
+                layout: "inline",
+                format: "day-hour-minute",
+                showText: "show",
+                backgroundColor: "#45B7D1",
+                customCSS: "",
+              },
+            ],
+            description: "Slides",
+            slideConfig: {
+              content: {
+                type: "string",
+                value: "",
+                description: "Content of the slide",
+              },
+              textColor: {
+                type: "color",
+                value: "#FFFFFF",
+                description: "Text color",
+              },
+              position: {
+                type: "select",
+                value: "",
+                options: ["left", "middle", "right"],
+                description: "Position of the text",
+              },
+              fontSize: {
+                type: "string",
+                value: "16px",
+                description: "Font size of the text",
+              },
+              redirectUrl: {
+                type: "url",
+                value: "",
+                description: "Redirect URL when the banner is clicked",
+              },
+              finishDate: {
+                type: "date",
+                value: "",
+                description: "Finish date for the countdown",
+              },
+              layout: {
+                type: "select",
+                value: "stacked",
+                options: ["inline", "stacked"],
+                description: "Layout style",
+              },
+              format: {
+                type: "select",
+                value: "",
+                options: ["day-hour-minute", "hour-minute-second"],
+                description: "Format of the countdown display",
+              },
+              showText: {
+                type: "select",
+                value: "",
+                options: ["show", "hide"],
+                description: "Show time unit labels",
+              },
+              desktopImageUrl: {
+                type: "url",
+                value: "",
+                description: "Desktop image URL",
+              },
+              mobileImageUrl: {
+                type: "url",
+                value: "",
+                description: "Mobile image URL",
+              },
+              additionalStyles: {
+                type: "string",
+                value: "",
+                description: "Additional CSS styles for countdown (optional)",
+              },
+              customCSS: {
+                type: "string",
+                value: "",
+                description: "Custom CSS for this slide",
+              },
+              backgroundColor: {
+                type: "color",
+                value: "#FF6B6B",
+                description: "Background color for this slide",
+              },
+            },
           },
         },
       },
@@ -177,7 +380,6 @@ const TargetConfig = {
             value: "",
             description: "Title text color",
           },
-
           textBody: {
             type: "string",
             value: "",
@@ -188,7 +390,6 @@ const TargetConfig = {
             value: "",
             description: "Body text color",
           },
-
           campaignText: {
             type: "string",
             value: "",
@@ -395,7 +596,7 @@ const TargetConfig = {
               {"minTime":16, "maxTime":25, "staticcode":"HALF50", "campaignText":"Great job! Get 50% off!"},
               {"minTime":26, "maxTime":999, "staticcode":"QUICK25", "campaignText":"Nice work! Take 25% off!"}
             ]`,
-            description: "JSON string of time-based promo codes and messages",
+            description: "Time-based promo codes",
           },
         },
         visual: {

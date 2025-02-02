@@ -2,34 +2,41 @@
 
 export function FirePopup(basicInputsData) {
   const config = {
+    // General settings with defaults
     desktopWidth: basicInputsData.targetRequirements?.general?.desktopWidth || "600px",
     mobileWidth: basicInputsData.targetRequirements?.general?.mobileWidth || "320px",
     desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "400px",
     mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "500px",
-    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#ffffff",
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#FFFFFF",
     redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
+    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
+    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
+    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
 
-    // Text settings
-    titleText: basicInputsData.targetRequirements?.setText?.textContent || "",
+    // Text settings with defaults
+    titleText: basicInputsData.targetRequirements?.setText?.textContent || "Special Offer! 🎉",
     titleColor: basicInputsData.targetRequirements?.setText?.titleColor || "#000000",
-    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "",
-    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#000000",
+    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "Don't miss out on our amazing deals!",
+    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#333333",
+    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "Limited time offer",
+    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#666666",
 
-    // Campaign settings
-    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "",
-    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#000000",
-    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "",
+    // Campaign settings with defaults
+    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "WELCOME20",
     campaignCodeColor: basicInputsData.targetRequirements?.setCampaignCode?.campaignCodeColor || "#000000",
-    copyButtonText: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonText || "Copy",
-    copyButtonColor: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonColor || "#000000",
+    copyButtonText: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonText || "Copy Code",
+    copyButtonColor: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonColor || "#4ECDC4",
+    additionalCampaignTextSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCampaignTextSettings || "",
+    additionalCopyButtonSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCopyButtonSettings || "",
 
-    // Media settings
+    // Media settings with defaults
     desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
     mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
     video: basicInputsData.targetRequirements?.setVideo?.videoUrl || "",
 
-    // Countdown settings
+    // Countdown settings with defaults
     finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
+    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "middle",
   };
   // const iframeStore = useIframeStore();
   // let target = iframeStore.content.contentWindow.document;
@@ -314,22 +321,34 @@ export function FirePopup(basicInputsData) {
 
 export function FireBanner(basicInputsData) {
   const config = {
+    // General settings with defaults
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#4ECDC4",
     desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "60px",
     mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "120px",
-    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#ffffff",
+    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
     redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
+    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
+    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
+    additionalStyles: basicInputsData.targetRequirements?.general?.additionalStyles || "",
 
-    titleText: basicInputsData.targetRequirements?.setText?.textContent || "",
-    titleColor: basicInputsData.targetRequirements?.setText?.titleColor || "#000000",
-    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "",
-    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#000000",
+    // Text settings with defaults
+    textContent: basicInputsData.targetRequirements?.setText?.textContent || "Welcome to our store! 🎉",
+    textColor: basicInputsData.targetRequirements?.setText?.textColor || "#FFFFFF",
+    position: basicInputsData.targetRequirements?.setText?.position || "middle",
+    fontSize: basicInputsData.targetRequirements?.setText?.fontSize || "18px",
+    fontWeight: basicInputsData.targetRequirements?.setText?.fontWeight || "normal",
 
-    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "",
-    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#000000",
-    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "",
-    campaignCodeColor: basicInputsData.targetRequirements?.setCampaignCode?.campaignCodeColor || "#000000",
-
+    // Countdown settings with defaults
     finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
+    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "right",
+    layout: basicInputsData.targetRequirements?.setCountdown?.layout || "inline",
+    format: basicInputsData.targetRequirements?.setCountdown?.format || "day-hour-minute",
+    showText: basicInputsData.targetRequirements?.setCountdown?.showText || "show",
+    countdownStyles: basicInputsData.targetRequirements?.setCountdown?.additionalStyles || "",
+
+    // Image settings with defaults
+    desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
+    mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
   };
 
   const jsCode = `
@@ -342,37 +361,16 @@ export function FireBanner(basicInputsData) {
     const link = document.createElement('a');
     link.href = '${config.redirectUrl}';
     link.className = 'exp-banner-link';
-    link.style.color = '${config.titleColor}';
+    link.style.color = '${config.textColor}';
 
-    if ('${config.titleText}') {
-      const title = document.createElement('span');
-      title.className = 'exp-banner-title';
-      title.textContent = '${config.titleText}';
-      link.appendChild(title);
-    }
-
-    if ('${config.bodyText}') {
-      const body = document.createElement('span');
-      body.className = 'exp-banner-body';
-      body.textContent = '${config.bodyText}';
-      body.style.color = '${config.bodyColor}';
-      link.appendChild(body);
-    }
-
-    if ('${config.campaignText}') {
-      const campaign = document.createElement('span');
-      campaign.className = 'exp-banner-campaign';
-      campaign.textContent = '${config.campaignText}';
-      campaign.style.color = '${config.campaignColor}';
-      link.appendChild(campaign);
-    }
-
-    if ('${config.campaignCode}') {
-      const code = document.createElement('span');
-      code.className = 'exp-banner-code';
-      code.textContent = '${config.campaignCode}';
-      code.style.color = '${config.campaignCodeColor}';
-      link.appendChild(code);
+    if ('${config.textContent}') {
+      const text = document.createElement('span');
+      text.className = 'exp-banner-text';
+      text.textContent = '${config.textContent}';
+      text.style.color = '${config.textColor}';
+      text.style.fontSize = '${config.fontSize}';
+      text.style.fontWeight = '${config.fontWeight}';
+      link.appendChild(text);
     }
 
     if ('${config.finishDate}') {
@@ -436,7 +434,7 @@ export function FireBanner(basicInputsData) {
 
     #exp-banner-wrapper .exp-banner-countdown {
       font-weight: bold;
-      color: ${config.campaignCodeColor};
+      color: ${config.textColor};
     }
 
     @media only screen and (max-width: 768px) {
@@ -459,6 +457,156 @@ export function FireBanner(basicInputsData) {
     css: styles,
     html: "",
   });
+}
+
+export function SlidingBanner(inputData) {
+  console.log("=== SlidingBanner Function Started ===");
+  const { targetRequirements } = inputData;
+  const general = targetRequirements.general || {};
+  const carousel = targetRequirements.setCarousel || {};
+  const slides = targetRequirements.setSlides?.slides || [];
+
+  // CSS including Swiper styles
+  const css = `
+    .experia-sliding-banner {
+      background-color: ${general.backgroundColor || "#FF6B6B"};
+      height: ${general.desktopHeight || "60px"};
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      ${general.additionalStyles || ""}
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+      ${carousel.swiperCustomCSS || ""}
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .experia-slide-content {
+      color: var(--slide-text-color, #FFFFFF);
+      font-size: var(--slide-font-size, 22px);
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      .experia-sliding-banner {
+        height: ${general.mobileHeight || "120px"};
+      }
+    }
+  `;
+
+  // JavaScript with Swiper initialization
+  const js = `
+    // Load Swiper CSS
+    const swiperCSS = document.createElement('link');
+    swiperCSS.rel = 'stylesheet';
+    swiperCSS.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+    document.head.appendChild(swiperCSS);
+
+    // Load Swiper JS
+    const swiperScript = document.createElement('script');
+    swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+    document.head.appendChild(swiperScript);
+
+    swiperScript.onload = () => {
+      // Create banner structure
+      const bannerContainer = document.createElement('div');
+      bannerContainer.className = 'experia-sliding-banner';
+
+      const swiperContainer = document.createElement('div');
+      swiperContainer.className = 'swiper';
+
+      const swiperWrapper = document.createElement('div');
+      swiperWrapper.className = 'swiper-wrapper';
+
+      // Create slides
+      const slides = ${JSON.stringify(slides)};
+      slides.forEach((slide, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'swiper-slide';
+        slideDiv.style.backgroundColor = slide.backgroundColor || '#4ECDC4';
+        if (slide.customCSS) {
+          slideDiv.style.cssText += slide.customCSS;
+        }
+
+        const content = document.createElement('div');
+        content.className = 'experia-slide-content';
+        content.textContent = slide.content || 'Slide ' + (index + 1);
+        content.style.setProperty('--slide-text-color', slide.textColor || '#FFFFFF');
+        content.style.setProperty('--slide-font-size', slide.fontSize || '22px');
+
+        if (slide.redirectUrl) {
+          const link = document.createElement('a');
+          link.href = slide.redirectUrl;
+          link.style.color = 'inherit';
+          link.style.textDecoration = 'none';
+          link.appendChild(content);
+          slideDiv.appendChild(link);
+        } else {
+          slideDiv.appendChild(content);
+        }
+
+        swiperWrapper.appendChild(slideDiv);
+      });
+
+      // Add navigation if enabled
+      if (${carousel.sliderButtons !== "false"}) {
+        const prevButton = document.createElement('div');
+        prevButton.className = 'swiper-button-prev';
+        const nextButton = document.createElement('div');
+        nextButton.className = 'swiper-button-next';
+        swiperContainer.appendChild(prevButton);
+        swiperContainer.appendChild(nextButton);
+      }
+
+      // Add pagination if enabled
+      if (${carousel.pagination !== "false"}) {
+        const pagination = document.createElement('div');
+        pagination.className = 'swiper-pagination';
+        swiperContainer.appendChild(pagination);
+      }
+
+      // Assemble the banner
+      swiperContainer.appendChild(swiperWrapper);
+      bannerContainer.appendChild(swiperContainer);
+
+      // Insert banner into DOM
+      const targetElement = document.querySelector('#experia-inline');
+      if (targetElement) {
+        targetElement.appendChild(bannerContainer);
+
+        // Initialize Swiper
+        new Swiper('.swiper', {
+          loop: ${carousel.loop !== "false"},
+          autoplay: ${carousel.autoplay !== "false"} ? {
+            delay: ${(parseFloat(carousel.autoplaySpeed) || 3) * 1000},
+            disableOnInteraction: false
+          } : false,
+          speed: ${(parseFloat(carousel.slideSpeed) || 0.5) * 1000},
+          navigation: ${carousel.sliderButtons !== "false"} ? {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          } : false,
+          pagination: ${carousel.pagination !== "false"} ? {
+            el: '.swiper-pagination',
+            clickable: true
+          } : false,
+          effect: '${carousel.effect || "slide"}',
+        });
+      }
+    };
+  `;
+
+  return JSON.stringify({ css, js });
 }
 
 export function fireFTW(basicInputsData) {
