@@ -5,8 +5,8 @@
     </template>
 
     <template v-else>
-      <InputPanel @option-selected="handleOptionSelection" @update-preview="handlePreviewUpdate" />
-      <BetterTargetPreview />
+      <InputPanel ref="inputPanel" @option-selected="handleOptionSelection" @update-preview="handlePreviewUpdate" />
+      <BetterTargetPreview ref="preview" />
     </template>
   </div>
 </template>
@@ -18,17 +18,17 @@ import InputPanel from "@/IframeTarget/components/InputPanel/InputPanel.vue";
 import BetterTargetPreview from "@/IframeTarget/components/BetterTargetPreview.vue";
 import { usePreviewStore } from "@/IframeTarget/store/previewStore";
 
-const previewStore = usePreviewStore();
 const selectedOption = ref("");
+const inputPanel = ref(null);
+const preview = ref(null);
+const previewStore = usePreviewStore();
 
 const handleOptionSelection = (option) => {
-  console.log("Option selected:", option);
   selectedOption.value = option;
 };
 
 const handlePreviewUpdate = (content) => {
-  console.log("Updating preview store with:", content);
-  previewStore.previewContent = content;
+  previewStore.setPreviewContent(content);
 };
 
 const handleCodeRun = (code) => {

@@ -10,29 +10,32 @@
         </span>
       </span>
 
-      <!-- Device Buttons and Enlarge -->
+      <!-- Device Buttons and Controls -->
       <div class="flex items-center gap-3">
-        <span class="flex gap-2">
-          <button
-            class="resolution-btn bg-zinc-300 rounded-md p-1.5 w-10 h-10 flex items-center justify-center"
-            :class="{
-              border: true,
-              'border-black': selectedDevice === btnKey,
-              'border-transparent': selectedDevice !== btnKey,
-            }"
-            v-for="(btnValue, btnKey) in svgObject"
-            :key="btnKey"
-            v-html="btnValue"
-            @click="selectDevice(btnKey)"></button>
-        </span>
+        <!-- Device Buttons and Enlarge -->
+        <div class="flex items-center gap-3">
+          <span class="flex gap-2">
+            <button
+              class="resolution-btn bg-zinc-300 rounded-md p-1.5 w-10 h-10 flex items-center justify-center"
+              :class="{
+                border: true,
+                'border-black': selectedDevice === btnKey,
+                'border-transparent': selectedDevice !== btnKey,
+              }"
+              v-for="(btnValue, btnKey) in svgObject"
+              :key="btnKey"
+              v-html="btnValue"
+              @click="selectDevice(btnKey)"></button>
+          </span>
 
-        <!-- Enlarge Button -->
-        <button @click="toggleEnlarge" class="bg-[#308e87] text-white rounded-md p-1.5 w-10 h-10 flex items-center justify-center hover:bg-[#277873] transition-colors" :title="isEnlarged ? 'Shrink preview' : 'Enlarge preview'">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-            <path v-if="!isEnlarged" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H3m0 0v6m0-6l7 7m5 11h6m0 0v-6m0 6L14 14" />
-          </svg>
-        </button>
+          <!-- Enlarge Button -->
+          <button @click="toggleEnlarge" class="bg-[#308e87] text-white rounded-md p-1.5 w-10 h-10 flex items-center justify-center hover:bg-[#277873] transition-colors" :title="isEnlarged ? 'Shrink preview' : 'Enlarge preview'">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+              <path v-if="!isEnlarged" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
+              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H3m0 0v6m0-6l7 7m5 11h6m0 0v-6m0 6L14 14" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -44,37 +47,114 @@
         :style="{
           width: deviceSizes[selectedDevice].width + 'px',
           height: deviceSizes[selectedDevice].height + 'px',
-          transform: `translate(-50%, -50%) scale(${isEnlarged ? deviceSizes[selectedDevice].scale * 1.5 : deviceSizes[selectedDevice].scale})`,
+          transform: `translate(-50%, -50%) scale(${isEnlarged ? deviceSizes[selectedDevice].enlargedScale : deviceSizes[selectedDevice].scale})`,
         }">
-        <div class="preview-content" v-html="previewContent"></div>
+        <iframe ref="previewIframe" class="w-full h-full" :srcdoc="previewContent" frameborder="0" @load="handleIframeLoad"></iframe>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { ref, onMounted, watch } from "vue";
 import svgObject from "../components/AuxJS/SvgVectors";
 import { usePreviewStore } from "../store/previewStore";
 import EcommerceTemplate from "../components/AuxJS/EcommerceTemplate";
 
 const previewStore = usePreviewStore();
 const previewContent = ref(EcommerceTemplate.generateTemplate());
+const previewIframe = ref(null);
 const isEnlarged = ref(false);
-
 const selectedDevice = ref("desktop");
 const deviceSizes = ref({
-  desktop: { width: 1920, height: 1080, scale: 0.45 },
-  tablet: { width: 810, height: 1080, scale: 0.6 },
-  mobile: { width: 390, height: 844, scale: 0.8 },
+  desktop: { width: 1920, height: 1080, scale: 0.45, enlargedScale: 0.65 },
+  tablet: { width: 810, height: 1080, scale: 0.6, enlargedScale: 0.7 },
+  mobile: { width: 390, height: 844, scale: 0.8, enlargedScale: 0.85 },
 });
+
+const handleIframeLoad = () => {
+  if (previewStore.previewContent && previewIframe.value) {
+    try {
+      // Parse the content if it's a string, otherwise use it directly
+      const content = typeof previewStore.previewContent === "string" ? JSON.parse(previewStore.previewContent) : previewStore.previewContent;
+
+      const iframeDoc = previewIframe.value.contentDocument;
+
+      // Add styles
+      if (content.css) {
+        const styleElement = iframeDoc.createElement("style");
+        styleElement.textContent = content.css;
+        iframeDoc.head.appendChild(styleElement);
+      }
+
+      // Execute JavaScript with proper container handling
+      if (content.js) {
+        const scriptElement = iframeDoc.createElement("script");
+        scriptElement.textContent = `
+          (function(document) {
+            try {
+              // Get or create the main target containers
+              const containers = {
+                inline: document.getElementById('experia-inline'),
+                external: document.getElementById('experia-external')
+              };
+
+              // Execute the target code
+              ${content.js}
+            } catch (error) {
+              console.error("Error executing target JS:", error);
+            }
+          })(document);
+        `;
+        iframeDoc.body.appendChild(scriptElement);
+      }
+    } catch (error) {
+      console.error("Error in handleIframeLoad:", error);
+    }
+  }
+};
+
+const processPreviewContent = (content) => {
+  if (!content) return EcommerceTemplate.generateTemplate();
+
+  try {
+    // Get the base template
+    const template = EcommerceTemplate.generateTemplate();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(template, "text/html");
+
+    // Parse the content if it's a string, otherwise use it directly
+    const targetContent = typeof content === "string" ? JSON.parse(content) : content;
+
+    // Add styles if they exist
+    if (targetContent.css) {
+      const styleElement = doc.createElement("style");
+      styleElement.textContent = targetContent.css;
+      doc.head.appendChild(styleElement);
+    }
+
+    return doc.documentElement.outerHTML;
+  } catch (error) {
+    console.error("Error processing preview content:", error);
+    return EcommerceTemplate.generateTemplate();
+  }
+};
+
+// Watch for changes in preview store, but only update on preview button click
+watch(
+  () => previewStore.previewContent,
+  (newContent) => {
+    // Only process if it's a preview button click (content will be stringified)
+    if (newContent && typeof newContent === "string") {
+      previewContent.value = processPreviewContent(newContent);
+    }
+  },
+  { immediate: true }
+);
 
 const selectDevice = (device) => {
   if (deviceSizes.value[device]) {
     selectedDevice.value = device;
-  } else {
-    console.warn(`Invalid device type: ${device}`);
-    selectedDevice.value = "desktop";
   }
 };
 
@@ -85,62 +165,6 @@ const toggleEnlarge = () => {
 const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
-
-const processPreviewContent = (content) => {
-  if (!content) return EcommerceTemplate.generateTemplate();
-
-  const template = EcommerceTemplate.generateTemplate();
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(template, "text/html");
-
-  // Get the target position details from the store
-  const position = previewStore.targetPosition;
-  const relativePosition = previewStore.relativePosition;
-
-  // Find the reference element using the query selector
-  const referenceElement = doc.querySelector(position?.selector || "header");
-
-  if (referenceElement && content) {
-    // Create a container for the banner
-    const bannerContainer = parser.parseFromString(content, "text/html").body.firstChild;
-
-    // Insert the banner based on relative position
-    switch (relativePosition) {
-      case "BEFORE":
-        referenceElement.parentNode.insertBefore(bannerContainer, referenceElement);
-        break;
-      case "AFTER":
-        referenceElement.parentNode.insertBefore(bannerContainer, referenceElement.nextSibling);
-        break;
-      case "INSIDE_BEGINNING":
-        referenceElement.insertBefore(bannerContainer, referenceElement.firstChild);
-        break;
-      case "INSIDE_END":
-        referenceElement.appendChild(bannerContainer);
-        break;
-      default:
-        // Default to after header if no position specified
-        const header = doc.querySelector("header");
-        if (header) {
-          header.parentNode.insertBefore(bannerContainer, header.nextSibling);
-        }
-    }
-  }
-
-  return doc.documentElement.outerHTML;
-};
-
-// Update the watch handler
-watch(
-  () => previewStore.previewContent,
-  (newContent) => {
-    previewContent.value = processPreviewContent(newContent);
-  }
-);
-
-onMounted(() => {
-  previewContent.value = processPreviewContent(previewStore.previewContent);
-});
 </script>
 
 <style scoped>
@@ -209,7 +233,7 @@ onMounted(() => {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  justify-center: center;
+  justify-content: center;
 }
 
 .resolution-btn :deep(svg) {
@@ -246,5 +270,11 @@ onMounted(() => {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.preview-frame iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
 }
 </style>

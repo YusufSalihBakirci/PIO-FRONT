@@ -14,6 +14,9 @@ const EcommerceTemplate = {
           </div>
         </header>
 
+        <!-- Experia Inline Container -->
+        <div id="experia-inline"></div>
+
         <!-- Hero Section -->
         <section style="
           margin: 20px 0; 
@@ -147,6 +150,9 @@ const EcommerceTemplate = {
           </div>
         </footer>
       </div>
+
+      <!-- Experia External Container -->
+      <div id="experia-external"></div>
     `;
   },
 };

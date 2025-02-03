@@ -2,288 +2,1456 @@
 
 export function FirePopup(basicInputsData) {
   const config = {
-    desktopWidth: "600px",
-    mobileWidth: "320px",
-    desktopHeight: "400px",
-    mobileHeight: "500px",
-    // General settings
-    backgroundColor: basicInputsData.targetRequirements.general.backgroundColor || "#ffffff",
-    redirectUrl: basicInputsData.targetRequirements.general.redirectUrl || "#",
+    // General settings with defaults
+    desktopWidth: basicInputsData.targetRequirements?.general?.desktopWidth || "600px",
+    mobileWidth: basicInputsData.targetRequirements?.general?.mobileWidth || "320px",
+    desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "400px",
+    mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "500px",
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#FFFFFF",
+    redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
+    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
+    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
+    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
 
-    // Text settings
-    titleText: basicInputsData.targetRequirements.setText.textContent || "",
-    titleColor: basicInputsData.targetRequirements.setText.titleColor || "#000000",
-    bodyText: basicInputsData.targetRequirements.setText.textBody || "",
-    bodyColor: basicInputsData.targetRequirements.setText.bodyColor || "#000000",
-    campaignText: basicInputsData.targetRequirements.setText.campaignText || "",
-    campaignColor: basicInputsData.targetRequirements.setText.campaignColor || "#000000",
+    // Text settings with defaults
+    titleText: basicInputsData.targetRequirements?.setText?.textContent || "Special Offer! 🎉",
+    titleColor: basicInputsData.targetRequirements?.setText?.titleColor || "#000000",
+    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "Don't miss out on our amazing deals!",
+    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#333333",
+    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "Limited time offer",
+    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#666666",
 
-    // Campaign code settings
-    campaignCode: basicInputsData.targetRequirements.setCampaignCode?.campaignCode || "",
-    campaignCodeColor: basicInputsData.targetRequirements.setCampaignCode?.campaignCodeColor || "#000000",
-    copyButtonText: basicInputsData.targetRequirements.setCampaignCode?.copyButtonText || "Copy",
-    copyButtonColor: basicInputsData.targetRequirements.setCampaignCode?.copyButtonColor || "#000000",
-    additionalCampaignTextSettings: basicInputsData.targetRequirements.setCampaignCode?.additionalCampaignTexSettings || "",
-    additionalCopyButtonSettings: basicInputsData.targetRequirements.setCampaignCode?.additionalCopyButtonSettings || "",
+    // Campaign settings with defaults
+    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "WELCOME20",
+    campaignCodeColor: basicInputsData.targetRequirements?.setCampaignCode?.campaignCodeColor || "#000000",
+    copyButtonText: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonText || "Copy Code",
+    copyButtonColor: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonColor || "#4ECDC4",
+    additionalCampaignTextSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCampaignTextSettings || "",
+    additionalCopyButtonSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCopyButtonSettings || "",
 
-    // Image settings
-    desktopImage: basicInputsData.targetRequirements.setImage?.desktopImageUrl || "",
-    mobileImage: basicInputsData.targetRequirements.setImage?.mobileImageUrl || "",
+    // Media settings with defaults
+    desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
+    mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
+    video: basicInputsData.targetRequirements?.setVideo?.videoUrl || "",
 
-    // Video settings
-    video: basicInputsData.targetRequirements.setVideo?.videoUrl || "",
-
-    // Countdown settings
-    finishDate: basicInputsData.targetRequirements.setCountdown?.finishDate || "",
+    // Countdown settings with defaults
+    finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
+    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "middle",
   };
   // const iframeStore = useIframeStore();
   // let target = iframeStore.content.contentWindow.document;
 
-  // Return the HTML content for preview
-  return `
-    <style>
-      #vl-popup-container {
-        z-index: 10000;
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-      }
+  const styles = `
+    #exp-popup-container {
+      z-index: 10000;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
 
-      #vl-popup-container .vl-popup-overlay {
-        z-index: 10000;
-        width: 100%;
-        height: 100%;
-        background: black;
-        opacity: 0.6;
-        position: fixed;
-        top: 0;
-        left: 0;
-      }
+    #exp-popup-container .exp-popup-overlay {
+      z-index: 10000;
+      width: 100%;
+      height: 100%;
+      background: black;
+      opacity: 0.6;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
 
-      #vl-popup-container .vl-popup {
-        position: absolute;
-        z-index: 100001;
-        width: ${config.desktopWidth};
-        height: ${config.desktopHeight};
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        -webkit-transform: translate(-50%, -50%);
-        background-color: ${config.backgroundColor};
-        overflow: hidden;
-        position: relative;
-      }
+    #exp-popup-container .exp-popup {
+      position: absolute;
+      z-index: 100001;
+      width: ${config.desktopWidth};
+      height: ${config.desktopHeight};
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      background-color: ${config.backgroundColor};
+      overflow: hidden;
+      position: relative;
+    }
 
-      #vl-popup-container .vl-popup-media {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
+    #exp-popup-container .exp-popup-media {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
 
-      #vl-popup-container .vl-popup-content {
-        position: relative;
-        z-index: 1;
-        height: 100%;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 10px;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7));
-      }
+    #exp-popup-container .exp-popup-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      gap: 10px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7));
+    }
 
-      #vl-popup-container .vl-popup-title {
-        color: ${config.titleColor};
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-      }
+    #exp-popup-container .exp-popup-title {
+      color: ${config.titleColor};
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+    }
 
-      #vl-popup-container .vl-popup-body {
-        color: ${config.bodyColor};
-        text-align: center;
-      }
+    #exp-popup-container .exp-popup-body {
+      color: ${config.bodyColor};
+      text-align: center;
+    }
 
-      #vl-popup-container .vl-popup-campaign-text {
-        color: ${config.campaignColor};
-        font-style: italic;
-        text-align: center;
-      }
+    #exp-popup-container .exp-popup-campaign-text {
+      color: ${config.campaignColor};
+      font-style: italic;
+      text-align: center;
+    }
 
-      #vl-popup-container .vl-popup-campaign-code {
-        color: ${config.campaignCodeColor};
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        padding: 10px;
-        border: 2px dashed ${config.campaignCodeColor};
-        ${config.additionalCampaignTextSettings}
-      }
+    #exp-popup-container .exp-popup-campaign-code {
+      color: ${config.campaignCodeColor};
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      border: 2px dashed ${config.campaignCodeColor};
+    }
 
-      #vl-popup-container .vl-popup-copy-button {
-        background-color: ${config.copyButtonColor};
-        color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        ${config.additionalCopyButtonSettings}
-      }
+    #exp-popup-container .exp-popup-copy-button {
+      background-color: ${config.copyButtonColor};
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-      #vl-popup-container .vl-popup-close {
-        position: absolute;
-        right: 1em;
-        top: 1em;
-        cursor: pointer;
-        z-index: 2;
-        width: 2em;
-        height: 2em;
-        background-color: white;
-        color: black;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-      }
+    #exp-popup-container .exp-popup-close {
+      position: absolute;
+      right: 1em;
+      top: 1em;
+      cursor: pointer;
+      z-index: 2;
+      width: 2em;
+      height: 2em;
+      background-color: white;
+      color: black;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
 
-      @media only screen and (max-width: 768px) {
-        #vl-popup-container .vl-popup {
-          width: ${config.mobileWidth};
-          height: ${config.mobileHeight};
-        }
+    @media only screen and (max-width: 768px) {
+      #exp-popup-container .exp-popup {
+        width: ${config.mobileWidth};
+        height: ${config.mobileHeight};
       }
-    </style>
-    <div id="vl-popup-container">
-      <div class="vl-popup-overlay"></div>
-      <div class="vl-popup">
-        <span class="vl-popup-close">✕</span>
-        ${
-          config.video
-            ? `<video src="${config.video}" controls class="vl-popup-media"></video>`
-            : config.desktopImage
-            ? `<picture>
-              ${config.mobileImage ? `<source media="(max-width: 768px)" srcset="${config.mobileImage}">` : ""}
-              <img src="${config.desktopImage}" class="vl-popup-media" alt="popup image">
-            </picture>`
-            : ""
-        }
-        <div class="vl-popup-content">
-          ${config.titleText ? `<div class="vl-popup-title">${config.titleText}</div>` : ""}
-          ${config.bodyText ? `<div class="vl-popup-body">${config.bodyText}</div>` : ""}
-          ${config.campaignText ? `<div class="vl-popup-campaign-text">${config.campaignText}</div>` : ""}
-          ${
-            config.campaignCode
-              ? `
-              <div class="vl-popup-campaign-code">${config.campaignCode}</div>
-              <button class="vl-popup-copy-button">${config.copyButtonText}</button>
-          `
-              : ""
-          }
-          ${config.finishDate ? `<div class="vl-popup-countdown" data-finish="${config.finishDate}"></div>` : ""}
-        </div>
-      </div>
-    </div>
+    }
+
+    /* Add countdown styles */
+    .countdown-wrapper {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      color: ${config.titleColor};
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .countdown-item span {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Add hover effect for copy button */
+    .exp-popup-copy-button:hover {
+      opacity: 0.9;
+    }
   `;
+
+  // Create the JavaScript code that will create and manipulate the DOM
+  const jsCode = `
+    const popupContainer = document.createElement('div');
+    popupContainer.id = 'exp-popup-container';
+
+    const popupOverlay = document.createElement('div');
+    popupOverlay.className = 'exp-popup-overlay';
+
+    const popup = document.createElement('div');
+    popup.className = 'exp-popup';
+
+    const content = document.createElement('div');
+    content.className = 'exp-popup-content';
+
+    const closeButton = document.createElement('div');
+    closeButton.className = 'exp-popup-close';
+    closeButton.innerHTML = '×';
+    closeButton.onclick = () => popupContainer.remove();
+
+    if ('${config.titleText}') {
+      const title = document.createElement('h2');
+      title.className = 'exp-popup-title';
+      title.textContent = '${config.titleText}';
+      content.appendChild(title);
+    }
+
+    if ('${config.bodyText}') {
+      const body = document.createElement('p');
+      body.className = 'exp-popup-body';
+      body.textContent = '${config.bodyText}';
+      content.appendChild(body);
+    }
+
+    if ('${config.campaignText}') {
+      const campaignText = document.createElement('p');
+      campaignText.className = 'exp-popup-campaign-text';
+      campaignText.textContent = '${config.campaignText}';
+      content.appendChild(campaignText);
+    }
+
+    if ('${config.campaignCode}') {
+      const codeContainer = document.createElement('div');
+      codeContainer.className = 'exp-popup-campaign-code';
+      codeContainer.textContent = '${config.campaignCode}';
+      
+      const copyButton = document.createElement('button');
+      copyButton.className = 'exp-popup-copy-button';
+      copyButton.textContent = '${config.copyButtonText}';
+      copyButton.onclick = () => {
+        navigator.clipboard.writeText('${config.campaignCode}');
+        copyButton.textContent = 'Copied!';
+        setTimeout(() => copyButton.textContent = '${config.copyButtonText}', 2000);
+      };
+      
+      content.appendChild(codeContainer);
+      content.appendChild(copyButton);
+    }
+
+    if ('${config.finishDate}') {
+      const countdownContainer = document.createElement('div');
+      countdownContainer.className = 'countdown-wrapper';
+      
+      const createCountdownItem = (value, label) => {
+        const item = document.createElement('div');
+        item.className = 'countdown-item';
+        const span = document.createElement('span');
+        span.textContent = value;
+        const labelDiv = document.createElement('div');
+        labelDiv.textContent = label;
+        item.appendChild(span);
+        item.appendChild(labelDiv);
+        return item;
+      };
+
+      const updateCountdown = () => {
+        const now = new Date().getTime();
+        const finishTime = new Date('${config.finishDate}').getTime();
+        const distance = finishTime - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownContainer.innerHTML = '';
+        countdownContainer.appendChild(createCountdownItem(days, 'Days'));
+        countdownContainer.appendChild(createCountdownItem(hours, 'Hours'));
+        countdownContainer.appendChild(createCountdownItem(minutes, 'Minutes'));
+        countdownContainer.appendChild(createCountdownItem(seconds, 'Seconds'));
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          countdownContainer.textContent = "EXPIRED";
+        }
+      };
+
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      content.appendChild(countdownContainer);
+    }
+
+    if ('${config.desktopImage}' || '${config.mobileImage}') {
+      const img = document.createElement('img');
+      img.className = 'exp-popup-media';
+      img.src = window.innerWidth > 768 ? '${config.desktopImage}' : '${config.mobileImage}';
+      popup.insertBefore(img, content);
+    }
+
+    if ('${config.video}') {
+      const video = document.createElement('video');
+      video.className = 'exp-popup-media';
+      video.src = '${config.video}';
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = true;
+      popup.insertBefore(video, content);
+    }
+
+    popup.appendChild(closeButton);
+    popup.appendChild(content);
+    popupContainer.appendChild(popupOverlay);
+    popupContainer.appendChild(popup);
+
+    const targetContainer = document.querySelector('#experia-external');
+    if (targetContainer) {
+      targetContainer.appendChild(popupContainer);
+    }
+  `;
+
+  return JSON.stringify({
+    js: jsCode,
+    css: styles,
+    html: "",
+  });
 }
 
-export function FireBanner(inputData) {
-  console.log("Banner Input Data:", inputData);
-
+export function FireBanner(basicInputsData) {
   const config = {
-    // General Settings
-    backgroundColor: inputData.targetRequirements?.general?.backgroundColor?.trim() || "#000000",
-    appendPosition: inputData?.selectedPosition?.value,
-    appendRelativePosition: inputData?.selectedRelativePosition?.value,
-    url: inputData.targetRequirements?.general?.redirectUrl || "#",
-    padding: inputData.targetRequirements?.general?.padding || "10px 15px",
-    borderRadius: inputData.targetRequirements?.general?.borderRadius || "4px",
-    desktopHeight: inputData.targetRequirements?.general?.desktopHeight || "60px",
-    mobileHeight: inputData.targetRequirements?.general?.mobileHeight || "200px",
-    position: inputData.targetRequirements?.general?.position || "relative",
-    zIndex: inputData.targetRequirements?.general?.zIndex || "999999",
+    // General settings with defaults
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#4ECDC4",
+    desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "60px",
+    mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "120px",
+    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
+    redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
+    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
+    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
+    additionalStyles: basicInputsData.targetRequirements?.general?.additionalStyles || "",
 
-    // Text Settings
-    text: inputData.targetRequirements?.setText?.textContent || "",
-    fontFamily: inputData.targetRequirements?.setText?.fontFamily || "inherit",
-    fontWeight: inputData.targetRequirements?.setText?.fontWeight || "normal",
-    fontSize: inputData.targetRequirements?.setText?.fontSize || "16",
-    textColor: inputData.targetRequirements?.setText?.textColor?.trim() || "#ffffff",
-    textAlign: inputData.targetRequirements?.setText?.textAlign || "center",
-    letterSpacing: inputData.targetRequirements?.setText?.letterSpacing || "normal",
-    lineHeight: inputData.targetRequirements?.setText?.lineHeight || "1.5",
+    // Text settings with defaults
+    textContent: basicInputsData.targetRequirements?.setText?.textContent || "Welcome to our store! 🎉",
+    textColor: basicInputsData.targetRequirements?.setText?.textColor || "#FFFFFF",
+    position: basicInputsData.targetRequirements?.setText?.position || "middle",
+    fontSize: basicInputsData.targetRequirements?.setText?.fontSize || "18px",
+    fontWeight: basicInputsData.targetRequirements?.setText?.fontWeight || "normal",
 
-    // Border Settings
-    borderWidth: inputData.targetRequirements?.border?.width || "0",
-    borderStyle: inputData.targetRequirements?.border?.style || "solid",
-    borderColor: inputData.targetRequirements?.border?.color?.trim() || "transparent",
+    // Countdown settings with defaults
+    finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
+    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "right",
+    layout: basicInputsData.targetRequirements?.setCountdown?.layout || "inline",
+    format: basicInputsData.targetRequirements?.setCountdown?.format || "day-hour-minute",
+    showText: basicInputsData.targetRequirements?.setCountdown?.showText || "show",
+    countdownStyles: basicInputsData.targetRequirements?.setCountdown?.additionalStyles || "",
 
-    // Shadow Settings
-    boxShadow: inputData.targetRequirements?.shadow?.enabled ? `${inputData.targetRequirements.shadow.x || "0"}px ${inputData.targetRequirements.shadow.y || "0"}px ${inputData.targetRequirements.shadow.blur || "0"}px ${inputData.targetRequirements.shadow.spread || "0"}px ${inputData.targetRequirements.shadow.color || "rgba(0,0,0,0.2)"}` : "none",
+    // Image settings with defaults
+    desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
+    mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
   };
 
-  return `
-    <div id="vl-banner-wrapper" style="
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      position: ${config.position};
-      z-index: ${config.zIndex};
-    ">
-      <div class="hb-banner-container" style="
-        width: 100%;
-        height: ${config.desktopHeight};
-        min-height: ${config.desktopHeight};
-        margin: 0 auto;
-        background-color: ${config.backgroundColor};
-        border-radius: ${config.borderRadius};
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: ${config.padding};
-        box-sizing: border-box;
-        border: ${config.borderWidth}px ${config.borderStyle} ${config.borderColor};
-        box-shadow: ${config.boxShadow};
-      ">
-        <div class="vl-banner-elements" style="
-          width: 100%;
-          text-align: ${config.textAlign};
-          margin: 0;
-          padding: 0;
-        ">
-          <a class="vl-banner-link" href="${config.url}" style="
-            text-decoration: none;
-            color: ${config.textColor};
-            font-size: ${config.fontSize}px;
-            font-weight: ${config.fontWeight};
-            font-family: ${config.fontFamily};
-            display: block;
-            width: 100%;
-            line-height: ${config.lineHeight};
-            letter-spacing: ${config.letterSpacing};
-            margin: 0;
-            padding: 0;
-          ">${config.text}</a>
-        </div>
-      </div>
-    </div>
-    <style>
-      @media only screen and (max-width: 768px) {
-        #vl-banner-wrapper .hb-banner-container {
-          height: ${config.mobileHeight} !important;
-          min-height: ${config.mobileHeight} !important;
-          padding: ${config.padding};
+  const jsCode = `
+    const bannerWrapper = document.createElement('div');
+    bannerWrapper.id = 'exp-banner-wrapper';
+
+    const bannerContainer = document.createElement('div');
+    bannerContainer.className = 'exp-banner-container';
+
+    const link = document.createElement('a');
+    link.href = '${config.redirectUrl}';
+    link.className = 'exp-banner-link';
+    link.style.color = '${config.textColor}';
+
+    if ('${config.textContent}') {
+      const text = document.createElement('span');
+      text.className = 'exp-banner-text';
+      text.textContent = '${config.textContent}';
+      text.style.color = '${config.textColor}';
+      text.style.fontSize = '${config.fontSize}';
+      text.style.fontWeight = '${config.fontWeight}';
+      link.appendChild(text);
+    }
+
+    if ('${config.finishDate}') {
+      const countdownContainer = document.createElement('div');
+      countdownContainer.className = 'exp-banner-countdown';
+      
+      const updateCountdown = () => {
+        const now = new Date().getTime();
+        const finishTime = new Date('${config.finishDate}').getTime();
+        const distance = finishTime - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownContainer.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          countdownContainer.textContent = "EXPIRED";
         }
-        #vl-banner-wrapper .vl-banner-link {
-          font-size: calc(${config.fontSize}px * 0.8);
+      };
+
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      link.appendChild(countdownContainer);
+    }
+
+    bannerContainer.appendChild(link);
+    bannerWrapper.appendChild(bannerContainer);
+
+    const targetContainer = document.querySelector('#experia-inline');
+    if (targetContainer) {
+      targetContainer.appendChild(bannerWrapper);
+    }
+  `;
+
+  const styles = `
+    #exp-banner-wrapper {
+      width: 100%;
+      background-color: ${config.backgroundColor};
+    }
+
+    #exp-banner-wrapper .exp-banner-container {
+      height: ${config.desktopHeight};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+    }
+
+    #exp-banner-wrapper .exp-banner-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+      width: 100%;
+      justify-content: center;
+    }
+
+    #exp-banner-wrapper .exp-banner-countdown {
+      font-weight: bold;
+      color: ${config.textColor};
+    }
+
+    @media only screen and (max-width: 768px) {
+      #exp-banner-wrapper .exp-banner-container {
+        height: ${config.mobileHeight};
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      #exp-banner-wrapper .exp-banner-link {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  `;
+
+  return JSON.stringify({
+    js: jsCode,
+    css: styles,
+    html: "",
+  });
+}
+
+export function SlidingBanner(inputData) {
+  console.log("=== SlidingBanner Function Started ===");
+  const { targetRequirements } = inputData;
+  const general = targetRequirements.general || {};
+  const carousel = targetRequirements.setCarousel || {};
+  const slides = targetRequirements.setSlides?.slides || [];
+
+  // CSS including Swiper styles
+  const css = `
+    .experia-sliding-banner {
+      background-color: ${general.backgroundColor || "#FF6B6B"};
+      height: ${general.desktopHeight || "60px"};
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      ${general.additionalStyles || ""}
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+      ${carousel.swiperCustomCSS || ""}
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .experia-slide-content {
+      color: var(--slide-text-color, #FFFFFF);
+      font-size: var(--slide-font-size, 22px);
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      .experia-sliding-banner {
+        height: ${general.mobileHeight || "120px"};
+      }
+    }
+  `;
+
+  // JavaScript with Swiper initialization
+  const js = `
+    // Load Swiper CSS
+    const swiperCSS = document.createElement('link');
+    swiperCSS.rel = 'stylesheet';
+    swiperCSS.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+    document.head.appendChild(swiperCSS);
+
+    // Load Swiper JS
+    const swiperScript = document.createElement('script');
+    swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+    document.head.appendChild(swiperScript);
+
+    swiperScript.onload = () => {
+      // Create banner structure
+      const bannerContainer = document.createElement('div');
+      bannerContainer.className = 'experia-sliding-banner';
+
+      const swiperContainer = document.createElement('div');
+      swiperContainer.className = 'swiper';
+
+      const swiperWrapper = document.createElement('div');
+      swiperWrapper.className = 'swiper-wrapper';
+
+      // Create slides
+      const slides = ${JSON.stringify(slides)};
+      slides.forEach((slide, index) => {
+        const slideDiv = document.createElement('div');
+        slideDiv.className = 'swiper-slide';
+        slideDiv.style.backgroundColor = slide.backgroundColor || '#4ECDC4';
+        if (slide.customCSS) {
+          slideDiv.style.cssText += slide.customCSS;
+        }
+
+        const content = document.createElement('div');
+        content.className = 'experia-slide-content';
+        content.textContent = slide.content || 'Slide ' + (index + 1);
+        content.style.setProperty('--slide-text-color', slide.textColor || '#FFFFFF');
+        content.style.setProperty('--slide-font-size', slide.fontSize || '22px');
+
+        if (slide.redirectUrl) {
+          const link = document.createElement('a');
+          link.href = slide.redirectUrl;
+          link.style.color = 'inherit';
+          link.style.textDecoration = 'none';
+          link.appendChild(content);
+          slideDiv.appendChild(link);
+        } else {
+          slideDiv.appendChild(content);
+        }
+
+        swiperWrapper.appendChild(slideDiv);
+      });
+
+      // Add navigation if enabled
+      if (${carousel.sliderButtons !== "false"}) {
+        const prevButton = document.createElement('div');
+        prevButton.className = 'swiper-button-prev';
+        const nextButton = document.createElement('div');
+        nextButton.className = 'swiper-button-next';
+        swiperContainer.appendChild(prevButton);
+        swiperContainer.appendChild(nextButton);
+      }
+
+      // Add pagination if enabled
+      if (${carousel.pagination !== "false"}) {
+        const pagination = document.createElement('div');
+        pagination.className = 'swiper-pagination';
+        swiperContainer.appendChild(pagination);
+      }
+
+      // Assemble the banner
+      swiperContainer.appendChild(swiperWrapper);
+      bannerContainer.appendChild(swiperContainer);
+
+      // Insert banner into DOM
+      const targetElement = document.querySelector('#experia-inline');
+      if (targetElement) {
+        targetElement.appendChild(bannerContainer);
+
+        // Initialize Swiper
+        new Swiper('.swiper', {
+          loop: ${carousel.loop !== "false"},
+          autoplay: ${carousel.autoplay !== "false"} ? {
+            delay: ${(parseFloat(carousel.autoplaySpeed) || 3) * 1000},
+            disableOnInteraction: false
+          } : false,
+          speed: ${(parseFloat(carousel.slideSpeed) || 0.5) * 1000},
+          navigation: ${carousel.sliderButtons !== "false"} ? {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          } : false,
+          pagination: ${carousel.pagination !== "false"} ? {
+            el: '.swiper-pagination',
+            clickable: true
+          } : false,
+          effect: '${carousel.effect || "slide"}',
+        });
+      }
+    };
+  `;
+
+  return JSON.stringify({ css, js });
+}
+
+export function fireFTW(basicInputsData) {
+  // Parse promo codes directly from timeRanges
+  let promoCodes = [];
+  try {
+    const timeRanges = basicInputsData.targetRequirements?.promoCodes?.timeRanges;
+    if (timeRanges) {
+      promoCodes = JSON.parse(timeRanges);
+      console.log("🎟 Parsed promo codes array:", promoCodes);
+    }
+  } catch (error) {
+    console.error("❌ Error parsing promo codes:", error);
+  }
+
+  // Get card images from config
+  const defaultCardImages = "https://picsum.photos/100/100?random=1, https://picsum.photos/100/100?random=2, https://picsum.photos/100/100?random=3, https://picsum.photos/100/100?random=4";
+  const cardImagesStr = basicInputsData.targetRequirements?.gameConfig?.cardImages?.value || defaultCardImages;
+  console.log("🃏 Card Images Input:", cardImagesStr);
+
+  const cardImages = cardImagesStr
+    .split(",")
+    .map((url) => url.trim())
+    .filter((url) => url.length > 0);
+  console.log("🃏 Processed Card Images:", cardImages);
+
+  const gameConfig = {
+    dimensions: {
+      height: window.innerHeight,
+      width: window.innerWidth,
+      gameAreaWidth: window.innerWidth <= 768 ? 350 : 600,
+      gameAreaHeight: window.innerWidth <= 768 ? 450 : 500,
+    },
+    timing: {
+      clickableDuration: 1000,
+      gameDuration: parseInt(basicInputsData.targetRequirements?.general?.gameDuration?.value) || 60,
+      cardFlipDuration: 300,
+    },
+    grid: {
+      rows: parseInt(basicInputsData.targetRequirements?.gameConfig?.gridRows?.value) || 3,
+      cols: parseInt(basicInputsData.targetRequirements?.gameConfig?.gridCols?.value) || 3,
+      cardMargin: 10,
+    },
+    cards: {
+      images: cardImages,
+      backImage: basicInputsData.targetRequirements?.gameConfig?.backCardImage?.value || "https://imgvisilabsnet.azureedge.net/banner/uploaded_images/418_1455_20241209195350115.jpg",
+      emptyImage: basicInputsData.targetRequirements?.gameConfig?.emptyCardImage?.value || "https://static.thenounproject.com/png/4653780-200.png",
+      idPrefix: "card-",
+      defaultBackfaceColor: "#383838",
+      emptyBackfaceColor: "transparent",
+      emptyFrontColor: "transparent",
+    },
+    visual: {
+      bgImage: basicInputsData.targetRequirements?.gameConfig?.backgroundImage?.value,
+      bgColor: basicInputsData.targetRequirements?.general?.backgroundColor?.value || "#000000",
+      fontColor: "white",
+      fontName: basicInputsData.targetRequirements?.visual?.fontFamily?.value || "'Arial', sans-serif",
+      borderRadius: basicInputsData.targetRequirements?.visual?.cardBorderRadius?.value || "10px",
+      scoreBoardRadius: basicInputsData.targetRequirements?.visual?.scoreBoardRadius?.value || "5px",
+      closeButtonColor: basicInputsData.targetRequirements?.visual?.closeButtonColor?.value || "black",
+    },
+    screens: {
+      start: {
+        title: {
+          text: basicInputsData.targetRequirements?.startScreen?.title?.value || "Memory Match Challenge",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.titleFontSize?.value || "32px",
+          color: basicInputsData.targetRequirements?.startScreen?.titleColor?.value || "#ffffff",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.titleFontSize?.value || "48px",
+        },
+        description: {
+          text: basicInputsData.targetRequirements?.startScreen?.description?.value || "Match all pairs as quickly as possible to win bigger discounts!",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.descriptionFontSize?.value || "18px",
+          color: basicInputsData.targetRequirements?.startScreen?.descriptionColor?.value || "#ffffff",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.descriptionFontSize?.value || "24px",
+        },
+        button: {
+          text: basicInputsData.targetRequirements?.startScreen?.buttonText?.value || "START GAME",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.buttonFontSize?.value || "24px",
+          color: "#ffffff",
+          backgroundColor: basicInputsData.targetRequirements?.startScreen?.buttonColor?.value || "#1ec4d2",
+          fontSize: basicInputsData.targetRequirements?.startScreen?.buttonFontSize?.value || "24px",
+        },
+      },
+      game: {
+        scoreboard: {
+          fontColor: "#ffffff",
+          fontSize: "24px",
+        },
+      },
+    },
+    styles: {
+      backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor?.value,
+      backgroundImage: basicInputsData.targetRequirements?.gameConfig?.backgroundImage?.value,
+      zIndex: basicInputsData.targetRequirements?.general?.zIndex?.value || "999999",
+      fontFamily: basicInputsData.targetRequirements?.visual?.fontFamily?.value || "'Arial', sans-serif",
+    },
+    promoCodes: promoCodes,
+  };
+
+  console.log("⚙️ Final Game Config:", gameConfig);
+  console.log("🎟 Final Promo Codes in config:", gameConfig.promoCodes);
+
+  const styles = `
+    /* Common styles for header elements */
+    .exp-header-element {
+      font-family: monospace;
+      font-weight: bold;
+      text-align: center;
+      background: rgba(128, 128, 128, 0.5);
+      border-radius: 5px;
+      color: white;
+      user-select: none;
+    }
+
+    #exp-header-container {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
+    }
+
+    #exp-memory-game {
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: ${basicInputsData.targetRequirements?.general?.backgroundColor?.value || "#000000a3"};
+      z-index: ${gameConfig.styles.zIndex};
+      font-family: ${gameConfig.styles.fontFamily};
+    }
+
+    /* Base styles */
+    #exp-count-down,
+    #exp-close-button {
+      font-family: monospace;
+      font-weight: bold;
+      text-align: center;
+      min-width: 90px;
+      background-color: ${basicInputsData.targetRequirements?.startScreen?.backgroundColor?.value || "#000000"};
+      padding: 15px;
+      border-radius: 5px;
+      color: white;
+      font-size: 16px;
+    }
+
+    /* Mobile styles with !important to ensure they're applied */
+    @media screen and (max-width: 768px) {
+      #exp-count-down,
+      #exp-close-button {
+        font-size: 8vw !important;  /* Direct viewport-based sizing */
+        min-width: 30vw !important; /* Width based on viewport */
+        padding: 3vw !important;
+      }
+
+      #exp-start-title {
+        font-size: 10vw !important;
+      }
+
+      #exp-start-description {
+        font-size: 6vw !important;
+      }
+
+      #exp-start-button {
+        font-size: 8vw !important;
+        padding: 3vw 6vw !important;
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 375px) {
+      :root {
+        --base-font: calc(16px + 3vw);
+        --large-font: calc(24px + 4vw);
+        --xl-font: calc(32px + 5vw);
+      }
+    }
+
+    /* Small devices */
+    @media (min-width: 376px) and (max-width: 576px) {
+      :root {
+        --base-font: calc(16px + 2.5vw);
+        --large-font: calc(24px + 3.5vw);
+        --xl-font: calc(32px + 4.5vw);
+      }
+    }
+
+    /* Medium devices */
+    @media (min-width: 577px) and (max-width: 768px) {
+      :root {
+        --base-font: calc(16px + 2vw);
+        --large-font: calc(24px + 3vw);
+        --xl-font: calc(32px + 4vw);
+      }
+    }
+
+    /* Desktop - keep original sizes */
+    @media (min-width: 769px) {
+      :root {
+        --base-font: 16px;
+        --large-font: 24px;
+        --xl-font: 32px;
+      }
+    }
+
+    #exp-start-screen {
+      width: ${gameConfig.dimensions.gameAreaWidth}px;
+      height: ${gameConfig.dimensions.gameAreaHeight}px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: ${basicInputsData.targetRequirements?.startScreen?.backgroundColor?.value || "#000000"};
+      background-image: url('${basicInputsData.targetRequirements?.startScreen?.backgroundImage?.value || ""}');
+      background-size: cover;
+      background-position: center;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    #exp-start-container {
+      text-align: center;
+      padding: 40px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #exp-start-title {
+      color: ${gameConfig.screens.start.title.color};
+      font-size: ${gameConfig.screens.start.title.fontSize};
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    #exp-start-description {
+      color: ${gameConfig.screens.start.description.color};
+      font-size: ${gameConfig.screens.start.description.fontSize};
+      margin-bottom: 30px;
+      line-height: 1.5;
+      padding: 0 20px;
+    }
+
+    #exp-start-button {
+      padding: 15px 40px;
+      font-size: ${gameConfig.screens.start.button.fontSize};
+      color: ${gameConfig.screens.start.button.color};
+      background-color: ${gameConfig.screens.start.button.backgroundColor};
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    #exp-start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(30, 196, 210, 0.5);
+    }
+
+    #exp-scoreboard {
+      padding: 25px 0;
+      position: fixed;
+      color: ${gameConfig.screens.game.scoreboard.fontColor};
+      text-align: center;
+      width: 200px;
+      max-width: 200px;
+      margin: 5px;
+      top: 25px;
+      font-size: ${gameConfig.screens.game.scoreboard.fontSize};
+      transition: 1s all;
+    }
+
+    .exp-card {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform ${gameConfig.timing.cardFlipDuration}ms;
+      cursor: pointer;
+      border-radius: 10px;
+      background: #383838;
+      width: 100%;
+      height: 100%;
+    }
+
+    .exp-card-front, .exp-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #383838;
+    }
+
+    .exp-card-front {
+      transform: rotateY(180deg);
+    }
+
+    .exp-card.matched {
+      pointer-events: none;
+    }
+
+    .exp-card.matched .exp-card-front {
+      opacity: 0.8;
+    }
+  `;
+
+  // Let's also add a console log to verify the styles are being injected
+  console.log("Styles being injected:", styles);
+
+  const jsCode = `
+    console.log("🎮 Game Initialization Starting");
+    const gameConfig = ${JSON.stringify(gameConfig)};
+    console.log("⚙️ Game Config in Runtime:", gameConfig);
+    const gameState = {
+      score: 100,
+      timeInterval: null,
+      audio: null,
+      mainComponent: document.createElement("DIV"),
+      pairCounter: 0,
+      lastClickedCardId: null,
+      pairCount: 0,
+      maxPairCount: 0,
+      pairs: [],
+      currentPair: [],
+      isFinishing: false,
+      waitingForReset: false,
+      remainingTime: gameConfig.timing.gameDuration,
+      clickable: true,
+      clickableDuration: 1000
+    };
+
+    const utils = {
+      startCountDown: (element, duration) => {
+        if (!element || typeof duration !== 'number') {
+          console.error('Invalid timer parameters:', { element, duration });
+          return;
+        }
+
+        const startTime = Date.now();
+        const timer = setInterval(() => {
+          const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+          const remainingTime = duration - elapsedTime;
+          gameState.remainingTime = remainingTime;
+
+          if (remainingTime <= 0) {
+            clearInterval(timer);
+            element.innerHTML = "00:00";
+            if (typeof checkLose === 'function') checkLose();
+          } else {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            element.innerHTML = \`\${minutes.toString().padStart(2, "0")}:\${seconds.toString().padStart(2, "0")}\`;
+          }
+        }, 1000);
+
+        return timer;
+      }
+    };
+
+    function createDiv({ id, styles = {}, className = "" }) {
+      const div = document.createElement("DIV");
+      div.id = id;
+      div.className = className;
+      Object.entries(styles).forEach(([property, value]) => {
+        div.style[property] = value;
+      });
+      return div;
+    }
+
+    function createScoreBoard() {
+      const timer = document.createElement("DIV");
+      timer.id = "exp-count-down";
+      timer.className = "exp-header-element";
+      timer.style.minWidth = window.innerWidth <= 768 ? "150px" : "90px";
+      timer.style.padding = window.innerWidth <= 768 ? "25px" : "15px";
+      timer.style.fontSize = calculateFontSize(16);
+
+      const duration = parseInt(gameConfig.timing.gameDuration);
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      timer.innerHTML = \`\${minutes.toString().padStart(2, "0")}:\${seconds.toString().padStart(2, "0")}\`;
+
+      gameState.mainComponent.appendChild(timer);
+    }
+
+    function initGame() {
+      console.log("🎮 Initializing Memory Game");
+      gameState.mainComponent.id = "exp-memory-game";
+      const targetContainer = document.querySelector('#experia-external');
+      if (targetContainer) {
+        targetContainer.appendChild(gameState.mainComponent);
+      }
+
+      const calculateFontSize = (baseSize) => {
+        const width = window.innerWidth;
+        if (width <= 768) {
+          return \`\${baseSize * 2}px\`;
+        }
+        return \`\${baseSize}px\`;
+      };
+
+      const headerContainer = createDiv({
+        id: "exp-header-container"
+      });
+
+      // Create timer with only dynamic styles
+      const timer = document.createElement("DIV");
+      timer.id = "exp-count-down";
+      timer.className = "exp-header-element";
+      timer.style.minWidth = window.innerWidth <= 768 ? "150px" : "90px";
+      timer.style.padding = window.innerWidth <= 768 ? "25px" : "15px";
+      timer.style.fontSize = calculateFontSize(16);
+
+      const duration = parseInt(gameConfig.timing.gameDuration);
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      timer.innerHTML = \`\${minutes.toString().padStart(2, "0")}:\${seconds.toString().padStart(2, "0")}\`;
+
+      // Create close button with only dynamic styles
+      const closeButton = createDiv({
+        id: "exp-close-button",
+        className: "exp-header-element",
+        styles: {
+          minWidth: window.innerWidth <= 768 ? "150px" : "90px",
+          padding: window.innerWidth <= 768 ? "25px" : "15px",
+          fontSize: calculateFontSize(16),
+          cursor: "pointer"
+        }
+      });
+      
+      closeButton.innerHTML = "✕ CLOSE";
+      
+      closeButton.addEventListener("click", () => {
+        if (gameState.timeInterval) {
+          clearInterval(gameState.timeInterval);
+        }
+        gameState.mainComponent.remove();
+      });
+
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        const newWidth = isMobile ? "150px" : "90px";
+        const newPadding = isMobile ? "25px" : "15px";
+        const newFontSize = calculateFontSize(16);
+
+        timer.style.minWidth = newWidth;
+        timer.style.padding = newPadding;
+        timer.style.fontSize = newFontSize;
+        
+        closeButton.style.minWidth = newWidth;
+        closeButton.style.padding = newPadding;
+        closeButton.style.fontSize = newFontSize;
+      });
+
+      headerContainer.appendChild(timer);
+      headerContainer.appendChild(closeButton);
+      gameState.mainComponent.appendChild(headerContainer);
+      
+      maxPairCalculator();
+      createStartScreen();
+    }
+
+    function maxPairCalculator() {
+      gameState.maxPairCount = Math.floor((gameConfig.grid.rows * gameConfig.grid.cols) / 2);
+    }
+
+    function createStartScreen() {
+      const startScreen = createDiv({
+        id: "exp-start-screen",
+        styles: {
+          width: gameConfig.dimensions.gameAreaWidth + "px",
+          height: gameConfig.dimensions.gameAreaHeight + "px",
+        },
+      });
+
+      const container = createDiv({
+        id: "exp-start-container",
+        styles: {
+          padding: "20px",
+          textAlign: "center",
+        },
+      });
+
+      // Create title
+      const title = document.createElement("h1");
+      title.id = "exp-start-title";
+      title.innerText = gameConfig.screens.start.title.text;
+      title.style.color = gameConfig.screens.start.title.color;
+      title.style.fontSize = gameConfig.screens.start.title.fontSize;
+      container.appendChild(title);
+
+      // Create description
+      const description = document.createElement("p");
+      description.id = "exp-start-description";
+      description.innerText = gameConfig.screens.start.description.text;
+      description.style.color = gameConfig.screens.start.description.color;
+      description.style.fontSize = gameConfig.screens.start.description.fontSize;
+      container.appendChild(description);
+
+      // Update start button click handler
+      const startButton = document.createElement("button");
+      startButton.id = "exp-start-button";
+      startButton.innerText = gameConfig.screens.start.button.text;
+      startButton.style.fontSize = gameConfig.screens.start.button.fontSize;
+      startButton.style.color = gameConfig.screens.start.button.color;
+      startButton.style.backgroundColor = gameConfig.screens.start.button.backgroundColor;
+      startButton.addEventListener("click", () => {
+        startScreen.remove();
+        createGameScreen();
+        // Start the timer only after clicking start
+        startTimer();
+      });
+      container.appendChild(startButton);
+
+      startScreen.appendChild(container);
+      gameState.mainComponent.appendChild(startScreen);
+    }
+
+    function createGameScreen() {
+      const gameScreen = createDiv({
+        id: "exp-game-screen",
+        styles: {
+          width: gameConfig.dimensions.gameAreaWidth + "px",
+          height: gameConfig.dimensions.gameAreaHeight + "px",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "rgba(0, 0, 0, 0.9)",
+          borderRadius: "15px",
+          overflow: "hidden"
+        }
+      });
+
+      const gameArea = createDiv({
+        id: "exp-game-screen-game-area",
+        styles: {
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateRows: "1fr 1fr 1fr",
+          gap: "15px",
+          padding: "40px",
+          boxSizing: "border-box"
+        }
+      });
+
+      gameScreen.appendChild(gameArea);
+      gameState.mainComponent.appendChild(gameScreen);
+
+      createCards();
+      showAllCards();
+    }
+
+    function createCards() {
+      const gameArea = document.getElementById("exp-game-screen-game-area");
+      const cards = generateCardGrid();
+      
+      cards.forEach((cardData, index) => {
+        const card = cardCreator(cardData, index);
+        gameArea.appendChild(card);
+      });
+    }
+
+    function generateCardGrid() {
+      let cards = gameConfig.cards.images.flatMap(imgUrl => [
+        { name: imgUrl, imgUrl },
+        { name: imgUrl, imgUrl }
+      ]);
+
+      if ((gameConfig.grid.rows * gameConfig.grid.cols) % 2 !== 0) {
+        cards.push({
+          name: "empty",
+          imgUrl: gameConfig.cards.emptyImage
+        });
+      }
+
+      return cards.sort(() => Math.random() - 0.5);
+    }
+
+    function cardCreator(cardData, cardId) {
+      const card = document.createElement("DIV");
+      card.id = gameConfig.cards.idPrefix + cardId;
+      card.className = "exp-card";
+
+      const front = document.createElement("DIV");
+      front.className = "exp-card-front";
+      front.style.backgroundImage = cardData?.imgUrl ? 
+        \`url('\${cardData.imgUrl}')\` : 
+        \`url('\${gameConfig.cards.backImage}')\`;
+
+      const back = document.createElement("DIV");
+      back.className = "exp-card-back";
+      back.style.backgroundImage = \`url('\${gameConfig.cards.backImage}')\`;
+
+      card.appendChild(front);
+      card.appendChild(back);
+
+      card.addEventListener("click", () => handleCardClick(card.id, cardData));
+
+      return card;
+    }
+
+    function handleCardClick(cardId, cardData) {
+      if (!gameState.clickable || gameState.lastClickedCardId === cardId) {
+        return;
+      }
+
+      showCard(cardId);
+      checkPair(cardId, cardData);
+    }
+
+    function showCard(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transform = "rotateY(180deg)";
+      }
+    }
+
+    function hideCard(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transform = "rotateY(0deg)";
+      }
+    }
+
+    function showAllCards() {
+      const cards = document.querySelectorAll('.exp-card');
+      cards.forEach(card => {
+        card.style.transform = "rotateY(180deg)";
+      });
+
+      setTimeout(() => {
+        cards.forEach(card => {
+          card.style.transform = "rotateY(0deg)";
+        });
+        gameState.clickable = true;
+      }, 2000);
+    }
+
+    function checkPair(cardId, cardData) {
+      if (gameState.currentPair.length === 0) {
+        gameState.currentPair = [{ id: cardId, data: cardData }];
+        gameState.lastClickedCardId = cardId;
+      } else {
+        gameState.clickable = false;
+        gameState.currentPair.push({ id: cardId, data: cardData });
+
+        if (gameState.currentPair[0].data.name === gameState.currentPair[1].data.name) {
+          handleMatch();
+        } else {
+          handleMismatch();
         }
       }
-    </style>
+    }
+
+    function handleMatch() {
+      console.log("✅ Match found!");
+      gameState.pairs.push(gameState.currentPair);
+      gameState.pairCount++;
+      
+      // Add matched class to both cards
+      gameState.currentPair.forEach(card => {
+        const cardElement = document.getElementById(card.id);
+        if (cardElement) {
+          cardElement.classList.add('matched');
+        }
+      });
+
+      setTimeout(() => {
+        gameState.currentPair = [];
+        gameState.lastClickedCardId = null;
+        gameState.clickable = true;
+
+        console.log(\`Pairs matched: \${gameState.pairCount} / \${gameState.maxPairCount}\`);
+        if (gameState.pairCount === gameState.maxPairCount) {
+          console.log("🎉 Game Won! Creating finish screen...");
+          handleWin();
+        }
+      }, 500);
+    }
+
+    function handleMismatch() {
+      setTimeout(() => {
+        gameState.currentPair.forEach(card => hideCard(card.id));
+        gameState.currentPair = [];
+        gameState.lastClickedCardId = null;
+        gameState.clickable = true;
+      }, 1000);
+    }
+
+    function handleWin() {
+      console.log("🏆 Handling win condition");
+      if (gameState.timeInterval) {
+        clearInterval(gameState.timeInterval);
+      }
+      createFinishScreen(true);
+    }
+
+    function checkLose() {
+      if (gameState.remainingTime <= 0) {
+        createFinishScreen(false);
+      }
+    }
+
+    function createFinishScreen(isWin) {
+      if (gameState.isFinishing) return;
+      gameState.isFinishing = true;
+
+      const timeElapsed = gameConfig.timing.gameDuration - gameState.remainingTime;
+      
+      // Find the appropriate promo code based on completion time
+      const promoCodeData = gameConfig.promoCodes.find(range => 
+        timeElapsed >= range.minTime && timeElapsed <= range.maxTime
+      );
+
+      const finishScreen = createDiv({
+        id: "exp-finish-screen",
+        styles: {
+          width: gameConfig.dimensions.gameAreaWidth + "px",
+          height: gameConfig.dimensions.gameAreaHeight + "px",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "rgba(0, 0, 0, 0.95)",
+          borderRadius: "15px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: "100002"
+        }
+      });
+
+      const container = createDiv({
+        id: "exp-finish-container",
+        styles: {
+          textAlign: "center",
+          padding: "40px",
+          color: "#ffffff",
+          width: "100%"
+        }
+      });
+
+      // Add result message
+      const resultMessage = document.createElement("h2");
+      resultMessage.style.fontSize = "36px";
+      resultMessage.style.marginBottom = "20px";
+      resultMessage.style.color = "#1ec4d2";
+      resultMessage.textContent = isWin ? "Congratulations!" : "Time's Up!";
+      container.appendChild(resultMessage);
+
+      if (promoCodeData) {
+        // Add campaign message
+        const campaignMessage = document.createElement("p");
+        campaignMessage.style.fontSize = "24px";
+        campaignMessage.style.marginBottom = "30px";
+        campaignMessage.textContent = promoCodeData.campaignText;
+        container.appendChild(campaignMessage);
+
+        // Create promo code container with flex column layout
+        const promoCodeContainer = document.createElement("div");
+        promoCodeContainer.style.marginBottom = "20px";
+        promoCodeContainer.style.display = "flex";
+        promoCodeContainer.style.flexDirection = "column";
+        promoCodeContainer.style.alignItems = "center";
+        promoCodeContainer.style.gap = "15px";
+
+        // Display promo code
+        const promoCode = document.createElement("div");
+        promoCode.style.fontSize = "48px";
+        promoCode.style.fontWeight = "bold";
+        promoCode.style.color = "#1ec4d2";
+        promoCode.style.padding = "10px 30px";
+        promoCode.style.border = "2px dashed #1ec4d2";
+        promoCode.style.display = "inline-block";
+        promoCode.textContent = promoCodeData.staticcode;
+        promoCodeContainer.appendChild(promoCode);
+
+        // Add copy button
+        const copyButton = document.createElement("button");
+        copyButton.style.backgroundColor = "#1ec4d2";
+        copyButton.style.color = "white";
+        copyButton.style.border = "none";
+        copyButton.style.padding = "10px 20px";
+        copyButton.style.borderRadius = "5px";
+        copyButton.style.cursor = "pointer";
+        copyButton.style.fontSize = "16px";
+        copyButton.style.minWidth = "120px";
+        copyButton.textContent = "Copy Code";
+        
+        copyButton.onclick = () => {
+          navigator.clipboard.writeText(promoCodeData.staticcode)
+            .then(() => {
+              copyButton.textContent = "Copied!";
+              setTimeout(() => {
+                copyButton.textContent = "Copy Code";
+              }, 2000);
+            })
+            .catch(err => console.error('Failed to copy:', err));
+        };
+        
+        promoCodeContainer.appendChild(copyButton);
+        container.appendChild(promoCodeContainer);
+      }
+
+      finishScreen.appendChild(container);
+      gameState.mainComponent.appendChild(finishScreen);
+    }
+
+    function startTimer() {
+      const timerElement = document.getElementById("exp-count-down");
+      if (timerElement) {
+        const duration = parseInt(gameConfig.timing.gameDuration);
+        if (!isNaN(duration)) {
+          gameState.timeInterval = utils.startCountDown(timerElement, duration);
+        } else {
+          console.error('Invalid game duration:', gameConfig.timing.gameDuration);
+        }
+      }
+    }
+
+    // Initialize the game
+    initGame();
   `;
+
+  return JSON.stringify({
+    js: jsCode,
+    css: styles,
+    html: "",
+    config: gameConfig,
+  });
 }

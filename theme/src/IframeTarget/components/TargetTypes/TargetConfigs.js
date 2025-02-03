@@ -9,7 +9,7 @@ const TargetConfig = {
           backgroundColor: {
             type: "color",
             value: "",
-            description: "Background color of the banner",
+            description: "Background color",
           },
           desktopHeight: {
             type: "string",
@@ -24,7 +24,7 @@ const TargetConfig = {
           pageToApply: {
             type: "string",
             value: "",
-            description: "Page where the banner will be applied",
+            description: "Page to apply",
           },
           redirectUrl: {
             type: "url",
@@ -40,7 +40,7 @@ const TargetConfig = {
             type: "select",
             value: "",
             options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
-            description: "Position relative to the selected element",
+            description: "Insert position",
           },
           additionalStyles: {
             type: "string",
@@ -91,6 +91,12 @@ const TargetConfig = {
             options: ["left", "middle", "right"],
             description: "Position of the countdown",
           },
+          layout: {
+            type: "select",
+            value: "stacked",
+            options: ["inline", "stacked"],
+            description: "Layout style",
+          },
           format: {
             type: "select",
             value: "",
@@ -101,7 +107,7 @@ const TargetConfig = {
             type: "select",
             value: "",
             options: ["show", "hide"],
-            description: "Show or hide 'Days', 'Hours', etc.",
+            description: "Show time unit labels",
           },
           additionalStyles: {
             type: "string",
@@ -120,6 +126,209 @@ const TargetConfig = {
             type: "url",
             value: "",
             description: "Mobile image URL",
+          },
+        },
+      },
+    },
+    "Sliding Banner": {
+      id: 1001,
+      TargetRequire: {
+        general: {
+          description: "General Settings",
+          backgroundColor: {
+            type: "color",
+            value: "#FF6B6B",
+            description: "Background color",
+          },
+          desktopHeight: {
+            type: "string",
+            value: "60px",
+            description: "Height of banner on desktop",
+          },
+          mobileHeight: {
+            type: "string",
+            value: "120px",
+            description: "Height of banner on mobile",
+          },
+          pageToApply: {
+            type: "string",
+            value: "",
+            description: "Page to apply",
+          },
+          querySelector: {
+            type: "string",
+            value: "body",
+            description: "CSS selector for target element",
+          },
+          insertPosition: {
+            type: "select",
+            value: "beforeend",
+            options: ["beforebegin", "afterbegin", "beforeend", "afterend"],
+            description: "Position relative to the selected element",
+          },
+          additionalStyles: {
+            type: "string",
+            value: "",
+            description: "Additional CSS styles for banner container (optional)",
+          },
+        },
+        setCarousel: {
+          description: "Carousel Settings",
+          slidePosition: {
+            type: "select",
+            value: "right",
+            options: ["top", "bottom", "left", "right"],
+            description: "Slide-in direction",
+          },
+          slideSpeed: {
+            type: "string",
+            value: "0.5s",
+            description: "Animation duration for slide effect",
+          },
+          autoplay: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Autoplay the banner",
+          },
+          autoplaySpeed: {
+            type: "string",
+            value: "3s",
+            description: "Speed of the autoplay",
+          },
+          loop: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Loop the banner",
+          },
+          sliderButtons: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Show slider buttons",
+          },
+          showPagination: {
+            type: "select",
+            value: "false",
+            options: ["true", "false"],
+            description: "Show pagination dots",
+          },
+          swiperCustomCSS: {
+            type: "string",
+            value: "",
+            description: "Custom CSS for Swiper container",
+          },
+        },
+        setSlides: {
+          description: "Slides Settings",
+          slides: {
+            type: "array",
+            value: [
+              {
+                content: "🎉 Welcome to our store!",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                finishDate: "",
+                layout: "inline",
+                format: "day-hour-minute",
+                showText: "show",
+                backgroundColor: "#4ECDC4",
+                customCSS: "",
+              },
+              {
+                content: "🛍️ Check out our latest offers",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                finishDate: "",
+                layout: "inline",
+                format: "day-hour-minute",
+                showText: "show",
+                backgroundColor: "#45B7D1",
+                customCSS: "",
+              },
+            ],
+            description: "Slides",
+            slideConfig: {
+              content: {
+                type: "string",
+                value: "",
+                description: "Content of the slide",
+              },
+              textColor: {
+                type: "color",
+                value: "#FFFFFF",
+                description: "Text color",
+              },
+              position: {
+                type: "select",
+                value: "",
+                options: ["left", "middle", "right"],
+                description: "Position of the text",
+              },
+              fontSize: {
+                type: "string",
+                value: "16px",
+                description: "Font size of the text",
+              },
+              redirectUrl: {
+                type: "url",
+                value: "",
+                description: "Redirect URL when the banner is clicked",
+              },
+              finishDate: {
+                type: "date",
+                value: "",
+                description: "Finish date for the countdown",
+              },
+              layout: {
+                type: "select",
+                value: "stacked",
+                options: ["inline", "stacked"],
+                description: "Layout style",
+              },
+              format: {
+                type: "select",
+                value: "",
+                options: ["day-hour-minute", "hour-minute-second"],
+                description: "Format of the countdown display",
+              },
+              showText: {
+                type: "select",
+                value: "",
+                options: ["show", "hide"],
+                description: "Show time unit labels",
+              },
+              desktopImageUrl: {
+                type: "url",
+                value: "",
+                description: "Desktop image URL",
+              },
+              mobileImageUrl: {
+                type: "url",
+                value: "",
+                description: "Mobile image URL",
+              },
+              additionalStyles: {
+                type: "string",
+                value: "",
+                description: "Additional CSS styles for countdown (optional)",
+              },
+              customCSS: {
+                type: "string",
+                value: "",
+                description: "Custom CSS for this slide",
+              },
+              backgroundColor: {
+                type: "color",
+                value: "#FF6B6B",
+                description: "Background color for this slide",
+              },
+            },
           },
         },
       },
@@ -171,7 +380,6 @@ const TargetConfig = {
             value: "",
             description: "Title text color",
           },
-
           textBody: {
             type: "string",
             value: "",
@@ -182,7 +390,6 @@ const TargetConfig = {
             value: "",
             description: "Body text color",
           },
-
           campaignText: {
             type: "string",
             value: "",
@@ -274,18 +481,170 @@ const TargetConfig = {
           description: "General Settings",
           backgroundColor: {
             type: "color",
-            value: "",
-            description: "Background color of the banner",
+            value: "#000000a3",
+            description: "Background color of the game container",
           },
-          pageToApply: {
+          zIndex: {
             type: "string",
-            value: "",
-            description: "Page where the banner will be applied",
+            value: "999999",
+            description: "Z-index of the game container",
           },
-          redirectUrl: {
+          gameDuration: {
+            type: "number",
+            value: 60,
+            description: "Game duration in seconds",
+          },
+        },
+        gameConfig: {
+          description: "Game Configuration",
+          gridRows: {
+            type: "number",
+            value: 3,
+            description: "Number of rows in the game grid",
+          },
+          gridCols: {
+            type: "number",
+            value: 3,
+            description: "Number of columns in the game grid",
+          },
+          cardImages: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=1, https://picsum.photos/100/100?random=2, https://picsum.photos/100/100?random=3, https://picsum.photos/100/100?random=4",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+          backCardImage: {
+            type: "url",
+            value: "https://imgvisilabsnet.azureedge.net/banner/uploaded_images/418_1455_20241209195350115.jpg",
+            description: "Image URL for card back",
+          },
+          emptyCardImage: {
+            type: "url",
+            value: "https://static.thenounproject.com/png/4653780-200.png",
+            description: "Image URL for empty card",
+          },
+          backgroundImage: {
+            type: "url",
+            value: "https://voyagemaison.com/cdn/shop/files/BOWMONT_WPO_PHE_2.jpg?format=pjpg&v=1710155491&width=720",
+            description: "Background image URL for game area",
+          },
+        },
+        startScreen: {
+          description: "Start Screen Settings",
+          backgroundColor: {
+            type: "color",
+            value: "#000000",
+            description: "Background color for start screen",
+          },
+          backgroundImage: {
             type: "url",
             value: "",
-            description: "Redirect URL when the banner is clicked",
+            description: "Background image URL for start screen",
+          },
+          title: {
+            type: "string",
+            value: "Memory Match Challenge",
+            description: "Title text for start screen",
+          },
+          titleColor: {
+            type: "color",
+            value: "#ffffff",
+            description: "Title text color",
+          },
+          titleFontSize: {
+            type: "string",
+            value: "48px",
+            description: "Title font size",
+          },
+          description: {
+            type: "string",
+            value: "Match all pairs as quickly as possible to win bigger discounts!",
+            description: "Description text for start screen",
+          },
+          descriptionColor: {
+            type: "color",
+            value: "#ffffff",
+            description: "Description text color",
+          },
+          descriptionFontSize: {
+            type: "string",
+            value: "36px",
+            description: "Description font size",
+          },
+          buttonText: {
+            type: "string",
+            value: "START GAME",
+            description: "Start button text",
+          },
+          buttonColor: {
+            type: "color",
+            value: "#1ec4d2",
+            description: "Start button color",
+          },
+          buttonFontSize: {
+            type: "string",
+            value: "40px",
+            description: "Button font size",
+          },
+        },
+        promoCodes: {
+          description: "Promo Code Settings",
+          timeRanges: {
+            type: "string",
+            value: `[
+              {"minTime":0, "maxTime":5, "staticcode":"WIN100", "campaignText":"Congratulations! You've won a 100% discount!"},
+              {"minTime":6, "maxTime":15, "staticcode":"SAVE75", "campaignText":"Amazing! Enjoy 75% off!"},
+              {"minTime":16, "maxTime":25, "staticcode":"HALF50", "campaignText":"Great job! Get 50% off!"},
+              {"minTime":26, "maxTime":999, "staticcode":"QUICK25", "campaignText":"Nice work! Take 25% off!"}
+            ]`,
+            description: "Time-based promo codes",
+          },
+        },
+        visual: {
+          description: "Visual Settings",
+          cardBorderRadius: {
+            type: "string",
+            value: "10px",
+            description: "Border radius for cards",
+          },
+          scoreBoardRadius: {
+            type: "string",
+            value: "5px",
+            description: "Border radius for scoreboard",
+          },
+          closeButtonColor: {
+            type: "color",
+            value: "black",
+            description: "Close button color",
+          },
+          fontFamily: {
+            type: "string",
+            value: "'Arial', sans-serif",
+            description: "Custom font family",
+          },
+          mobileFontSizes: {
+            type: "string",
+            value: `{
+              "timer": "32px",
+              "closeButton": "32px",
+              "title": "48px",
+              "description": "36px",
+              "button": "40px"
+            }`,
+            description: "JSON string of mobile font sizes",
+          },
+        },
+        sound: {
+          description: "Sound Settings",
+          enabled: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Enable game sounds",
+          },
+          soundUrl: {
+            type: "url",
+            value: "https://bariisarslans.github.io/giftcatchgame/sound.mp3",
+            description: "URL for game sound effect",
           },
         },
       },
