@@ -101,6 +101,7 @@ import { FirePopup, FireBanner } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
 import CodeEditor from "./CodeEditor.vue";
 import { usePreviewStore } from "../../store/previewStore";
+import { addExperience, getExperienceByID } from "../../../api/ExperienceService";
 
 export default {
   components: {
@@ -191,7 +192,9 @@ export default {
         console.log("Using FirePopup - Regular popup type");
         console.log("Popup data:", proxyReq);
         const popupHtml = FirePopup(proxyReq);
+        addExperience("test12", popupHtml, 1000, "test12", 1); 
         console.log("Generated Popup HTML:", popupHtml);
+        getExperienceByID(3);
         emit("update-preview", popupHtml);
       }
     };

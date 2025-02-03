@@ -152,6 +152,7 @@ import ListExperience from "@/pages/experiences/ListExperience.vue"
 import GamificationExperience from "@/pages/experiences/GamificationExperience.vue"
 import InlineExperience from "@/pages/experiences/InlineExperience.vue"
 import ExternalExperience from "@/pages/experiences/ExternalExperience.vue"
+import EditExperience from "@/pages/experiences/EditExperience.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -191,6 +192,14 @@ const routes: Array<RouteRecordRaw> = [
             component: ListExperience,
             meta: {
               title: 'Experience List | Vue Admin Template',
+            }
+          },
+          {
+            path: "edit/:targetId",
+            name: "EditExperience",
+            component: EditExperience,
+            meta: {
+              title: 'Edit Experience | Vue Admin Template',
             }
           },
           {
