@@ -297,6 +297,26 @@ class Line {
       'data:realIndex': realIndex,
     })
 
+    if (w.globals.hasNullValues) {
+      // fixes https://github.com/apexcharts/apexcharts.js/issues/3641
+      const firstPoint = this.markers.plotChartMarkers({
+        pointsPos: {
+          x: [0],
+          y: [w.globals.gridHeight + w.globals.markers.largestSize],
+        },
+        seriesIndex: i,
+        j: 0,
+        pSize: 0.1,
+        alwaysDrawMarker: true,
+        isVirtualPoint: true,
+      })
+
+      if (firstPoint !== null) {
+        // firstPoint is rendered for cases where there are null values and when dynamic markers are required
+        this.elPointsMain.add(firstPoint)
+      }
+    }
+
     // eldatalabels
     this.elDataLabelsWrap = graphics.group({
       class: 'apexcharts-datalabels',
@@ -587,7 +607,7 @@ class Line {
     let segmentStartX
 
     for (let j = 0; j < iterations; j++) {
-      if (series[i].length === 0) break;
+      if (series[i].length === 0) break
 
       const isNull =
         typeof series[i][j + 1] === 'undefined' || series[i][j + 1] === null
@@ -745,11 +765,11 @@ class Line {
         this.elPointsMain.node.classList.add('apexcharts-element-hidden')
       }
 
-      let elPointsWrap = this.markers.plotChartMarkers(
+      let elPointsWrap = this.markers.plotChartMarkers({
         pointsPos,
-        realIndex,
-        j + 1
-      )
+        seriesIndex: realIndex,
+        j: j + 1,
+      })
       if (elPointsWrap !== null) {
         this.elPointsMain.add(elPointsWrap)
       }
@@ -956,7 +976,10 @@ class Line {
               areaPath = graphics.move(pX, pY)
 
               // Check for single isolated point
-              if (series[i][j + 1] === null || typeof series[i][j + 1] === 'undefined') {
+              if (
+                series[i][j + 1] === null ||
+                typeof series[i][j + 1] === 'undefined'
+              ) {
                 linePaths.push(linePath)
                 areaPaths.push(areaPath)
                 // Stay in pathState = 0;
@@ -1045,7 +1068,10 @@ class Line {
               areaPath = graphics.move(pX, pY)
 
               // Check for single isolated point
-              if (series[i][j + 1] === null || typeof series[i][j + 1] === 'undefined') {
+              if (
+                series[i][j + 1] === null ||
+                typeof series[i][j + 1] === 'undefined'
+              ) {
                 linePaths.push(linePath)
                 areaPaths.push(areaPath)
                 // Stay in pathState = 0
@@ -1125,14 +1151,15 @@ class Line {
       if (!(pSize > 0)) {
         pSize = 0
       }
+
       // fixes apexcharts.js#1282, #1252
-      let elPointsWrap = this.markers.plotChartMarkers(
+      let elPointsWrap = this.markers.plotChartMarkers({
         pointsPos,
-        realIndex,
-        j + 1,
+        seriesIndex: realIndex,
+        j: j + 1,
         pSize,
-        true
-      )
+        alwaysDrawMarker: true,
+      })
       if (elPointsWrap !== null) {
         this.elPointsMain.add(elPointsWrap)
       }

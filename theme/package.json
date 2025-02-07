@@ -20,6 +20,7 @@
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "@vuepic/vue-datepicker": "^8.6.0",
     "aos-vue": "^0.0.5",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "core-js": "^3.8.3",
     "dropzone-vue": "^0.1.11",
