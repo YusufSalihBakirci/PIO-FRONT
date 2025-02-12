@@ -12,16 +12,20 @@
           <div class="slider">
             <div class="slider-wrapper" 
                  :style="{ transform: `translateX(-${currentSlides[exp.id] * 100}%)` }">
-              <img v-for="(image, index) in exp.images" 
+              <div v-for="(image, index) in exp.images" 
                    :key="index"
-                   :src="image" 
-                   alt="Deneyim Görseli">
+                   class="slide">
+                <img :src="image" 
+                     :alt="`${exp.name} - Görsel ${index + 1}`">
+              </div>
             </div>
             <button class="slider-btn prev" @click="prevSlide(exp.id)">❮</button>
             <button class="slider-btn next" @click="nextSlide(exp.id)">❯</button>
             <div class="slider-dots">
-              <span v-for="i in 3" :key="i" 
-                    :class="['dot', (currentSlides[exp.id] || 0) === i-1 ? 'active' : '']">
+              <span v-for="i in exp.images.length" 
+                    :key="i" 
+                    :class="['dot', (currentSlides[exp.id] || 0) === i-1 ? 'active' : '']"
+                    @click="currentSlides[exp.id] = i-1">
               </span>
             </div>
           </div>
@@ -33,8 +37,8 @@
         
         <div class="card-footer">
           <div class="button-group">
-            <button class="preview-btn active" @click="openPreview(exp)">Önizleme</button>
-            <button class="create-btn active">Oluştur</button>
+            <button class="preview-btn" @click="openPreview(exp)">Önizleme</button>
+            <button class="create-btn">Oluştur</button>
           </div>
         </div>
       </div>
@@ -116,7 +120,7 @@
 
             <div class="slider-window">
               <div class="slider-content" 
-                   :style="{ transform: `translateX(-${currentAlternativeIndex * 33.33}%)` }">
+                   :style="{ transform: `translateX(-${currentAlternativeIndex * 20}%)` }">
                 <div v-for="exp in alternativeExperiences" 
                      :key="exp.id" 
                      class="experience-card">
@@ -130,7 +134,7 @@
 
             <button class="slider-nav next" 
                     @click="nextAlternative" 
-                    :disabled="currentAlternativeIndex >= alternativeExperiences.length - 3">
+                    :disabled="currentAlternativeIndex >= alternativeExperiences.length - 5">
               <i class="fa fa-chevron-right"></i>
             </button>
           </div>
@@ -292,7 +296,8 @@ const prevPreviewSlide = () => {
 };
 
 const nextAlternative = () => {
-  if (currentAlternativeIndex.value < alternativeExperiences.value.length - 3) {
+  const maxIndex = alternativeExperiences.value.length - getVisibleCards();
+  if (currentAlternativeIndex.value < maxIndex) {
     currentAlternativeIndex.value++;
   }
 };
@@ -301,6 +306,16 @@ const prevAlternative = () => {
   if (currentAlternativeIndex.value > 0) {
     currentAlternativeIndex.value--;
   }
+};
+
+// Ekran genişliğine göre görünür kart sayısını hesapla
+const getVisibleCards = () => {
+  const width = window.innerWidth;
+  if (width > 1400) return 5;
+  if (width > 1100) return 4;
+  if (width > 800) return 3;
+  if (width > 540) return 2;
+  return 1;
 };
 </script>
 
@@ -521,17 +536,19 @@ const prevAlternative = () => {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: none;
-    background: rgba(var(--black), 0.1);
-    color: rgba(var(--black), 0.7);
+    border: 2px solid var(--theme-default);
+    background: white;
+    color: var(--theme-default);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    z-index: 2;
 
     &:hover:not(:disabled) {
-      background: rgba(var(--black), 0.2);
+      background: var(--theme-default);
+      color: white;
     }
 
     &:disabled {
@@ -547,19 +564,22 @@ const prevAlternative = () => {
 
   .slider-content {
     display: flex;
+    gap: 20px;
     transition: transform 0.3s ease;
+    width: fit-content;
   }
 
   .experience-card {
-    flex: 0 0 33.33%;
-    padding: 0 10px;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    flex: 0 0 240px;
+    margin-right: 20px;
+    
+    &:last-child {
+      margin-right: 0;
+    }
     
     img {
       width: 100%;
-      height: 200px;
+      height: 160px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -570,7 +590,6 @@ const prevAlternative = () => {
       font-weight: 600;
       margin-bottom: 10px;
       color: rgba(var(--black), 0.8);
-      height: 24px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -590,26 +609,224 @@ const prevAlternative = () => {
 
     .preview-btn {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       border: none;
       background: var(--theme-default);
       color: white;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s ease;
+      margin-top: auto;
+      font-size: 14px;
+      font-weight: 500;
+      display: block;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      opacity: 1;
 
       &:hover {
-        filter: brightness(0.9);
+        background: var(--theme-secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }
 }
 
-// Responsive tasarım
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
+  .experience-slider-container {
+    .slider-content {
+      gap: 15px;
+    }
+    .experience-card {
+      flex: 0 0 280px;
+      margin-right: 15px;
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  .experience-slider-container {
+    .slider-content {
+      gap: 15px;
+    }
+    .experience-card {
+      flex: 0 0 300px;
+      margin-right: 15px;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .experience-slider-container {
+    .slider-content {
+      gap: 10px;
+    }
+    .experience-card {
+      flex: 0 0 calc(50% - 20px);
+      margin-right: 10px;
+    }
+  }
+}
+
+@media (max-width: 540px) {
   .experience-slider-container {
     .experience-card {
+      flex: 0 0 calc(100% - 40px);
+      margin-right: 0;
+    }
+  }
+}
+
+.card-image {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 15px;
+
+  .slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+    .slider-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .slide {
       flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      &.prev {
+        left: 10px;
+      }
+
+      &.next {
+        right: 10px;
+      }
+    }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &.active {
+          background: white;
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+}
+
+.card-footer {
+  padding: 15px;
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+    
+    button {
+      flex: 1;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    .preview-btn {
+      background-color: var(--theme-default);
+      color: white;
+      
+      &:hover {
+        filter: brightness(90%);
+      }
+    }
+    
+    .create-btn {
+      background-color: var(--theme-secondary);
+      color: white;
+      
+      &:hover {
+        filter: brightness(90%);
+      }
+    }
+  }
+}
+
+// Responsive tasarım için
+@media (max-width: 768px) {
+  .card-footer {
+    .button-group {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
     }
   }
 }

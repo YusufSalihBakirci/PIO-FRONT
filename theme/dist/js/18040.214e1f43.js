@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkadmiro_vue"]=self["webpackChunkadmiro_vue"]||[]).push([[18040],{18040:(e,r,o)=>{o.r(r),o.d(r,{default:()=>u});var s=o(56768),c={class:"footer"};function a(e,r){return(0,s.uX)(),(0,s.CE)("footer",c,r[0]||(r[0]=[(0,s.Lk)("div",{class:"container-fluid"},[(0,s.Lk)("div",{class:"row"},[(0,s.Lk)("div",{class:"col-md-6 footer-copyright"},[(0,s.Lk)("p",{class:"mb-0"},"Copyright 2025 © Self Service Target Project.")])])],-1)]))}var t=o(71241);const i={},l=(0,t.A)(i,[["render",a]]),u=l}}]);
+//# sourceMappingURL=18040.214e1f43.js.map

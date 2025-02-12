@@ -1,1 +1,30 @@
 node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Node Modules (more comprehensive ignore)
+**/node_modules/**
+**/theme/node_modules/**
+theme/**/node_modules/
