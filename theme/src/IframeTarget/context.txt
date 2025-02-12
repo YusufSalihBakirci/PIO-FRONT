@@ -3,56 +3,52 @@ theme/src/
 ├── IframeTarget/
 │   ├── components/
 │   │   ├── InputPanel/
-│   │   │   ├── InputPanel.vue (Handles target selection and creation)
-│   │   │   ├── TargetCreator.vue (Creates target configurations)
-│   │   │   ├── CodeEditor.vue (Monaco editor for custom code)
-│   │   │   └── TargetJSCreator.vue (Generates target JS code)
+│   │   │   ├── InputPanel.vue (Main interface)
+│   │   │   ├── TargetCreator.vue (Target configuration)
+│   │   │   ├── CodeEditor.vue (Monaco-based editor)
+│   │   │   └── TargetJSCreator.vue (JS code generation)
 │   │   ├── TargetTypes/
-│   │   │   ├── TargetCodes.js (Generates actual target code)
-│   │   │   └── TargetConfigs.js (Defines target configurations)
+│   │   │   ├── TargetCodes.js (Target code generation)
+│   │   │   └── TargetConfigs.js (Target definitions)
 │   │   ├── AuxJS/
-│   │   │   ├── PageReader.js (Reads and analyzes page elements)
-│   │   │   ├── EcommerceTemplate.js (Template generation)
-│   │   │   └── SvgVectors.js (UI icons and vectors)
-│   │   ├── BetterTargetPreview.vue (New preview component)
-│   │   └── TargetPreview.vue (Original preview component)
+│   │   │   ├── PageReader.js (DOM analysis)
+│   │   │   ├── EcommerceTemplate.js (Preview template)
+│   │   │   └── SvgVectors.js (UI icons)
+│   │   └── BetterTargetPreview.vue (Enhanced preview)
 │   ├── store/
-│   │   ├── previewStore.js (Preview state management)
-│   │   └── iframeStore.js (Iframe content management)
+│   │   ├── previewStore.js (Preview state)
+│   │   └── iframeStore.js (Iframe management)
 │   └── public/
-       └── FoodMart-1.0.0/ (Template assets)
+        └── FoodMart-1.0.0/ (Template assets)
 
 Data Flow:
 User Action ─► InputPanel.vue
                   │
                   ▼
-            TargetCreator.vue ──► TargetCodes.js/CodeEditor.vue
+            TargetCreator.vue ──► CodeEditor.vue/TargetCodes.js
                   │                    │
                   │                    ▼
-                  │              Generates Code
+                  │              Generated Code
                   │                    │
                   ▼                    ▼
-            previewStore.js ◄─── JSON String
+            previewStore.js ◄─── JSON/JS String
                   │
                   ▼
         BetterTargetPreview.vue
                   │
                   ▼
-            Displays Preview
+            Preview Render
 
-Key Components:
-1. InputPanel: Main interface for target creation
-2. CodeEditor: Monaco-based code editor for custom JS
-3. PageReader: Analyzes page structure for target placement
-4. TargetCodes: Generates popup/banner code
-5. BetterTargetPreview: Renders preview in template
-
-State Management:
-- previewStore: Manages preview content and target type
-- iframeStore: Manages iframe content and interactions
+Key Features:
+1. Responsive Preview: Desktop/tablet/mobile views
+2. Code Editing: Monaco editor with syntax highlighting
+3. DOM Analysis: Smart target placement
+4. State Management: Centralized using Pinia
+5. Template System: Consistent preview environment
 
 Current Focus:
-- Improving preview rendering
-- Handling code execution in preview
-- Managing target code generation
-- Maintaining clean code structure
+- Enhanced preview performance
+- Code generation optimization
+- Target placement accuracy
+- User interface improvements
+- State management refinement

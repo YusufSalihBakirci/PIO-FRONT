@@ -1,4 +1,52 @@
-# IframeTarget Component Documentation
+# IframeTarget Module
+
+## Overview
+
+The IframeTarget module is a Vue.js-based system for creating, previewing, and managing interactive website targets (popups, banners, etc.) within an iframe environment.
+
+## Key Components
+
+### Core Components
+
+- `InputPanel.vue`: Main interface for target selection and configuration
+- `TargetCreator.vue`: Handles target configuration creation and management
+- `BetterTargetPreview.vue`: Enhanced preview component with responsive device views
+- `CodeEditor.vue`: Monaco-based code editor for custom JavaScript
+
+### Auxiliary Components
+
+- `PageReader.js`: Analyzes page structure for target placement
+- `EcommerceTemplate.js`: Generates template HTML for preview
+- `SvgVectors.js`: UI icons for device selection and controls
+
+### State Management
+
+- `previewStore.js`: Manages preview content and target type state
+- `iframeStore.js`: Handles iframe content and interactions
+
+## Features
+
+- Responsive preview with desktop/tablet/mobile views
+- Real-time code editing with syntax highlighting
+- Dynamic target placement analysis
+- Template-based preview system
+- State management using Pinia
+
+## Technical Stack
+
+- Vue 3
+- Pinia for state management
+- Monaco Editor for code editing
+- Tailwind CSS for styling
+
+## Usage
+
+1. Select target type from InputPanel
+2. Configure target settings in TargetCreator
+3. Preview changes in BetterTargetPreview
+4. Edit custom code using CodeEditor if needed
+
+## Development
 
 ## Project Structure
 
@@ -9,7 +57,7 @@ The project follows a modular structure with the following organization:
 - **InputPanel/**
 
   - `InputPanel.vue` - Handles target selection and creation
-  - `TargetCreator.vue` - Creates target configurations
+  - `TargetCreator.vue` - Creates target configurations. Must be used with TargetCodes.js and TargetConfigs.js and must be target agnostic.
   - `CodeEditor.vue` - Monaco editor for custom code
   - `TargetJSCreator.vue` - Generates target JS code
 

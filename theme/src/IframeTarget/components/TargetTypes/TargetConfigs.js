@@ -43,7 +43,7 @@ const TargetConfig = {
             description: "Insert position",
           },
           additionalStyles: {
-            type: "string",
+            type: "textarea",
             value: "",
             description: "Additional CSS styles for banner container (optional)",
           },
@@ -110,7 +110,7 @@ const TargetConfig = {
             description: "Show time unit labels",
           },
           additionalStyles: {
-            type: "string",
+            type: "textarea",
             value: "",
             description: "Additional CSS styles for countdown (optional)",
           },
@@ -167,7 +167,7 @@ const TargetConfig = {
             description: "Position relative to the selected element",
           },
           additionalStyles: {
-            type: "string",
+            type: "textarea",
             value: "",
             description: "Additional CSS styles for banner container (optional)",
           },
@@ -215,14 +215,23 @@ const TargetConfig = {
             description: "Show pagination dots",
           },
           swiperCustomCSS: {
-            type: "string",
-            value: "",
+            type: "textarea",
+            value: `
+.swiper {}
+.swiper-wrapper {}
+.swiper-slide {}
+.swiper-button-next {}
+.swiper-button-prev {}
+.swiper-pagination {}
+.swiper-slide-active {}
+.swiper-slide-visible {}
+.swiper-slide-duplicate {}`,
             description: "Custom CSS for Swiper container",
           },
         },
         setSlides: {
           description: "Slides Settings",
-          slides: {
+          items: {
             type: "array",
             value: [
               {
@@ -249,6 +258,19 @@ const TargetConfig = {
                 format: "day-hour-minute",
                 showText: "show",
                 backgroundColor: "#45B7D1",
+                customCSS: "",
+              },
+              {
+                content: "🛍️ Slide 3",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                finishDate: "",
+                layout: "inline",
+                format: "day-hour-minute",
+                showText: "show",
+                backgroundColor: "#35f7D5",
                 customCSS: "",
               },
             ],
@@ -313,20 +335,15 @@ const TargetConfig = {
                 value: "",
                 description: "Mobile image URL",
               },
-              additionalStyles: {
-                type: "string",
-                value: "",
-                description: "Additional CSS styles for countdown (optional)",
-              },
-              customCSS: {
-                type: "string",
-                value: "",
-                description: "Custom CSS for this slide",
-              },
               backgroundColor: {
                 type: "color",
                 value: "#FF6B6B",
                 description: "Background color for this slide",
+              },
+              customCSS: {
+                type: "textarea",
+                value: "",
+                description: "Custom CSS for this slide",
               },
             },
           },
@@ -438,12 +455,12 @@ const TargetConfig = {
             description: "Copy button color",
           },
           additionalCampaignTexSettings: {
-            type: "string",
+            type: "textarea",
             value: "",
-            description: "Additional campaign textsettings (css code)",
+            description: "Additional campaign text settings (css code)",
           },
           additionalCopyButtonSettings: {
-            type: "string",
+            type: "textarea",
             value: "",
             description: "Additional copy button settings (css code)",
           },
@@ -467,6 +484,238 @@ const TargetConfig = {
             type: "url",
             value: "",
             description: "Video URL",
+          },
+        },
+      },
+    },
+    "Expanding Modal": {
+      id: 2001,
+      TargetRequire: {
+        general: {
+          description: "General Settings",
+          backgroundColor: {
+            type: "color",
+            value: "#f2ece0",
+            description: "First background color",
+          },
+          backgroundColor2: {
+            type: "color",
+            value: "#d03233",
+            description: "Second background color",
+          },
+          pageToApply: {
+            type: "url",
+            value: "",
+            description: "Page to apply",
+          },
+          logoUrl: {
+            type: "url",
+            value: "https://place-hold.it/300x126/f2ece0/transparent?text=Logo_Here&bold&fontsize=30",
+            description: "Logo URL",
+          },
+          customCSS: {
+            type: "textarea",
+            value: "",
+            description: "Custom CSS for banner container",
+          },
+        },
+        setCarousel: {
+          description: "Carousel Settings",
+          delay: {
+            type: "string",
+            value: "4000",
+            description: "Slide delay (ms)",
+          },
+          speed: {
+            type: "string",
+            value: "1000",
+            description: "Animation speed (ms)",
+          },
+          slidePosition: {
+            type: "select",
+            value: "right",
+            options: ["top", "bottom", "left", "right"],
+            description: "Slide-in direction",
+          },
+          autoplay: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Autoplay slides",
+          },
+          loop: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Loop slides",
+          },
+          showButtons: {
+            type: "select",
+            value: "true",
+            options: ["true", "false"],
+            description: "Show navigation buttons",
+          },
+          showPagination: {
+            type: "select",
+            value: "false",
+            options: ["true", "false"],
+            description: "Show pagination dots",
+          },
+          customCSS: {
+            type: "textarea",
+            value: "",
+            description: "Custom CSS for carousel",
+          },
+        },
+        setMinBanner: {
+          description: "Minimized Banner Settings",
+          slides: {
+            type: "array",
+            value: [
+              {
+                content: "SEVGİLİLER GÜNÜ FIRSATLARINI KEŞFET",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                backgroundColor: "#4ECDC4",
+                customCSS: "",
+              },
+              {
+                content: "MOBİL APP'E ÖZEL 100 TL İNDİRİM",
+                textColor: "#FFFFFF",
+                position: "middle",
+                fontSize: "22px",
+                redirectUrl: "",
+                backgroundColor: "#45B7D1",
+                customCSS: "",
+              },
+            ],
+            description: "Minimized Banner Slides",
+            slideConfig: {
+              content: {
+                type: "string",
+                value: "",
+                description: "Content of the slide",
+              },
+              textColor: {
+                type: "color",
+                value: "#FFFFFF",
+                description: "Text color",
+              },
+              position: {
+                type: "select",
+                value: "middle",
+                options: ["left", "middle", "right"],
+                description: "Position of the text",
+              },
+              fontSize: {
+                type: "string",
+                value: "22px",
+                description: "Font size",
+              },
+              redirectUrl: {
+                type: "url",
+                value: "",
+                description: "Redirect URL",
+              },
+              backgroundColor: {
+                type: "color",
+                value: "#4ECDC4",
+                description: "Background color",
+              },
+              customCSS: {
+                type: "textarea",
+                value: "",
+                description: "Custom CSS for this slide",
+              },
+            },
+          },
+        },
+        setMaxBanner: {
+          description: "Expanded Banner Settings",
+          maxSlides: {
+            type: "array",
+            value: [
+              {
+                redirectUrl: null,
+                desktopImg: "https://picsum.photos/600/270?random=2",
+                mobileImg: "https://picsum.photos/400/230?random=2",
+                couponCode: null,
+              },
+              {
+                redirectUrl: null,
+                desktopImg: "https://picsum.photos/600/270?random=3",
+                mobileImg: "https://picsum.photos/400/230?random=3",
+                couponCode: "DISCOUNT10",
+              },
+              {
+                redirectUrl: "https://example.com",
+                desktopImg: "https://picsum.photos/600/270?random=4",
+                mobileImg: "https://picsum.photos/400/230?random=4",
+                couponCode: null,
+              },
+              {
+                redirectUrl: "https://example.com/special",
+                desktopImg: "https://picsum.photos/600/270?random=5",
+                mobileImg: "https://picsum.photos/400/230?random=5",
+                couponCode: "SPECIAL50",
+              },
+            ],
+            description: "Expanded Banner Slides",
+            slideConfig: {
+              content: {
+                type: "string",
+                value: "",
+                description: "Content of the slide",
+              },
+              textColor: {
+                type: "color",
+                value: "#FFFFFF",
+                description: "Text color",
+              },
+              position: {
+                type: "select",
+                value: "middle",
+                options: ["left", "middle", "right"],
+                description: "Position of the text",
+              },
+              fontSize: {
+                type: "string",
+                value: "22px",
+                description: "Font size",
+              },
+              redirectUrl: {
+                type: "url",
+                value: "",
+                description: "Redirect URL",
+              },
+              desktopImg: {
+                type: "url",
+                value: "",
+                description: "Desktop image URL",
+              },
+              mobileImg: {
+                type: "url",
+                value: "",
+                description: "Mobile image URL",
+              },
+              couponCode: {
+                type: "string",
+                value: "",
+                description: "Coupon code",
+              },
+              backgroundColor: {
+                type: "color",
+                value: "#4ECDC4",
+                description: "Background color",
+              },
+              customCSS: {
+                type: "textarea",
+                value: "",
+                description: "Custom CSS for this slide",
+              },
+            },
           },
         },
       },

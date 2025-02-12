@@ -12,7 +12,7 @@
 
       <!-- Device Buttons and Controls -->
       <div class="flex items-center gap-3">
-        <!-- Device Buttons and Enlarge -->
+        <!-- Device Buttons -->
         <div class="flex items-center gap-3">
           <span class="flex gap-2">
             <button
@@ -57,7 +57,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import svgObject from "../components/AuxJS/SvgVectors";
+import { deviceIcons } from "../components/AuxJS/SvgVectors";
 import { usePreviewStore } from "../store/previewStore";
 import EcommerceTemplate from "../components/AuxJS/EcommerceTemplate";
 
@@ -66,6 +66,8 @@ const previewContent = ref(EcommerceTemplate.generateTemplate());
 const previewIframe = ref(null);
 const isEnlarged = ref(false);
 const selectedDevice = ref("desktop");
+const svgObject = deviceIcons;
+
 const deviceSizes = ref({
   desktop: { width: 1920, height: 1080, scale: 0.45, enlargedScale: 0.65 },
   tablet: { width: 810, height: 1080, scale: 0.6, enlargedScale: 0.7 },
@@ -73,33 +75,32 @@ const deviceSizes = ref({
 });
 
 const handleIframeLoad = () => {
+  console.log("Iframe loaded, preview content:", previewStore.previewContent);
   if (previewStore.previewContent && previewIframe.value) {
     try {
       // Parse the content if it's a string, otherwise use it directly
       const content = typeof previewStore.previewContent === "string" ? JSON.parse(previewStore.previewContent) : previewStore.previewContent;
 
+      console.log("Parsed content:", content);
       const iframeDoc = previewIframe.value.contentDocument;
 
       // Add styles
       if (content.css) {
+        console.log("Injecting CSS");
         const styleElement = iframeDoc.createElement("style");
+        styleElement.setAttribute("data-experia", "true");
         styleElement.textContent = content.css;
         iframeDoc.head.appendChild(styleElement);
       }
 
-      // Execute JavaScript with proper container handling
+      // Execute JavaScript
       if (content.js) {
+        console.log("Injecting JS");
         const scriptElement = iframeDoc.createElement("script");
+        scriptElement.setAttribute("data-experia", "true");
         scriptElement.textContent = `
           (function(document) {
             try {
-              // Get or create the main target containers
-              const containers = {
-                inline: document.getElementById('experia-inline'),
-                external: document.getElementById('experia-external')
-              };
-
-              // Execute the target code
               ${content.js}
             } catch (error) {
               console.error("Error executing target JS:", error);
@@ -140,16 +141,16 @@ const processPreviewContent = (content) => {
   }
 };
 
-// Watch for changes in preview store, but only update on preview button click
+// Modified watch to add logging
 watch(
   () => previewStore.previewContent,
   (newContent) => {
-    // Only process if it's a preview button click (content will be stringified)
+    console.log("Preview store content changed:", newContent);
     if (newContent && typeof newContent === "string") {
+      console.log("Processing new content");
       previewContent.value = processPreviewContent(newContent);
     }
-  },
-  { immediate: true }
+  }
 );
 
 const selectDevice = (device) => {

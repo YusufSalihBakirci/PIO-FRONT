@@ -1,42 +1,350 @@
 // import { iframeStore } from "../../iframeStore";
 
+export function FireBanner(basicInputsData) {
+  const config = {
+    desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "60px",
+    mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "120px",
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#ffffff",
+    redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
+
+    titleText: basicInputsData.targetRequirements?.setText?.textContent || "",
+    titleColor: basicInputsData.targetRequirements?.setText?.titleColor || "#000000",
+    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "",
+    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#000000",
+
+    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "",
+    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#000000",
+    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "",
+    campaignCodeColor: basicInputsData.targetRequirements?.setCampaignCode?.campaignCodeColor || "#000000",
+
+    finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
+  };
+
+  const jsCode = `
+    const bannerWrapper = document.createElement('div');
+    bannerWrapper.id = 'exp-banner-wrapper';
+
+    const bannerContainer = document.createElement('div');
+    bannerContainer.className = 'exp-banner-container';
+
+    const link = document.createElement('a');
+    link.href = '${config.redirectUrl}';
+    link.className = 'exp-banner-link';
+    link.style.color = '${config.titleColor}';
+
+    if ('${config.titleText}') {
+      const title = document.createElement('span');
+      title.className = 'exp-banner-title';
+      title.textContent = '${config.titleText}';
+      link.appendChild(title);
+    }
+
+    if ('${config.bodyText}') {
+      const body = document.createElement('span');
+      body.className = 'exp-banner-body';
+      body.textContent = '${config.bodyText}';
+      body.style.color = '${config.bodyColor}';
+      link.appendChild(body);
+    }
+
+    if ('${config.campaignText}') {
+      const campaign = document.createElement('span');
+      campaign.className = 'exp-banner-campaign';
+      campaign.textContent = '${config.campaignText}';
+      campaign.style.color = '${config.campaignColor}';
+      link.appendChild(campaign);
+    }
+
+    if ('${config.campaignCode}') {
+      const code = document.createElement('span');
+      code.className = 'exp-banner-code';
+      code.textContent = '${config.campaignCode}';
+      code.style.color = '${config.campaignCodeColor}';
+      link.appendChild(code);
+    }
+
+    if ('${config.finishDate}') {
+      const countdownContainer = document.createElement('div');
+      countdownContainer.className = 'exp-banner-countdown';
+      
+      const updateCountdown = () => {
+        const now = new Date().getTime();
+        const finishTime = new Date('${config.finishDate}').getTime();
+        const distance = finishTime - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownContainer.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          countdownContainer.textContent = "EXPIRED";
+        }
+      };
+
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      link.appendChild(countdownContainer);
+    }
+
+    bannerContainer.appendChild(link);
+    bannerWrapper.appendChild(bannerContainer);
+
+    const targetContainer = document.querySelector('#experia-inline');
+    if (targetContainer) {
+      targetContainer.appendChild(bannerWrapper);
+    }
+  `;
+
+  const styles = `
+    #exp-banner-wrapper {
+      width: 100%;
+      background-color: ${config.backgroundColor};
+    }
+
+    #exp-banner-wrapper .exp-banner-container {
+      height: ${config.desktopHeight};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+    }
+
+    #exp-banner-wrapper .exp-banner-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+      width: 100%;
+      justify-content: center;
+    }
+
+    #exp-banner-wrapper .exp-banner-countdown {
+      font-weight: bold;
+      color: ${config.campaignCodeColor};
+    }
+
+    @media only screen and (max-width: 768px) {
+      #exp-banner-wrapper .exp-banner-container {
+        height: ${config.mobileHeight};
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      #exp-banner-wrapper .exp-banner-link {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  `;
+
+  return JSON.stringify({
+    js: jsCode,
+    css: styles,
+    html: "",
+  });
+}
+
+export function SlidingBanner(inputData) {
+  // Add default values and validation
+  console.log(`🔍 Input Data:`, inputData);
+  const config = {
+    general: {
+      backgroundColor: inputData?.targetRequirements?.general?.backgroundColor || "#ffffff",
+      desktopHeight: inputData?.targetRequirements?.general?.desktopHeight || "60px",
+      mobileHeight: inputData?.targetRequirements?.general?.mobileHeight || "120px",
+      pageToApply: inputData?.targetRequirements?.general?.pageToApply || "",
+      querySelector: inputData?.targetRequirements?.general?.querySelector || "",
+      insertPosition: inputData?.targetRequirements?.general?.insertPosition || "beforeend",
+      additionalStyles: inputData?.targetRequirements?.general?.additionalStyles || "",
+      zIndex: inputData?.targetRequirements?.general?.zIndex || "999999",
+    },
+    carousel: {
+      loop: inputData?.targetRequirements?.carousel?.loop || "true",
+      autoplay: inputData?.targetRequirements?.carousel?.autoplay || "true",
+      autoplaySpeed: inputData?.targetRequirements?.carousel?.autoplaySpeed || "3",
+      slideSpeed: inputData?.targetRequirements?.carousel?.slideSpeed || "0.5",
+      swiperCustomCSS: inputData?.targetRequirements?.carousel?.swiperCustomCSS || "",
+    },
+    slides: inputData?.targetRequirements?.setSlides.items,
+    visual: {
+      fontFamily: inputData?.targetRequirements?.visual?.fontFamily || "'Arial', sans-serif",
+      borderRadius: inputData?.targetRequirements?.visual?.borderRadius || "0px",
+      boxShadow: inputData?.targetRequirements?.visual?.boxShadow || "none",
+      transition: inputData?.targetRequirements?.visual?.transition || "all 0.3s ease",
+    },
+  };
+
+  const carousel = config.carousel;
+  const slides = config.slides;
+  console.log(slides);
+
+  const styles = `
+    .experia-sliding-banner {
+      background-color: ${config.general.backgroundColor || "#FF6B6B"};
+      height: ${config.general.desktopHeight || "60px"};
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      ${config.general.additionalStyles || ""}
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+      ${config.carousel.swiperCustomCSS || ""}
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .experia-slide-content {
+      color: var(--slide-text-color, #FFFFFF);
+      font-size: var(--slide-font-size, 22px);
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      .experia-sliding-banner {
+        height: ${config.general.mobileHeight || "120px"};
+      }
+    }
+  `;
+
+  const jsCode = `
+    // Load Swiper from CDN
+    function loadSwiper() {
+      return new Promise((resolve, reject) => {
+        // Load CSS
+        const swiperCSS = document.createElement('link');
+        swiperCSS.rel = 'stylesheet';
+        swiperCSS.href = 'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css';
+        document.head.appendChild(swiperCSS);
+
+        // Load JS
+        const swiperScript = document.createElement('script');
+        swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js';
+        swiperScript.onload = resolve;
+        swiperScript.onerror = reject;
+        document.head.appendChild(swiperScript);
+      });
+    }
+
+    // Initialize banner after Swiper is loaded
+    async function initBanner() {
+      try {
+        await loadSwiper();
+        
+        // Create banner container
+        const bannerWrapper = document.createElement('div');
+        bannerWrapper.className = 'experia-sliding-banner';
+        
+        // Create Swiper container
+        const swiperContainer = document.createElement('div');
+        swiperContainer.className = 'swiper';
+        
+        const swiperWrapper = document.createElement('div');
+        swiperWrapper.className = 'swiper-wrapper';
+        
+        // Create slides
+        ${slides
+          .map(
+            (slide, index) => `
+          const slide${index} = document.createElement('div');
+          slide${index}.className = 'swiper-slide';
+          slide${index}.style.backgroundColor = '${slide.backgroundColor}';
+          
+          const content${index} = document.createElement('div');
+          content${index}.className = 'experia-slide-content';
+          content${index}.style.setProperty('--slide-text-color', '${slide.textColor}');
+          content${index}.style.setProperty('--slide-font-size', '${slide.fontSize}');
+          content${index}.textContent = '${slide.content}';
+          
+          slide${index}.appendChild(content${index});
+          swiperWrapper.appendChild(slide${index});`
+          )
+          .join("\n")}
+        
+        swiperContainer.appendChild(swiperWrapper);
+        bannerWrapper.appendChild(swiperContainer);
+        
+        // Find and inject into experia-inline container
+        const targetContainer = document.querySelector('#experia-inline');
+        if (targetContainer) {
+          targetContainer.appendChild(bannerWrapper);
+          
+          // Initialize Swiper with modified options based on slide count
+          new Swiper('.swiper', {
+            loop: ${slides.length > 1 ? carousel.loop : false},
+            autoplay: ${
+              carousel.autoplay && slides.length > 1
+                ? `{
+              delay: ${carousel.autoplaySpeed * 1000},
+              disableOnInteraction: false,
+            }`
+                : false
+            },
+            speed: ${carousel.slideSpeed * 1000},
+            // Disable interactions if only one slide
+            allowTouchMove: ${slides.length > 1},
+            simulateTouch: ${slides.length > 1}
+          });
+        }
+      } catch (error) {
+        console.error('Error initializing sliding banner:', error);
+      }
+    }
+
+    // Start initialization
+    initBanner();
+  `;
+
+  return JSON.stringify({
+    js: jsCode,
+    css: styles,
+    html: "",
+  });
+}
+
 export function FirePopup(basicInputsData) {
   const config = {
-    // General settings with defaults
     desktopWidth: basicInputsData.targetRequirements?.general?.desktopWidth || "600px",
     mobileWidth: basicInputsData.targetRequirements?.general?.mobileWidth || "320px",
     desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "400px",
     mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "500px",
-    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#FFFFFF",
+    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#ffffff",
     redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
-    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
-    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
-    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
 
-    // Text settings with defaults
-    titleText: basicInputsData.targetRequirements?.setText?.textContent || "Special Offer! 🎉",
+    // Text settings
+    titleText: basicInputsData.targetRequirements?.setText?.textContent || "",
     titleColor: basicInputsData.targetRequirements?.setText?.titleColor || "#000000",
-    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "Don't miss out on our amazing deals!",
-    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#333333",
-    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "Limited time offer",
-    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#666666",
+    bodyText: basicInputsData.targetRequirements?.setText?.textBody || "",
+    bodyColor: basicInputsData.targetRequirements?.setText?.bodyColor || "#000000",
 
-    // Campaign settings with defaults
-    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "WELCOME20",
+    // Campaign settings
+    campaignText: basicInputsData.targetRequirements?.setText?.campaignText || "",
+    campaignColor: basicInputsData.targetRequirements?.setText?.campaignColor || "#000000",
+    campaignCode: basicInputsData.targetRequirements?.setCampaignCode?.campaignCode || "",
     campaignCodeColor: basicInputsData.targetRequirements?.setCampaignCode?.campaignCodeColor || "#000000",
-    copyButtonText: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonText || "Copy Code",
-    copyButtonColor: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonColor || "#4ECDC4",
-    additionalCampaignTextSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCampaignTextSettings || "",
-    additionalCopyButtonSettings: basicInputsData.targetRequirements?.setCampaignCode?.additionalCopyButtonSettings || "",
+    copyButtonText: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonText || "Copy",
+    copyButtonColor: basicInputsData.targetRequirements?.setCampaignCode?.copyButtonColor || "#000000",
 
-    // Media settings with defaults
+    // Media settings
     desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
     mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
     video: basicInputsData.targetRequirements?.setVideo?.videoUrl || "",
 
-    // Countdown settings with defaults
+    // Countdown settings
     finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
-    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "middle",
   };
   // const iframeStore = useIframeStore();
   // let target = iframeStore.content.contentWindow.document;
@@ -319,296 +627,640 @@ export function FirePopup(basicInputsData) {
   });
 }
 
-export function FireBanner(basicInputsData) {
-  const config = {
-    // General settings with defaults
-    backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor || "#4ECDC4",
-    desktopHeight: basicInputsData.targetRequirements?.general?.desktopHeight || "60px",
-    mobileHeight: basicInputsData.targetRequirements?.general?.mobileHeight || "120px",
-    pageToApply: basicInputsData.targetRequirements?.general?.pageToApply || "",
-    redirectUrl: basicInputsData.targetRequirements?.general?.redirectUrl || "#",
-    querySelector: basicInputsData.targetRequirements?.general?.querySelector || "body",
-    insertPosition: basicInputsData.targetRequirements?.general?.insertPosition || "beforeend",
-    additionalStyles: basicInputsData.targetRequirements?.general?.additionalStyles || "",
-
-    // Text settings with defaults
-    textContent: basicInputsData.targetRequirements?.setText?.textContent || "Welcome to our store! 🎉",
-    textColor: basicInputsData.targetRequirements?.setText?.textColor || "#FFFFFF",
-    position: basicInputsData.targetRequirements?.setText?.position || "middle",
-    fontSize: basicInputsData.targetRequirements?.setText?.fontSize || "18px",
-    fontWeight: basicInputsData.targetRequirements?.setText?.fontWeight || "normal",
-
-    // Countdown settings with defaults
-    finishDate: basicInputsData.targetRequirements?.setCountdown?.finishDate || "",
-    countdownPosition: basicInputsData.targetRequirements?.setCountdown?.position || "right",
-    layout: basicInputsData.targetRequirements?.setCountdown?.layout || "inline",
-    format: basicInputsData.targetRequirements?.setCountdown?.format || "day-hour-minute",
-    showText: basicInputsData.targetRequirements?.setCountdown?.showText || "show",
-    countdownStyles: basicInputsData.targetRequirements?.setCountdown?.additionalStyles || "",
-
-    // Image settings with defaults
-    desktopImage: basicInputsData.targetRequirements?.setImage?.desktopImageUrl || "",
-    mobileImage: basicInputsData.targetRequirements?.setImage?.mobileImageUrl || "",
-  };
-
+export function FireExpandModal(input) {
   const jsCode = `
-    const bannerWrapper = document.createElement('div');
-    bannerWrapper.id = 'exp-banner-wrapper';
-
-    const bannerContainer = document.createElement('div');
-    bannerContainer.className = 'exp-banner-container';
-
-    const link = document.createElement('a');
-    link.href = '${config.redirectUrl}';
-    link.className = 'exp-banner-link';
-    link.style.color = '${config.textColor}';
-
-    if ('${config.textContent}') {
-      const text = document.createElement('span');
-      text.className = 'exp-banner-text';
-      text.textContent = '${config.textContent}';
-      text.style.color = '${config.textColor}';
-      text.style.fontSize = '${config.fontSize}';
-      text.style.fontWeight = '${config.fontWeight}';
-      link.appendChild(text);
-    }
-
-    if ('${config.finishDate}') {
-      const countdownContainer = document.createElement('div');
-      countdownContainer.className = 'exp-banner-countdown';
-      
-      const updateCountdown = () => {
-        const now = new Date().getTime();
-        const finishTime = new Date('${config.finishDate}').getTime();
-        const distance = finishTime - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        countdownContainer.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          countdownContainer.textContent = "EXPIRED";
+    // Utility functions
+    const utils = {
+      copyCoupon(coupon) {
+        if (!navigator.clipboard) {
+          const elem = document.createElement("textarea");
+          document.body.appendChild(elem);
+          elem.value = coupon;
+          elem.select();
+          document.execCommand("copy");
+          document.body.removeChild(elem);
+        } else {
+          navigator.clipboard.writeText(coupon);
         }
-      };
+      },
 
-      updateCountdown();
-      const countdownInterval = setInterval(updateCountdown, 1000);
-      link.appendChild(countdownContainer);
+      loadExternalResource(type, url) {
+        const element = document.createElement(type === "script" ? "script" : "link");
+        if (type === "script") {
+          element.src = url;
+        } else {
+          element.rel = "stylesheet";
+          element.href = url;
+        }
+        return new Promise((resolve) => {
+          element.onload = resolve;
+          document.head.appendChild(element);
+        });
+      },
+    };
+
+    // Get config settings directly from input
+    const config = {
+      general: {
+        desktopBreakpoint: 768,
+        sessionStorageKey: "exp-expanding-banner",
+        maxDisplayCount: 2,
+        reappearDelay: 15000,
+        logoUrl: "${input.targetRequirements.general.logoUrl}"
+      },
+      minBanner: {
+        swiperSettings: {
+          delay: ${parseInt(input.targetRequirements.setCarousel.delay)},
+          speed: ${parseInt(input.targetRequirements.setCarousel.speed)}
+        },
+        slides: ${JSON.stringify(
+          input.targetRequirements.setMinBanner.slides.map((slide) => ({
+            text: slide.content,
+            href: slide.redirectUrl || null,
+          }))
+        )}
+      },
+      maxBanner: {
+        banners: ${JSON.stringify(
+          input.targetRequirements.setMaxBanner.maxSlides.map((slide) => ({
+            type: "banner",
+            coupon: slide.couponCode,
+            desktopImg: slide.desktopImg,
+            mobileImg: slide.mobileImg,
+            href: slide.redirectUrl,
+          }))
+        )}
+      }
+    };
+
+    // Get config settings
+    const isDesktop = window.innerWidth > config.general.desktopBreakpoint;
+    let callCount = parseInt(sessionStorage.getItem(config.general.sessionStorageKey) || 0, 10);
+    let isOpened = false;
+
+    async function init() {
+      // Don't initialize if banner was previously clicked
+      if (sessionStorage.getItem("exp-banner-clicked") === "true") return;
+
+      await utils.loadExternalResource("css", "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css");
+      await initSwiper();
+      if (callCount < config.general.maxDisplayCount) {
+        setTimeout(() => initMinBar(), 500);
+      }
     }
 
-    bannerContainer.appendChild(link);
-    bannerWrapper.appendChild(bannerContainer);
-
-    const targetContainer = document.querySelector('#experia-inline');
-    if (targetContainer) {
-      targetContainer.appendChild(bannerWrapper);
-    }
-  `;
-
-  const styles = `
-    #exp-banner-wrapper {
-      width: 100%;
-      background-color: ${config.backgroundColor};
+    async function initSwiper() {
+      await Promise.all([
+        utils.loadExternalResource("script", "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"),
+        utils.loadExternalResource("css", "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css")
+      ]);
     }
 
-    #exp-banner-wrapper .exp-banner-container {
-      height: ${config.desktopHeight};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 20px;
-    }
+    function initMinBar() {
+      addActionStyles();
+      const minConfig = config.minBanner;
 
-    #exp-banner-wrapper .exp-banner-link {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      text-decoration: none;
-      width: 100%;
-      justify-content: center;
-    }
+      const minBarContainer = document.createElement("section");
+      minBarContainer.id = "min-bar-container";
+      minBarContainer.className = "exp-minbar-bg-animation";
 
-    #exp-banner-wrapper .exp-banner-countdown {
-      font-weight: bold;
-      color: ${config.textColor};
-    }
+      const minBar = document.createElement("div");
+      minBar.id = "exp-min-bar";
 
-    @media only screen and (max-width: 768px) {
-      #exp-banner-wrapper .exp-banner-container {
-        height: ${config.mobileHeight};
-        flex-direction: column;
-        padding: 15px;
+      let swiperHTML = "";
+      minConfig.slides.forEach((item) => {
+        swiperHTML += \`<div class="swiper-slide">\${item.href ? \`<a href="\${item.href}" target="_blank">\${item.text}</a>\` : item.text}
+        </div>\`;
+      });
+
+      minBar.innerHTML = \`
+        <span class="exp-min-bar_close">&#10005;</span>
+        <div class="exp-min-bar-swiper-container">
+          <div class="swiper-wrapper">\${swiperHTML}</div>
+        </div>
+      \`;
+
+      document.body.append(minBarContainer);
+      minBarContainer.append(minBar);
+
+      if (callCount > config.general.maxDisplayCount) {
+        minBarContainer.style.display = "none";
       }
 
-      #exp-banner-wrapper .exp-banner-link {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
+      const swiper = new Swiper(".exp-min-bar-swiper-container", {
+        direction: "vertical",
+        loop: true,
+        autoplay: {
+          delay: minConfig.swiperSettings.delay,
+          disableOnInteraction: false,
+        },
+        speed: minConfig.swiperSettings.speed,
+      });
+
+      minBar.addEventListener("click", handleMinBarClick);
+      minBar.querySelector(".exp-min-bar_close").addEventListener("click", handleMinBarClose);
+    }
+
+    function handleMinBarClick(e) {
+      if (!e.target.classList.contains("exp-min-bar_close")) {
+        if (e.target.href) {
+          window.location.href = e.target.href;
+        } else {
+          if (!isOpened) {
+            initMaxBar();
+          } else {
+            document.querySelector("#max-bar-container").style.display = "block";
+            isOpened = !isOpened;
+          }
+        }
       }
+    }
+
+    function handleMinBarClose(e) {
+      e.stopPropagation();
+      const minBar = document.querySelector("#min-bar-container");
+
+      minBar.classList.add("animate__animated", "animate__fadeOut");
+
+      minBar.addEventListener("animationend", () => {
+        minBar.style.display = "none";
+        callCount++;
+        sessionStorage.setItem(config.general.sessionStorageKey, callCount);
+
+        setTimeout(() => {
+          if (callCount < config.general.maxDisplayCount) {
+            minBar.classList.remove("animate__fadeOut");
+            minBar.classList.add("animate__fadeIn");
+            minBar.style.display = "unset";
+          }
+        }, config.general.reappearDelay);
+      });
+    }
+
+    function initMaxBar() {
+      document.body.style.overflowX = "hidden";
+      const maxBarContainer = document.createElement("section");
+      maxBarContainer.id = "max-bar-container";
+      maxBarContainer.innerHTML = \`<div class="exp-top-bar_up">
+        <img class="exp-max-bar_logo" src="\${config.general.logoUrl}" />
+        <span class="exp-max-bar_close exp-close-btn">&#10005;</span>
+      </div>\`;
+
+      const downPart = document.createElement("div");
+      downPart.className = "exp-max-bar_down";
+      downPart.innerHTML = generateMaxBannerHTML(config.maxBanner.banners);
+
+      maxBarContainer.append(downPart);
+      document.body.append(maxBarContainer);
+
+      downPart.addEventListener("click", handleMaxBarClick);
+      maxBarContainer.querySelector(".exp-max-bar_close").addEventListener("click", handleMaxBarClose);
+    }
+
+    function generateMaxBannerHTML(banners) {
+      return banners
+        .map((banner) => {
+          if (banner.type !== "banner") return "";
+
+          const imgTemplate = \`
+          <picture>
+            <source media="(max-width:\${config.general.desktopBreakpoint}px)" srcset="\${banner.mobileImg}">
+            <img class="exp-campaign-banner" src="\${banner.desktopImg}" alt="exp-campaign">
+          </picture>
+        \`;
+
+          if (banner.coupon && banner.href) {
+            return \`
+            <div class="exp-campaign-wrapper" data-coupon-code="\${banner.coupon}">
+              <a href="\${banner.href}">\${imgTemplate}</a>
+              <div class='exp-max-copy-btn'>Kopyala</div>
+            </div>
+          \`;
+          }
+
+          if (banner.coupon && !banner.href) {
+            return \`
+            <div class="exp-campaign-wrapper" data-coupon-code="\${banner.coupon}">
+              \${imgTemplate}
+              <div class='exp-max-copy-btn'>Kopyala</div>
+            </div>
+          \`;
+          }
+
+          if (!banner.coupon && banner.href) {
+            return \`
+            <div class="exp-campaign-wrapper">
+              <a href="\${banner.href}">\${imgTemplate}</a>
+            </div>
+          \`;
+          }
+
+          return \`
+          <div class="exp-campaign-wrapper">
+            \${imgTemplate}
+          </div>
+        \`;
+        })
+        .join("");
+    }
+
+    function handleMaxBarClick(e) {
+      const wrapper = e.target.closest(".exp-campaign-wrapper");
+      if (!wrapper) return;
+
+      if (e.target.classList.contains("exp-max-copy-btn")) {
+        const coupon = wrapper.dataset.couponCode;
+        utils.copyCoupon(coupon);
+        e.target.innerText = "Kopyalandı";
+      }
+
+      sessionStorage.setItem("exp-banner-clicked", "true");
+      handleMaxBarClose();
+    }
+
+    function handleMaxBarClose() {
+      const maxBar = document.querySelector("#max-bar-container");
+      const minBar = document.querySelector("#min-bar-container");
+
+      minBar.remove();
+      maxBar.classList.add("exp-slide-down-exit");
+
+      setTimeout(() => {
+        maxBar.remove();
+        document.body.style.overflowX = "hidden";
+      }, 2000);
+    }
+
+    function addActionStyles() {
+      const actionStyle = document.createElement("style");
+      actionStyle.innerHTML = \`
+        :root {
+          --main-color: ${input.targetRequirements.general.backgroundColor};
+          --theme-color: ${input.targetRequirements.general.backgroundColor};
+          --color: ${input.targetRequirements.general.backgroundColor2};
+        }
+
+        .scroll-to-top {
+          display: none !important;
+        }
+
+        #min-bar-container {
+          position: fixed !important;
+          bottom: -100px;
+          left: 50%;
+          cursor: pointer;
+          -webkit-transform: translateX(-50%);
+          -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+          z-index: 90;
+
+          -webkit-animation: relatedModalBanner 2s ease infinite, slideUpBanner 1s forwards;
+          -moz-animation: relatedModalBanner 2s ease infinite, slideUpBanner 1s forwards;
+          animation: relatedModalBanner 2s ease infinite, slideUpBanner 1s forwards;
+        }
+
+        @keyframes slideUpBanner {
+          from {
+            bottom: -100px;
+          }
+          to {
+            bottom: \${isDesktop ? "30px" : "60px"};
+          }
+        }
+
+        #exp-min-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          font-size: 14px;
+          overflow: hidden;
+          transition: all 0.3s linear;
+        }
+
+        .exp-min-bar_close {
+          cursor: pointer;
+          font-size: 15px;
+          left: 15px;
+          position: absolute;
+          z-index: 999999999;
+          padding: 15px;
+          color: var(--color);
+        }
+
+        .exp-min-bar-swiper-container {
+          height: 60px;
+        }
+
+        #sliding-text-content {
+          display: inline-block;
+          opacity: 0;
+        }
+
+        .slide-in {
+          animation: slideIn 300ms forwards;
+        }
+
+        .slide-out {
+          animation: slideOut 300ms forwards;
+        }
+
+        @keyframes slideIn {
+          0% {
+            transform: translateY(100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideOut {
+          0% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+        }
+
+        #exp-min-bar {
+          display: -webkit-box !important;
+          display: -ms-flexbox !important;
+          display: flex !important;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          height: 60px;
+          width: 471px;
+          font-size: 20px;
+          color: white;
+          border-radius: 35px;
+          user-select: none;
+
+          -webkit-animation: slideInUp;
+          -moz-animation: slideInUp;
+          -o-animation: slideInUp;
+          animation: slideInUp;
+          animation-duration: 300ms;
+        }
+
+        #max-bar-container {
+          padding: 20px 0px;
+          width: 100%;
+          height: 100%;
+          position: fixed;
+          z-index: 1000000;
+          background-color: white;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          align-items: center;
+          top: 0;
+          left: 0;
+
+          -webkit-animation: slideInUp;
+          -moz-animation: slideInUp;
+          -o-animation: slideInUp;
+          animation: slideInUp;
+          animation-duration: 1000ms;
+        }
+
+        #max-bar-container .exp-top-bar_up {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          height: 120px;
+          width: 100%;
+        }
+
+        #max-bar-container .exp-top-bar_up .exp-max-bar_close {
+          right: 1rem;
+          top: 2rem;
+          position: absolute;
+          font-size: 30px;
+          user-select: none;
+        }
+
+        #max-bar-container .exp-top-bar_up .exp-max-bar_logo {
+          width: 300px;
+          top: 40px;
+        }
+
+        #max-bar-container .exp-max-bar_down {
+          padding: 25px 15%;
+          box-sizing: border-box;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          justify-items: center;
+          max-width: calc(1220px + 30%);
+          position: relative;
+          column-gap: 1.5rem;
+          row-gap: 1.5rem;
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+          width: 0px;
+          background: transparent;
+        }
+
+        .exp-max-copy-btn {
+          position: absolute;
+          background: #000000;
+          color: #ebeaef;
+          bottom: 5px;
+          padding: 8px 16px;
+          border-radius: 5px;
+          cursor: pointer;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        #max-bar-container .exp-max-bar_down .exp-campaign-wrapper {
+          width: 600px;
+          position: relative;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: center;
+          -ms-flex-pack: center;
+          justify-content: center;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          height: 270px;
+        }
+
+        .exp-campaign-banner {
+          width: 100%;
+        }
+
+        .exp-min-bar-swiper-container {
+          position: relative;
+          width: 100%;
+          height: 60px;
+          overflow: hidden;
+        }
+
+        .exp-min-bar-swiper-container .swiper-wrapper {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .exp-min-bar-swiper-container .swiper-wrapper .swiper-slide {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+          flex-direction: column;
+          color:var(--color);
+        }
+
+        .exp-min-bar-swiper-container .swiper-wrapper .swiper-slide a {
+          text-decoration: none;
+          color: white;
+        }
+
+        .exp-minbar-bg-animation {
+          background: linear-gradient(270deg, var(--main-color), var(--theme-color));
+          background-size: 400% 400%;
+          border-radius: 35px;
+        }
+
+        @-webkit-keyframes relatedModalBanner {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @-moz-keyframes relatedModalBanner {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes relatedModalBanner {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1102px) {
+          #min-bar-container {
+            bottom: 60px;
+          }
+
+          #exp-min-bar {
+            border-radius: 15px 15px 0 0;
+          }
+        }
+
+        @media (max-width: 1228px) {
+          #max-bar-container .exp-max-bar_down {
+            max-width: calc(1025px + 30%);
+          }
+
+          #max-bar-container .exp-max-bar_down .exp-campaign-wrapper {
+            width: 500px;
+            height: 225px;
+          }
+
+          .exp-max-copy-btn {
+            bottom: 3px;
+          }
+        }
+
+        @media (max-width: 1024px) {
+          #max-bar-container .exp-max-bar_down {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 768px) {
+          #min-bar-container {
+            bottom: 60px;
+          }
+
+          #exp-min-bar {
+            width: 320px;
+            font-size: 18px;
+            border-radius: 15px 15px 0 0;
+          }
+
+          #exp-min-bar .exp-min-bar_close {
+            left: 20px;
+          }
+
+          #max-bar-container .exp-max-bar_down .exp-campaign-wrapper {
+            height: auto;
+          }
+
+          .sliding-text {
+            width: 66%;
+            text-align: center;
+            font-size: 80%;
+          }
+
+          #max-bar-container .exp-top-bar_up .exp-max-bar_logo {
+            width: 150px;
+          }
+
+          #max-bar-container .exp-top-bar_up .exp-max-bar_close {
+            font-size: 25px;
+            top: 3rem;
+          }
+
+          #max-bar-container .exp-top-bar_up {
+            height: 100px;
+          }
+
+          .exp-minbar-bg-animation {
+            border-radius: 15px 15px 0 0;
+          }
+        }
+
+        .exp-slide-down-exit {
+          transform: translateY(100%);
+          transition: all 1000ms ease-in;
+        }
+      \`;
+
+      document.head.append(actionStyle);
+    }
+
+    // Main execution
+    if (!document.querySelector("#min-bar-container")) {
+      init();
     }
   `;
 
   return JSON.stringify({
     js: jsCode,
-    css: styles,
+    css: "", // CSS is now handled within the JS through addActionStyles
     html: "",
   });
 }
-
-export function SlidingBanner(inputData) {
-  console.log("=== SlidingBanner Function Started ===");
-  const { targetRequirements } = inputData;
-  const general = targetRequirements.general || {};
-  const carousel = targetRequirements.setCarousel || {};
-  const slides = targetRequirements.setSlides?.slides || [];
-
-  // CSS including Swiper styles
-  const css = `
-    .experia-sliding-banner {
-      background-color: ${general.backgroundColor || "#FF6B6B"};
-      height: ${general.desktopHeight || "60px"};
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-      ${general.additionalStyles || ""}
-    }
-
-    .swiper {
-      width: 100%;
-      height: 100%;
-      ${carousel.swiperCustomCSS || ""}
-    }
-
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .experia-slide-content {
-      color: var(--slide-text-color, #FFFFFF);
-      font-size: var(--slide-font-size, 22px);
-      width: 100%;
-      padding: 0 20px;
-    }
-
-    @media (max-width: 768px) {
-      .experia-sliding-banner {
-        height: ${general.mobileHeight || "120px"};
-      }
-    }
-  `;
-
-  // JavaScript with Swiper initialization
-  const js = `
-    // Load Swiper CSS
-    const swiperCSS = document.createElement('link');
-    swiperCSS.rel = 'stylesheet';
-    swiperCSS.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
-    document.head.appendChild(swiperCSS);
-
-    // Load Swiper JS
-    const swiperScript = document.createElement('script');
-    swiperScript.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
-    document.head.appendChild(swiperScript);
-
-    swiperScript.onload = () => {
-      // Create banner structure
-      const bannerContainer = document.createElement('div');
-      bannerContainer.className = 'experia-sliding-banner';
-
-      const swiperContainer = document.createElement('div');
-      swiperContainer.className = 'swiper';
-
-      const swiperWrapper = document.createElement('div');
-      swiperWrapper.className = 'swiper-wrapper';
-
-      // Create slides
-      const slides = ${JSON.stringify(slides)};
-      slides.forEach((slide, index) => {
-        const slideDiv = document.createElement('div');
-        slideDiv.className = 'swiper-slide';
-        slideDiv.style.backgroundColor = slide.backgroundColor || '#4ECDC4';
-        if (slide.customCSS) {
-          slideDiv.style.cssText += slide.customCSS;
-        }
-
-        const content = document.createElement('div');
-        content.className = 'experia-slide-content';
-        content.textContent = slide.content || 'Slide ' + (index + 1);
-        content.style.setProperty('--slide-text-color', slide.textColor || '#FFFFFF');
-        content.style.setProperty('--slide-font-size', slide.fontSize || '22px');
-
-        if (slide.redirectUrl) {
-          const link = document.createElement('a');
-          link.href = slide.redirectUrl;
-          link.style.color = 'inherit';
-          link.style.textDecoration = 'none';
-          link.appendChild(content);
-          slideDiv.appendChild(link);
-        } else {
-          slideDiv.appendChild(content);
-        }
-
-        swiperWrapper.appendChild(slideDiv);
-      });
-
-      // Add navigation if enabled
-      if (${carousel.sliderButtons !== "false"}) {
-        const prevButton = document.createElement('div');
-        prevButton.className = 'swiper-button-prev';
-        const nextButton = document.createElement('div');
-        nextButton.className = 'swiper-button-next';
-        swiperContainer.appendChild(prevButton);
-        swiperContainer.appendChild(nextButton);
-      }
-
-      // Add pagination if enabled
-      if (${carousel.pagination !== "false"}) {
-        const pagination = document.createElement('div');
-        pagination.className = 'swiper-pagination';
-        swiperContainer.appendChild(pagination);
-      }
-
-      // Assemble the banner
-      swiperContainer.appendChild(swiperWrapper);
-      bannerContainer.appendChild(swiperContainer);
-
-      // Insert banner into DOM
-      const targetElement = document.querySelector('#experia-inline');
-      if (targetElement) {
-        targetElement.appendChild(bannerContainer);
-
-        // Initialize Swiper
-        new Swiper('.swiper', {
-          loop: ${carousel.loop !== "false"},
-          autoplay: ${carousel.autoplay !== "false"} ? {
-            delay: ${(parseFloat(carousel.autoplaySpeed) || 3) * 1000},
-            disableOnInteraction: false
-          } : false,
-          speed: ${(parseFloat(carousel.slideSpeed) || 0.5) * 1000},
-          navigation: ${carousel.sliderButtons !== "false"} ? {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          } : false,
-          pagination: ${carousel.pagination !== "false"} ? {
-            el: '.swiper-pagination',
-            clickable: true
-          } : false,
-          effect: '${carousel.effect || "slide"}',
-        });
-      }
-    };
-  `;
-
-  return JSON.stringify({ css, js });
-}
-
 export function fireFTW(basicInputsData) {
   // Parse promo codes directly from timeRanges
   let promoCodes = [];
@@ -1452,6 +2104,6 @@ export function fireFTW(basicInputsData) {
     js: jsCode,
     css: styles,
     html: "",
-    config: gameConfig,
+    // config: gameConfig,
   });
 }

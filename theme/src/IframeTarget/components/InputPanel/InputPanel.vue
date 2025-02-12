@@ -145,6 +145,10 @@ export default {
           image: "https://picsum.photos/50/50?random=4",
           description: "Build custom interactive experiences",
         },
+        "Expanding Modal": {
+          image: "https://picsum.photos/50/50?random=5",
+          description: "Create expandable modal experiences with carousel",
+        },
       },
     };
   },
