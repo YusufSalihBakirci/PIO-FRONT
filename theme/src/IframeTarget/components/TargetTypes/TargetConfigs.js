@@ -746,31 +746,43 @@ const TargetConfig = {
         },
         gameConfig: {
           description: "Game Configuration",
-          gridRows: {
-            type: "number",
-            value: 3,
-            description: "Number of rows in the game grid",
-          },
-          gridCols: {
-            type: "number",
-            value: 3,
-            description: "Number of columns in the game grid",
-          },
-          cardImages: {
-            type: "string",
-            value: "https://picsum.photos/100/100?random=1, https://picsum.photos/100/100?random=2, https://picsum.photos/100/100?random=3, https://picsum.photos/100/100?random=4",
-            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          gridSize: {
+            type: "select",
+            value: "3x3",
+            options: ["3x3 - Easy", "4x4 - Medium", "5x5 - Hard"],
+            description: "Size of the game grid. Depending on your choice, last one or two card images will be ignored",
           },
           backCardImage: {
             type: "url",
-            value: "https://imgvisilabsnet.azureedge.net/banner/uploaded_images/418_1455_20241209195350115.jpg",
+            value: "https://picsum.photos/100/100?random=6",
             description: "Image URL for card back",
           },
-          emptyCardImage: {
-            type: "url",
-            value: "https://static.thenounproject.com/png/4653780-200.png",
-            description: "Image URL for empty card",
+          cardImage1: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=1",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
           },
+          cardImage2: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=2",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+          cardImage4: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=3",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+          cardImage4: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=4",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+          cardImage5: {
+            type: "string",
+            value: "https://picsum.photos/100/100?random=5",
+            description: "Comma-separated URLs for card faces (using Lorem Picsum 100x100 random images)",
+          },
+
           backgroundImage: {
             type: "url",
             value: "https://voyagemaison.com/cdn/shop/files/BOWMONT_WPO_PHE_2.jpg?format=pjpg&v=1710155491&width=720",
@@ -786,7 +798,7 @@ const TargetConfig = {
           },
           backgroundImage: {
             type: "url",
-            value: "",
+            value: "https://voyagemaison.com/cdn/shop/files/BOWMONT_WPO_PHE_2.jpg?format=pjpg&v=1710155491&width=720",
             description: "Background image URL for start screen",
           },
           title: {
@@ -804,7 +816,7 @@ const TargetConfig = {
             value: "48px",
             description: "Title font size",
           },
-          description: {
+          descriptionofGame: {
             type: "string",
             value: "Match all pairs as quickly as possible to win bigger discounts!",
             description: "Description text for start screen",
@@ -837,15 +849,55 @@ const TargetConfig = {
         },
         promoCodes: {
           description: "Promo Code Settings",
-          timeRanges: {
+          promoCode1: {
             type: "string",
-            value: `[
-              {"minTime":0, "maxTime":5, "staticcode":"WIN100", "campaignText":"Congratulations! You've won a 100% discount!"},
-              {"minTime":6, "maxTime":15, "staticcode":"SAVE75", "campaignText":"Amazing! Enjoy 75% off!"},
-              {"minTime":16, "maxTime":25, "staticcode":"HALF50", "campaignText":"Great job! Get 50% off!"},
-              {"minTime":26, "maxTime":999, "staticcode":"QUICK25", "campaignText":"Nice work! Take 25% off!"}
-            ]`,
-            description: "Time-based promo codes",
+            value: "WIN100",
+            description: "First place promo code",
+          },
+          promoText1: {
+            type: "string",
+            value: "Congratulations! You've won a 100% discount!",
+            description: "Message for first place winner",
+          },
+          promoCode2: {
+            type: "string",
+            value: "SAVE75",
+            description: "Second place promo code",
+          },
+          promoText2: {
+            type: "string",
+            value: "Amazing! Enjoy 75% off!",
+            description: "Message for second place winner",
+          },
+          promoCode3: {
+            type: "string",
+            value: "HALF50",
+            description: "Third place promo code",
+          },
+          promoText3: {
+            type: "string",
+            value: "Great job! Get 50% off!",
+            description: "Message for third place winner",
+          },
+          promoCode4: {
+            type: "string",
+            value: "QUICK25",
+            description: "Fourth place promo code",
+          },
+          promoText4: {
+            type: "string",
+            value: "Nice work! Take 25% off!",
+            description: "Message for fourth place winner",
+          },
+          promoCode5: {
+            type: "string",
+            value: "EASY10",
+            description: "Fifth place promo code",
+          },
+          promoText5: {
+            type: "string",
+            value: "Congratulations! You've won a 10% discount!",
+            description: "Message for fifth place winner",
           },
         },
         visual: {
@@ -870,23 +922,12 @@ const TargetConfig = {
             value: "'Arial', sans-serif",
             description: "Custom font family",
           },
-          mobileFontSizes: {
-            type: "string",
-            value: `{
-              "timer": "32px",
-              "closeButton": "32px",
-              "title": "48px",
-              "description": "36px",
-              "button": "40px"
-            }`,
-            description: "JSON string of mobile font sizes",
-          },
         },
         sound: {
           description: "Sound Settings",
           enabled: {
             type: "select",
-            value: "true",
+            value: "false",
             options: ["true", "false"],
             description: "Enable game sounds",
           },

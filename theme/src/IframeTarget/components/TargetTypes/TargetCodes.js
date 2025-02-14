@@ -695,7 +695,7 @@ export function FireExpandModal(input) {
 
     // Get config settings
     const isDesktop = window.innerWidth > config.general.desktopBreakpoint;
-    let callCount = parseInt(sessionStorage.getItem(config.general.sessionStorageKey) || 0, 10);
+    let callCount = parseInt(sessionStorage.getItem(config.general.sessionStorageKey) || 0, 10;
     let isOpened = false;
 
     async function init() {
@@ -1261,30 +1261,18 @@ export function FireExpandModal(input) {
     html: "",
   });
 }
+
 export function fireFTW(basicInputsData) {
-  // Parse promo codes directly from timeRanges
-  let promoCodes = [];
-  try {
-    const timeRanges = basicInputsData.targetRequirements?.promoCodes?.timeRanges;
-    if (timeRanges) {
-      promoCodes = JSON.parse(timeRanges);
-      console.log("🎟 Parsed promo codes array:", promoCodes);
-    }
-  } catch (error) {
-    console.error("❌ Error parsing promo codes:", error);
-  }
+  // Calculate required number of unique images based on grid size
+  const gridSize = (basicInputsData.grid?.rows || 3) * (basicInputsData.grid?.cols || 3);
+  const requiredUniqueImages = Math.floor(gridSize / 2); // Since each image needs a pair
 
-  // Get card images from config
-  const defaultCardImages = "https://picsum.photos/100/100?random=1, https://picsum.photos/100/100?random=2, https://picsum.photos/100/100?random=3, https://picsum.photos/100/100?random=4";
-  const cardImagesStr = basicInputsData.targetRequirements?.gameConfig?.cardImages?.value || defaultCardImages;
-  console.log("🃏 Card Images Input:", cardImagesStr);
+  // Separate the first image for card back and take required number of images for card faces
+  const cardImages = basicInputsData.cards?.images || [];
+  const [backImage, ...remainingImages] = cardImages;
+  const selectedImages = remainingImages.slice(0, requiredUniqueImages);
 
-  const cardImages = cardImagesStr
-    .split(",")
-    .map((url) => url.trim())
-    .filter((url) => url.length > 0);
-  console.log("🃏 Processed Card Images:", cardImages);
-
+  // Create game config from the new input structure
   const gameConfig = {
     dimensions: {
       height: window.innerHeight,
@@ -1293,83 +1281,80 @@ export function fireFTW(basicInputsData) {
       gameAreaHeight: window.innerWidth <= 768 ? 450 : 500,
     },
     timing: {
-      clickableDuration: 1000,
-      gameDuration: parseInt(basicInputsData.targetRequirements?.general?.gameDuration?.value) || 60,
-      cardFlipDuration: 300,
+      clickableDuration: basicInputsData.timing?.clickableDuration || 1000,
+      gameDuration: parseInt(basicInputsData.timing?.gameDuration || 60),
+      cardFlipDuration: basicInputsData.timing?.cardFlipDuration || 300,
     },
     grid: {
-      rows: parseInt(basicInputsData.targetRequirements?.gameConfig?.gridRows?.value) || 3,
-      cols: parseInt(basicInputsData.targetRequirements?.gameConfig?.gridCols?.value) || 3,
-      cardMargin: 10,
+      rows: basicInputsData.grid?.rows || 3,
+      cols: basicInputsData.grid?.cols || 3,
+      cardMargin: basicInputsData.grid?.cardMargin || 10,
     },
     cards: {
-      images: cardImages,
-      backImage: basicInputsData.targetRequirements?.gameConfig?.backCardImage?.value || "https://imgvisilabsnet.azureedge.net/banner/uploaded_images/418_1455_20241209195350115.jpg",
-      emptyImage: basicInputsData.targetRequirements?.gameConfig?.emptyCardImage?.value || "https://static.thenounproject.com/png/4653780-200.png",
+      images: selectedImages,
+      backImage: backImage || basicInputsData.cards?.backImage,
+      emptyImage: basicInputsData.cards?.emptyImage,
       idPrefix: "card-",
-      defaultBackfaceColor: "#383838",
-      emptyBackfaceColor: "transparent",
-      emptyFrontColor: "transparent",
+      defaultBackfaceColor: basicInputsData.cards?.defaultBackfaceColor,
+      emptyBackfaceColor: basicInputsData.cards?.emptyBackfaceColor,
+      emptyFrontColor: basicInputsData.cards?.emptyFrontColor,
     },
     visual: {
-      bgImage: basicInputsData.targetRequirements?.gameConfig?.backgroundImage?.value,
-      bgColor: basicInputsData.targetRequirements?.general?.backgroundColor?.value || "#000000",
-      fontColor: "white",
-      fontName: basicInputsData.targetRequirements?.visual?.fontFamily?.value || "'Arial', sans-serif",
-      borderRadius: basicInputsData.targetRequirements?.visual?.cardBorderRadius?.value || "10px",
-      scoreBoardRadius: basicInputsData.targetRequirements?.visual?.scoreBoardRadius?.value || "5px",
-      closeButtonColor: basicInputsData.targetRequirements?.visual?.closeButtonColor?.value || "black",
+      bgColor: basicInputsData.visual?.bgColor,
+      fontColor: basicInputsData.visual?.fontColor,
+      fontName: basicInputsData.visual?.fontFamily,
+      borderRadius: basicInputsData.visual?.borderRadius,
+      scoreBoardRadius: basicInputsData.visual?.scoreBoardRadius,
+      closeButtonColor: basicInputsData.visual?.closeButtonColor,
     },
     screens: {
       start: {
         title: {
-          text: basicInputsData.targetRequirements?.startScreen?.title?.value || "Memory Match Challenge",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.titleFontSize?.value || "32px",
-          color: basicInputsData.targetRequirements?.startScreen?.titleColor?.value || "#ffffff",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.titleFontSize?.value || "48px",
+          text: basicInputsData.screens?.start?.title?.text,
+          fontSize: basicInputsData.screens?.start?.title?.fontSize,
+          color: basicInputsData.screens?.start?.title?.color,
         },
         description: {
-          text: basicInputsData.targetRequirements?.startScreen?.description?.value || "Match all pairs as quickly as possible to win bigger discounts!",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.descriptionFontSize?.value || "18px",
-          color: basicInputsData.targetRequirements?.startScreen?.descriptionColor?.value || "#ffffff",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.descriptionFontSize?.value || "24px",
+          text: basicInputsData.screens?.start?.description?.text,
+          fontSize: basicInputsData.screens?.start?.description?.fontSize,
+          color: basicInputsData.screens?.start?.description?.color,
         },
         button: {
-          text: basicInputsData.targetRequirements?.startScreen?.buttonText?.value || "START GAME",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.buttonFontSize?.value || "24px",
-          color: "#ffffff",
-          backgroundColor: basicInputsData.targetRequirements?.startScreen?.buttonColor?.value || "#1ec4d2",
-          fontSize: basicInputsData.targetRequirements?.startScreen?.buttonFontSize?.value || "24px",
+          text: basicInputsData.screens?.start?.button?.text,
+          fontSize: basicInputsData.screens?.start?.button?.fontSize,
+          color: basicInputsData.screens?.start?.button?.color,
+          backgroundColor: basicInputsData.screens?.start?.button?.backgroundColor,
         },
       },
       game: {
         scoreboard: {
-          fontColor: "#ffffff",
-          fontSize: "24px",
+          fontColor: basicInputsData.screens?.game?.scoreboard?.fontColor,
+          fontSize: basicInputsData.screens?.game?.scoreboard?.fontSize,
         },
       },
     },
     styles: {
-      backgroundColor: basicInputsData.targetRequirements?.general?.backgroundColor?.value,
-      backgroundImage: basicInputsData.targetRequirements?.gameConfig?.backgroundImage?.value,
-      zIndex: basicInputsData.targetRequirements?.general?.zIndex?.value || "999999",
-      fontFamily: basicInputsData.targetRequirements?.visual?.fontFamily?.value || "'Arial', sans-serif",
+      zIndex: basicInputsData.styles?.zIndex,
+      fontFamily: basicInputsData.styles?.fontFamily,
     },
-    promoCodes: promoCodes,
+    promoCodes: basicInputsData.promoCodes || [],
   };
 
   console.log("⚙️ Final Game Config:", gameConfig);
+  console.log("⏱ Game Duration:", gameConfig.timing.gameDuration, "seconds");
   console.log("🎟 Final Promo Codes in config:", gameConfig.promoCodes);
+  console.log("🎴 Card Back Image:", backImage);
+  console.log("🖼 Selected Images for grid size:", selectedImages.length * 2, "cards:", selectedImages);
 
   const styles = `
     /* Common styles for header elements */
     .exp-header-element {
-      font-family: monospace;
+      font-family: ${gameConfig.styles.fontFamily};
       font-weight: bold;
       text-align: center;
       background: rgba(128, 128, 128, 0.5);
-      border-radius: 5px;
-      color: white;
+      border-radius: ${gameConfig.visual.scoreBoardRadius};
+      color: ${gameConfig.visual.fontColor};
       user-select: none;
     }
 
@@ -1381,7 +1366,7 @@ export function fireFTW(basicInputsData) {
       display: flex;
       justify-content: space-between;
       padding: 0 20px;
-      z-index: 1000;
+      z-index: ${gameConfig.styles.zIndex};
     }
 
     #exp-memory-game {
@@ -1390,7 +1375,7 @@ export function fireFTW(basicInputsData) {
       position: fixed;
       top: 0;
       left: 0;
-      background-color: ${basicInputsData.targetRequirements?.general?.backgroundColor?.value || "#000000a3"};
+      background-color: ${gameConfig.visual.bgColor}a3;
       z-index: ${gameConfig.styles.zIndex};
       font-family: ${gameConfig.styles.fontFamily};
     }
@@ -1398,23 +1383,23 @@ export function fireFTW(basicInputsData) {
     /* Base styles */
     #exp-count-down,
     #exp-close-button {
-      font-family: monospace;
+      font-family: ${gameConfig.styles.fontFamily};
       font-weight: bold;
       text-align: center;
       min-width: 90px;
-      background-color: ${basicInputsData.targetRequirements?.startScreen?.backgroundColor?.value || "#000000"};
+      background-color: ${gameConfig.visual.closeButtonColor};
       padding: 15px;
-      border-radius: 5px;
-      color: white;
-      font-size: 16px;
+      border-radius: ${gameConfig.visual.borderRadius};
+      color: ${gameConfig.visual.fontColor};
+      font-size: ${gameConfig.screens.game.scoreboard.fontSize};
     }
 
     /* Mobile styles with !important to ensure they're applied */
     @media screen and (max-width: 768px) {
       #exp-count-down,
       #exp-close-button {
-        font-size: 8vw !important;  /* Direct viewport-based sizing */
-        min-width: 30vw !important; /* Width based on viewport */
+        font-size: 8vw !important;
+        min-width: 30vw !important;
         padding: 3vw !important;
       }
 
@@ -1586,6 +1571,45 @@ export function fireFTW(basicInputsData) {
     console.log("🎮 Game Initialization Starting");
     const gameConfig = ${JSON.stringify(gameConfig)};
     console.log("⚙️ Game Config in Runtime:", gameConfig);
+    
+    function calculateFontSize(type) {
+      const width = window.innerWidth;
+      
+      if (width <= 375) { // Extra small devices
+        switch(type) {
+          case 'title': return '8vw';
+          case 'description': return '5vw';
+          case 'button': return '6vw';
+          case 'timer': return '6vw';
+          default: return '4vw';
+        }
+      } else if (width <= 576) { // Small devices
+        switch(type) {
+          case 'title': return '7vw';
+          case 'description': return '4vw';
+          case 'button': return '5vw';
+          case 'timer': return '5vw';
+          default: return '3.5vw';
+        }
+      } else if (width <= 768) { // Medium devices
+        switch(type) {
+          case 'title': return '6vw';
+          case 'description': return '3.5vw';
+          case 'button': return '4vw';
+          case 'timer': return '4vw';
+          default: return '3vw';
+        }
+      } else { // Desktop
+        switch(type) {
+          case 'title': return gameConfig.screens.start.title.fontSize;
+          case 'description': return gameConfig.screens.start.description.fontSize;
+          case 'button': return gameConfig.screens.start.button.fontSize;
+          case 'timer': return gameConfig.screens.game.scoreboard.fontSize;
+          default: return '16px';
+        }
+      }
+    }
+
     const gameState = {
       score: 100,
       timeInterval: null,
@@ -1648,7 +1672,7 @@ export function fireFTW(basicInputsData) {
       timer.className = "exp-header-element";
       timer.style.minWidth = window.innerWidth <= 768 ? "150px" : "90px";
       timer.style.padding = window.innerWidth <= 768 ? "25px" : "15px";
-      timer.style.fontSize = calculateFontSize(16);
+      timer.style.fontSize = calculateFontSize('timer');
 
       const duration = parseInt(gameConfig.timing.gameDuration);
       const minutes = Math.floor(duration / 60);
@@ -1666,14 +1690,6 @@ export function fireFTW(basicInputsData) {
         targetContainer.appendChild(gameState.mainComponent);
       }
 
-      const calculateFontSize = (baseSize) => {
-        const width = window.innerWidth;
-        if (width <= 768) {
-          return \`\${baseSize * 2}px\`;
-        }
-        return \`\${baseSize}px\`;
-      };
-
       const headerContainer = createDiv({
         id: "exp-header-container"
       });
@@ -1684,7 +1700,7 @@ export function fireFTW(basicInputsData) {
       timer.className = "exp-header-element";
       timer.style.minWidth = window.innerWidth <= 768 ? "150px" : "90px";
       timer.style.padding = window.innerWidth <= 768 ? "25px" : "15px";
-      timer.style.fontSize = calculateFontSize(16);
+      timer.style.fontSize = calculateFontSize('timer');
 
       const duration = parseInt(gameConfig.timing.gameDuration);
       const minutes = Math.floor(duration / 60);
@@ -1698,7 +1714,7 @@ export function fireFTW(basicInputsData) {
         styles: {
           minWidth: window.innerWidth <= 768 ? "150px" : "90px",
           padding: window.innerWidth <= 768 ? "25px" : "15px",
-          fontSize: calculateFontSize(16),
+          fontSize: calculateFontSize('closeButton'),
           cursor: "pointer"
         }
       });
@@ -1716,7 +1732,7 @@ export function fireFTW(basicInputsData) {
         const isMobile = window.innerWidth <= 768;
         const newWidth = isMobile ? "150px" : "90px";
         const newPadding = isMobile ? "25px" : "15px";
-        const newFontSize = calculateFontSize(16);
+        const newFontSize = calculateFontSize('timer');
 
         timer.style.minWidth = newWidth;
         timer.style.padding = newPadding;
@@ -1724,7 +1740,7 @@ export function fireFTW(basicInputsData) {
         
         closeButton.style.minWidth = newWidth;
         closeButton.style.padding = newPadding;
-        closeButton.style.fontSize = newFontSize;
+        closeButton.style.fontSize = calculateFontSize('closeButton');
       });
 
       headerContainer.appendChild(timer);
@@ -1761,7 +1777,7 @@ export function fireFTW(basicInputsData) {
       title.id = "exp-start-title";
       title.innerText = gameConfig.screens.start.title.text;
       title.style.color = gameConfig.screens.start.title.color;
-      title.style.fontSize = gameConfig.screens.start.title.fontSize;
+      title.style.fontSize = calculateFontSize('title');
       container.appendChild(title);
 
       // Create description
@@ -1769,14 +1785,14 @@ export function fireFTW(basicInputsData) {
       description.id = "exp-start-description";
       description.innerText = gameConfig.screens.start.description.text;
       description.style.color = gameConfig.screens.start.description.color;
-      description.style.fontSize = gameConfig.screens.start.description.fontSize;
+      description.style.fontSize = calculateFontSize('description');
       container.appendChild(description);
 
       // Update start button click handler
       const startButton = document.createElement("button");
       startButton.id = "exp-start-button";
       startButton.innerText = gameConfig.screens.start.button.text;
-      startButton.style.fontSize = gameConfig.screens.start.button.fontSize;
+      startButton.style.fontSize = calculateFontSize('button');
       startButton.style.color = gameConfig.screens.start.button.color;
       startButton.style.backgroundColor = gameConfig.screens.start.button.backgroundColor;
       startButton.addEventListener("click", () => {
@@ -2104,6 +2120,5 @@ export function fireFTW(basicInputsData) {
     js: jsCode,
     css: styles,
     html: "",
-    // config: gameConfig,
   });
 }

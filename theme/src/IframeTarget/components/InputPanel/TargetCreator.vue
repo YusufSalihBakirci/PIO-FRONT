@@ -1,12 +1,12 @@
 <template>
-  <div v-if="steps.length > 0" :key="selectedTarget.id" :data-id="dataId" :class="styles.container">
-    <div :class="styles.spaceY">
-      <div v-for="(step, index) in steps" :key="index" :class="styles.stepContainer">
-        <div :class="styles.headerContainer" @click="toggleStep(index)">
-          <h3 :class="styles.headerTitle">
+  <div v-if="steps.length > 0" :key="selectedTarget.id" :data-id="dataId" :class="StyleClasses.container">
+    <div :class="StyleClasses.spaceY">
+      <div v-for="(step, index) in steps" :key="index" :class="StyleClasses.stepContainer">
+        <div :class="StyleClasses.headerContainer" @click="toggleStep(index)">
+          <h3 :class="StyleClasses.headerTitle">
             {{ step.title || step.description }}
           </h3>
-          <svg :class="[styles.iconBase, 'transition-transform duration-200 text-gray-600', { [styles.rotate180]: activeStep === index }]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" v-html="svgs.chevronDown"></svg>
+          <svg :class="[StyleClasses.iconBase, 'transition-transform duration-200 text-gray-600', { [StyleClasses.rotate180]: activeStep === index }]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" v-html="svgs.uiIcons.chevronDown"></svg>
         </div>
 
         <div v-show="activeStep === index" class="p-4 border-t bg-white">
@@ -29,7 +29,7 @@
                 </div>
 
                 <div v-show="activeSlide === slideIndex" class="p-4 bg-white">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="grid grid-cols-1 gap-6">
                     <div v-for="(field, key) in step.fields.slides.slideConfig" :key="key" class="form-group">
                       <label :for="`slide-${slideIndex}-${key}`" class="block text-sm font-medium text-gray-700 mb-2">
                         {{ field.description }}
@@ -95,7 +95,7 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <template v-for="(field, key) in step.fields" :key="key">
                   <!-- Regular fields -->
-                  <div :class="['form-group', key === 'swiperCustomCSS' ? 'md:col-span-2' : '']">
+                  <div :class="['form-group', key === 'swiperCustomCSS' ? 'md:col-span-2' : '', field.type === 'array' ? 'col-span-full' : '', field.type === 'textarea' ? 'md:col-span-2' : '']">
                     <label :for="key" class="block text-sm font-medium text-gray-700 mb-1">
                       {{ field.description || key }}
                     </label>
@@ -159,8 +159,74 @@
                       <CodeEditor v-model="field.value" @run-code="handleCodeRun" :readOnly="false" />
                     </template>
 
+                    <template v-else-if="field.type === 'array'">
+                      <div class="space-y-4 w-full">
+                        <div v-for="(item, itemIndex) in field.value" :key="itemIndex" class="border border-gray-200 rounded-lg w-full">
+                          <div class="flex justify-between items-center p-4 bg-gray-50 cursor-pointer" @click="toggleArrayItem(key, itemIndex)">
+                            <h4 class="font-medium">Item {{ itemIndex + 1 }}</h4>
+                            <div class="flex items-center space-x-2">
+                              <button @click.stop="removeArrayItem(step.key, key, itemIndex)" class="text-red-500 hover:text-red-700">
+                                <span class="sr-only">Remove Item</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                              <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': activeArrayItems[`${key}-${itemIndex}`] }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                              </svg>
+                            </div>
+                          </div>
+
+                          <div v-show="activeArrayItems[`${key}-${itemIndex}`]" class="p-4">
+                            <div class="grid grid-cols-1 gap-4 w-full">
+                              <template v-for="(config, propKey) in field.slideConfig" :key="propKey">
+                                <div class="form-group w-full">
+                                  <label :for="`${key}-${itemIndex}-${propKey}`" class="block text-sm font-medium text-gray-700 mb-2 w-full">
+                                    {{ config.description }}
+                                  </label>
+
+                                  <template v-if="config.type === 'select'">
+                                    <select :id="`${key}-${itemIndex}-${propKey}`" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md" :value="item[propKey]" @change="(e) => updateArrayItemField(step.key, key, itemIndex, propKey, e.target.value)">
+                                      <option v-for="option in config.options" :key="option" :value="option">
+                                        {{ option }}
+                                      </option>
+                                    </select>
+                                  </template>
+
+                                  <template v-else-if="config.type === 'color'">
+                                    <div class="relative w-full">
+                                      <div class="color-picker-trigger flex items-center p-3 border border-gray-300 rounded-lg bg-white shadow-md cursor-pointer w-full" @click="() => toggleColorPicker(`${key}-${itemIndex}-${propKey}`)">
+                                        <div class="w-6 h-6 rounded-full border-2 border-white shadow-sm mr-3" :style="{ backgroundColor: item[propKey] || '#ffffff' }"></div>
+                                        <span class="text-gray-700 flex-1">{{ item[propKey] || "#ffffff" }}</span>
+                                      </div>
+                                      <input type="color" :id="`${key}-${itemIndex}-${propKey}`" :value="item[propKey]" @input="(e) => updateArrayItemField(step.key, key, itemIndex, propKey, e.target.value)" class="sr-only" />
+                                    </div>
+                                  </template>
+
+                                  <template v-else-if="config.type === 'textarea'">
+                                    <textarea :id="`${key}-${itemIndex}-${propKey}`" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md min-h-[100px] resize-y" :value="item[propKey]" @input="(e) => updateArrayItemField(step.key, key, itemIndex, propKey, e.target.value)"></textarea>
+                                  </template>
+
+                                  <template v-else>
+                                    <input :type="config.type === 'number' ? 'number' : 'text'" :id="`${key}-${itemIndex}-${propKey}`" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md" :value="item[propKey]" @input="(e) => updateArrayItemField(step.key, key, itemIndex, propKey, e.target.value)" />
+                                  </template>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button @click="addArrayItem(step.key, key)" class="w-full px-6 py-2.5 bg-[#308e87] text-white rounded-lg hover:bg-[#277571] transition-colors duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                          Add Item
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    </template>
+
                     <template v-else>
-                      <input type="text" class="w-full p-3 border border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent" :name="key" :id="key" :value="field.value" @input="(e) => handleInputChange(step.key + '.' + key, e.target.value)" />
+                      <input type="text" :class="StyleClasses.input" :name="key" :id="key" :value="field.value" @input="(e) => handleInputChange(step.key + '.' + key, e.target.value)" />
                     </template>
                   </div>
                 </template>
@@ -171,25 +237,27 @@
       </div>
     </div>
 
-    <div :class="styles.footer">
-      <button :class="styles.button" @click="onPreview">
+    <div :class="StyleClasses.footer">
+      <button :class="StyleClasses.button" @click="onPreview">
         Preview
-        <svg :class="styles.iconBase" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" v-html="svgs.eye"></svg>
+        <svg :class="StyleClasses.iconBase" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" v-html="svgs.inputIcons.eye"></svg>
       </button>
     </div>
   </div>
-  <div v-else class="bg-white p-6 rounded-lg shadow-lg">
-    <p class="text-gray-500 text-center">Lütfen bir hedef seçin</p>
+  <div v-else :class="StyleClasses.container">
+    <p :class="StyleClasses.emptyState">Lütfen bir hedef seçin</p>
   </div>
 </template>
 
 <script>
 import { reactive, watch, ref, computed } from "vue";
 import { useIframeStore } from "../../iframeStore";
-import { FireBanner, FirePopup, fireFTW, SlidingBanner } from "../TargetTypes/TargetCodes";
+import { FireBanner, FirePopup, fireFTW, SlidingBanner, FireExpandModal } from "../TargetTypes/TargetCodes";
 import { pageReader, highligthSelection } from "../AuxJS/PageReader";
 import CodeEditor from "./CodeEditor.vue";
 import { usePreviewStore } from "../../store/previewStore";
+import { StyleClasses } from "../AuxJS/StyleClasses";
+import { deviceIcons, uiIcons, inputIcons } from "../AuxJS/SvgVectors";
 
 export default {
   components: {
@@ -205,77 +273,61 @@ export default {
     },
     isInline: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     dataId: {
-      type: Number,
-      required: true,
+      type: [String, Number],
+      default: 0,
     },
   },
 
   setup(props, { emit }) {
-    let insertPositions = ref([]);
-    const selectedPosition = ref("");
-    const selectedRelativePosition = ref("");
-    const activeStep = ref(null);
-    const iframeStore = useIframeStore();
     const previewStore = usePreviewStore();
-    const slides = ref([
-      {
-        content: "Welcome to our store!",
-        textColor: "#000000",
-        position: "middle",
-        fontSize: "18px",
-        redirectUrl: "",
-        finishDate: "",
-        layout: "inline",
-        format: "day-hour-minute",
-        showText: "show",
-        backgroundColor: "#4ECDC4",
-        customCSS: "",
-      },
-      {
-        content: "Check out our latest offers",
-        textColor: "#000000",
-        position: "middle",
-        fontSize: "18px",
-        redirectUrl: "",
-        finishDate: "",
-        layout: "inline",
-        format: "day-hour-minute",
-        showText: "show",
-        backgroundColor: "#45B7D1",
-        customCSS: "",
-      },
-    ]);
+    const activeStep = ref(null);
     const activeSlide = ref(null);
+    const slides = ref([]);
+    const selectedPosition = ref(null);
+    const selectedRelativePosition = ref(null);
+    const insertPositions = ref([]);
+
+    // Proxy request object
+    const proxyReq = reactive({
+      targetRequirements: {},
+    });
+
+    // Get requirements from target
+    const getRequirements = () => {
+      const requirements = {};
+      if (props.selectedTarget?.TargetRequire) {
+        Object.entries(props.selectedTarget.TargetRequire).forEach(([group, fields]) => {
+          requirements[group] = {};
+          Object.entries(fields).forEach(([field, config]) => {
+            if (field !== "description") {
+              requirements[group][field] = config.value;
+            }
+          });
+        });
+      }
+      return requirements;
+    };
+
+    // Steps computed property
+    const steps = computed(() => {
+      const reqs = props.selectedTarget?.TargetRequire || {};
+      return Object.entries(reqs)
+        .filter(([_, groupValue]) => typeof groupValue === "object" && groupValue.description)
+        .map(([groupKey, groupValue]) => ({
+          key: groupKey,
+          title: groupValue.description,
+          fields: Object.fromEntries(Object.entries(groupValue).filter(([key]) => key !== "description")),
+        }));
+    });
 
     const onSelectPosition = () => {
       return true;
       // bu alan faz2 de iframe içerisinde eklenecek alanı highlight etmek için kullanılacak.
       // highligthSelection(iframeStore.content, selectedPosition.value);
     };
-
-    const getRequirements = () => {
-      if (!props.selectedTarget?.TargetRequire) return {};
-
-      const requirements = {};
-      Object.entries(props.selectedTarget.TargetRequire).forEach(([groupKey, groupValue]) => {
-        if (typeof groupValue === "object") {
-          requirements[groupKey] = {};
-          Object.entries(groupValue).forEach(([fieldKey, fieldValue]) => {
-            if (fieldKey !== "description") {
-              requirements[groupKey][fieldKey] = fieldValue.value || "";
-            }
-          });
-        }
-      });
-      return requirements;
-    };
-
-    const proxyReq = reactive({
-      targetRequirements: getRequirements(),
-    });
 
     const handleInputChange = (key, value) => {
       const [group, field] = key.split(".");
@@ -285,70 +337,42 @@ export default {
     };
 
     const onPreview = () => {
-      const targetType = props.selectedTarget.type.toLowerCase();
-      const subOption = props.selectedTarget.subOption?.toLowerCase();
+      let targetCode;
 
-      // Create input data object with all necessary configurations
-      const inputData = {
-        targetType: subOption,
-        targetRequirements: {
-          ...proxyReq.targetRequirements,
-          setSlides: {
-            ...proxyReq.targetRequirements.setSlides,
-            slides: slides.value, // Include current slides data
-          },
-        },
-        selectedPosition: selectedPosition.value,
-        selectedRelativePosition: selectedRelativePosition.value,
-      };
+      switch (props.selectedTarget.id) {
+        // Inline Targets (1000-1999)
+        case 1000:
+          targetCode = FireBanner(proxyReq);
+          break;
+        case 1001:
+          targetCode = SlidingBanner(proxyReq);
+          break;
 
-      let previewContent;
+        // External Targets (2000-2999)
+        case 2000:
+          targetCode = FirePopup(proxyReq);
+          break;
+        case 2001: // Expanding Modal ID
+          console.log("Firing Expand Modal with data:", proxyReq);
+          targetCode = FireExpandModal(proxyReq);
+          break;
 
-      // Generate the appropriate target code based on type and subOption
-      if (targetType === "inline target") {
-        if (subOption === "sliding banner") {
-          previewContent = SlidingBanner(inputData);
-        } else {
-          previewContent = FireBanner(inputData);
-        }
-      } else if (targetType === "external target") {
-        previewContent = FirePopup(inputData);
-      } else if (targetType === "gamification") {
-        previewContent = fireFTW(inputData);
+        // Gamification Targets (3000-3999)
+        case 3000:
+          targetCode = fireFTW(proxyReq);
+          break;
+
+        default:
+          console.error("Unknown target type:", props.selectedTarget.id);
+          return;
       }
 
-      // Store the target type in previewStore
-      previewStore.setTargetType(subOption);
-
-      // Emit the preview content
-      emit("update-preview", previewContent);
+      if (targetCode) {
+        console.log("Generated target code:", targetCode);
+        previewStore.setPreviewContent(JSON.parse(targetCode));
+        emit("update-preview", targetCode);
+      }
     };
-
-    const steps = computed(() => {
-      const reqs = props.selectedTarget?.TargetRequire || {};
-      const stepArray = [];
-
-      if (reqs) {
-        Object.entries(reqs).forEach(([groupKey, groupValue]) => {
-          if (typeof groupValue === "object" && groupValue.description) {
-            const fields = {};
-            Object.entries(groupValue).forEach(([key, value]) => {
-              if (key !== "description") {
-                fields[key] = value;
-              }
-            });
-
-            stepArray.push({
-              key: groupKey,
-              title: groupValue.description,
-              fields: fields,
-            });
-          }
-        });
-      }
-
-      return stepArray;
-    });
 
     watch(
       () => props.selectedTarget,
@@ -454,7 +478,54 @@ export default {
       emit("update-preview", requirements);
     };
 
+    const activeArrayItems = ref({});
+
+    const toggleArrayItem = (fieldKey, itemIndex) => {
+      const key = `${fieldKey}-${itemIndex}`;
+      activeArrayItems.value[key] = !activeArrayItems.value[key];
+    };
+
+    // Expand newly added items automatically
+    const addArrayItem = (groupKey, fieldKey) => {
+      const field = props.selectedTarget.TargetRequire[groupKey][fieldKey];
+      if (field && field.slideConfig) {
+        const newItem = {};
+        Object.entries(field.slideConfig).forEach(([key, config]) => {
+          newItem[key] = config.value;
+        });
+        const newIndex = field.value.length;
+        field.value = Array.isArray(field.value) ? [...field.value, newItem] : [newItem];
+
+        // Automatically expand the new item
+        activeArrayItems.value[`${fieldKey}-${newIndex}`] = true;
+      }
+    };
+
+    const removeArrayItem = (groupKey, fieldKey, index) => {
+      const field = props.selectedTarget.TargetRequire[groupKey][fieldKey];
+      if (field && Array.isArray(field.value)) {
+        field.value.splice(index, 1);
+      }
+    };
+
+    const updateArrayItemField = (groupKey, fieldKey, itemIndex, propKey, value) => {
+      const field = props.selectedTarget.TargetRequire[groupKey][fieldKey];
+      if (field && Array.isArray(field.value) && field.value[itemIndex]) {
+        field.value[itemIndex][propKey] = value;
+      }
+    };
+
+    const svgs = {
+      deviceIcons,
+      uiIcons,
+      inputIcons,
+    };
+
+    // Make StyleClasses available to the template
+    const classes = StyleClasses;
+
     return {
+      StyleClasses: classes,
       proxyReq,
       onPreview,
       onSelectPosition,
@@ -478,12 +549,19 @@ export default {
       toggleSlide,
       updateSlideField,
       updatePreview,
+      svgs,
+      activeArrayItems,
+      toggleArrayItem,
+      addArrayItem,
+      removeArrayItem,
+      updateArrayItemField,
     };
   },
 };
 </script>
 
 <style>
+/* Only keep dynamic styles that can't be moved to StyleClasses */
 .rotate-180 {
   transform: rotate(180deg);
 }
@@ -492,11 +570,7 @@ export default {
   min-height: 48px;
 }
 
-.color-picker-trigger:hover {
-  border-color: #93c5fd;
-}
-
-/* Hide default color picker appearance */
+/* Color picker input styles */
 input[type="color"] {
   -webkit-appearance: none;
   appearance: none;
